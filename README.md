@@ -6,7 +6,7 @@ InterviewSarthi brings together three apps for job seekers. The [homepage](https
 - [Prep Sarthi](https://interviewsarthi.com/prep/): spoken AI mock interviews with follow-up questions and feedback.
 - [Live Sarthi](https://interviewsarthi.com/live/): the existing Windows interview assistant, with CV-based answer suggestions during a call.
 
-[Official website](https://interviewsarthi.com/) · [Product facts](https://interviewsarthi.com/facts.html) · [Microsoft Store](https://apps.microsoft.com/detail/9NMKQPSQ1KS8) · [Releases](https://github.com/abhishekchoudhary1710/Interview-Sarthi/releases)
+[Official website](https://interviewsarthi.com/) · [Product facts](https://interviewsarthi.com/facts.html) · [Microsoft Store](https://apps.microsoft.com/detail/9NMKQPSQ1KS8) · [Releases](https://github.com/interviewsarthi/Interview-Sarthi/releases)
 
 ## What this repository contains
 
