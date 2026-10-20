@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" role="img" aria-labelledby="title desc">
+  <title id="title">Resume to AI interview assistance workflow for a light website</title>
+  <desc id="desc">A three-step visual showing a resume becoming relevant interview assistance and clearer communication.</desc>
+  <defs>
+    <linearGradient id="background" x1="80" y1="45" x2="1124" y2="495" gradientUnits="userSpaceOnUse"><stop stop-color="#F9FBFF"/><stop offset="1" stop-color="#EFF6FF"/></linearGradient>
+    <linearGradient id="connector" x1="360" y1="270" x2="835" y2="270" gradientUnits="userSpaceOnUse"><stop stop-color="#60A5FA"/><stop offset=".5" stop-color="#818CF8"/><stop offset="1" stop-color="#34D399"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="160%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0F172A" flood-opacity=".11"/></filter>
+  </defs>
+  <rect width="1200" height="540" rx="36" fill="url(#background)"/>
+  <circle cx="98" cy="81" r="155" fill="#2563EB" fill-opacity=".08"/><circle cx="1102" cy="475" r="170" fill="#14B8A6" fill-opacity=".07"/>
+  <path d="M346 270h146M710 270h146" stroke="url(#connector)" stroke-width="8" stroke-linecap="round"/>
+  <path d="m480 250 22 20-22 20M844 250l22 20-22 20" fill="none" stroke="#4F46E5" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <g filter="url(#shadow)">
+    <rect x="72" y="108" width="280" height="325" rx="26" fill="#FFFFFF" stroke="#D4DBE6"/>
+    <rect x="104" y="148" width="74" height="88" rx="11" fill="#DBEAFE"/><path d="M122 176h38M122 193h38M122 210h24" stroke="#2563EB" stroke-width="7" stroke-linecap="round"/>
+    <text x="104" y="280" fill="#0F172A" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24" font-weight="750">Your resume</text><text x="104" y="313" fill="#64748B" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16">Your real experience</text><text x="104" y="339" fill="#64748B" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16">sets the foundation.</text>
+    <rect x="460" y="108" width="280" height="325" rx="26" fill="#FFFFFF" stroke="#C7D2FE"/>
+    <circle cx="600" cy="194" r="48" fill="#E0E7FF"/><path d="M577 200c10 0 18-4 23-11 6-8 10-20 19-20 7 0 12 4 18 10" fill="none" stroke="#4F46E5" stroke-width="8" stroke-linecap="round"/><circle cx="577" cy="200" r="5" fill="#2563EB"/>
+    <text x="492" y="280" fill="#0F172A" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24" font-weight="750">AI assistance</text><text x="492" y="313" fill="#64748B" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16">Relevant context and</text><text x="492" y="339" fill="#64748B" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16">clear answer structure.</text>
+    <rect x="848" y="108" width="280" height="325" rx="26" fill="#FFFFFF" stroke="#A7F3D0"/>
+    <circle cx="988" cy="194" r="48" fill="#D1FAE5"/><path d="m966 194 14 14 30-34" fill="none" stroke="#059669" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="880" y="280" fill="#0F172A" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24" font-weight="750">Speak clearly</text><text x="880" y="313" fill="#64748B" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16">Organise your thoughts</text><text x="880" y="339" fill="#64748B" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16">and communicate clearly.</text>
+  </g>
+  <text x="600" y="492" fill="#475569" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" letter-spacing="2">YOUR EXPERIENCE. CLEARER COMMUNICATION.</text>
+</svg>

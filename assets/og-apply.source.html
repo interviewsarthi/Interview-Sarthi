@@ -1,0 +1,59 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>ApplySarthi share card source</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1200px;height:630px;font-family:Inter,system-ui,sans-serif;overflow:hidden;background:#0d1530;position:relative}
+.bg{position:absolute;right:-150px;top:-90px;width:820px;height:820px;opacity:.09}
+.glow{position:absolute;left:-200px;bottom:-320px;width:760px;height:760px;border-radius:50%;
+  background:radial-gradient(circle,#3B82F6 0%,rgba(59,130,246,0) 70%);opacity:.5}
+.pad{position:relative;padding:58px 70px;height:630px;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:15px}
+.brand img{width:52px;height:52px;border-radius:13px}
+.brand .n{font-size:30px;font-weight:800;color:#fff;letter-spacing:-.4px}
+.brand .n i{font-style:normal;color:#93b4fd}
+.brand .tag{font-size:18px;color:#7f90b3;font-weight:500;border-left:1.5px solid #ffffff25;padding-left:15px}
+.free{margin-left:auto;font-size:17px;font-weight:600;color:#a7f3d0;border:1.5px solid #34d39955;
+  background:#05966922;padding:9px 20px;border-radius:99px}
+h1{margin-top:auto;font-weight:800;color:#fff;letter-spacing:-1.8px;max-width:1015px;
+  font-size:var(--h1,64px);line-height:1.12}
+h1 b{font-weight:800;color:#8ab4ff}
+.sub{margin-top:26px;font-size:25px;line-height:1.45;color:#a9b7d4;font-weight:400;letter-spacing:-.2px;max-width:990px}
+.row{margin-top:auto;display:flex;align-items:center;gap:14px}
+.chip{font-size:20px;font-weight:600;color:#dbe6ff;background:#ffffff14;border:1.5px solid #ffffff21;
+  padding:12px 22px;border-radius:12px;white-space:nowrap}
+.url{margin-left:auto;font-size:20px;font-weight:600;color:#7f90b3}
+</style></head><body>
+<img class="bg" src="mark-plain.svg" alt="InterviewSarthi">
+<div class="glow"></div>
+<div class="pad">
+  <div class="brand">
+    <img src="mark.svg" alt="InterviewSarthi"><span class="n">Apply<i>Sarthi</i></span>
+    <span class="tag">Find it. Tailor it. Apply.</span>
+    <span class="free">Always free</span>
+  </div>
+  <h1 id="h1"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="row">
+    <span class="chip">Naukri &middot; LinkedIn &middot; Indeed &middot; Shine</span>
+    <span class="chip">754 company career pages</span>
+    <span class="url">interviewsarthi.com/apply</span>
+  </div>
+</div>
+<script>
+// The wording that is live. Override any of it with ?h=&s=&size= to try an alternative before
+// replacing assets/og-apply.jpg with the new render.
+const LIVE = {
+  h: 'We auto-apply to<br><b>every job that fits you</b>.',
+  s: 'Naukri, LinkedIn, Indeed and 754 company career pages in one place, matched to your CV. ' +
+     'ApplySarthi fills in every application for you.',
+  size: '68px',
+};
+const q = new URLSearchParams(location.search);
+document.getElementById('h1').innerHTML = q.get('h') || LIVE.h;
+document.getElementById('sub').innerHTML = q.get('s') || LIVE.s;
+document.documentElement.style.setProperty('--h1', q.get('size') || LIVE.size);
+</script>
+</body></html>

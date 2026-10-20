@@ -1,0 +1,64 @@
+/* Explain the included Prep month beside the pass that grants it. */
+.prep-bundle {
+  box-sizing: border-box;
+  background: #edf2ff;
+  border: 1px solid #cfdcf8;
+  border-radius: 9px;
+  padding: 14px 15px 7px;
+  margin: 14px 0 16px;
+  color: #203958;
+  text-align: left;
+}
+.prep-bundle .prep-bundle__label {
+  margin: 0 0 7px;
+  color: #245adc;
+  font-size: 10px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+.prep-bundle .prep-bundle__title {
+  margin: 0 0 7px;
+  color: #203958;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  line-height: 1.4;
+}
+.prep-bundle .prep-bundle__copy {
+  margin: 0 0 9px;
+  color: #435974;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.prep-bundle .prep-bundle__terms {
+  margin: 0;
+  color: #526782;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.prep-bundle .prep-bundle__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  color: #245adc;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prep-bundle .prep-bundle__link:hover { color: #163fa5; }
+.prep-bundle .prep-bundle__link:focus-visible {
+  outline: 3px solid #245adc;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.plan .prep-bundle { margin: 0 0 18px; }
+.final .prep-bundle { max-width: 510px; margin: 22px auto 0; }
+@media (max-width: 360px) {
+  .prep-bundle { padding-right: 12px; padding-left: 12px; }
+  .prep-bundle .prep-bundle__title { font-size: 14px; }
+}

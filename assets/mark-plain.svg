@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="t d">
+  <title id="t">Interview Sarthi mark — chariot wheel</title>
+  <desc id="d">A chariot wheel in motion: the sarthi's rath, reduced to the one shape that survives at favicon size.</desc>
+  <defs>
+    <linearGradient id="ck" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6"/><stop offset="1" stop-color="#4F46E5"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- motion, drawn to the left so the wheel reads as travelling forward -->
+  
+  <!-- the wheel -->
+  <g transform="translate(38 32)">
+    <circle r="15.5" fill="none" stroke="#fff" stroke-width="3.6"/>
+    <g stroke="#fff" stroke-width="2.4" stroke-linecap="round">
+      <path d="M0-13.2V13.2M-13.2 0H13.2M-9.3-9.3l18.6 18.6M-9.3 9.3l18.6-18.6"/>
+    </g>
+    <circle r="4.4" fill="#fff"/>
+  </g>
+</svg>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Prep Sarthi engine test</title>
+  <style>
+    :root { --bg:#0f1218; --card:#171c25; --line:#2a3140; --text:#e8ecf3; --muted:#98a2b3; --accent:#3ddc84; --warn:#ffb020; --bad:#ff5c5c; --me:#24344d; --them:#1f2a24; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    main { max-width:760px; margin:0 auto; padding:16px; }
+    h1 { font-size:20px; margin:0 0 4px; }
+    .sub { color:var(--muted); margin:0 0 16px; font-size:13px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:12px; }
+    label { display:block; font-size:12px; color:var(--muted); margin:10px 0 4px; }
+    input, select, textarea { width:100%; background:#0c0f14; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:10px; font:inherit; }
+    textarea { min-height:90px; resize:vertical; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media (max-width:520px) { .row { grid-template-columns:1fr; } }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; align-items:center; }
+    button { background:var(--accent); color:#06120b; border:0; border-radius:10px; padding:12px 18px; font:600 15px system-ui; cursor:pointer; }
+    button.secondary { background:#252c3a; color:var(--text); }
+    button:disabled { opacity:.45; cursor:default; }
+    .status { display:flex; gap:12px; align-items:center; font-size:13px; color:var(--muted); flex-wrap:wrap; }
+    .dot { width:10px; height:10px; border-radius:50%; background:#555; display:inline-block; }
+    .dot.live { background:var(--accent); } .dot.connecting { background:var(--warn); } .dot.closed { background:#555; }
+    .meter { height:6px; background:#0c0f14; border-radius:3px; overflow:hidden; width:120px; }
+    .meter i { display:block; height:100%; width:0; background:var(--accent); transition:width .1s; }
+    #transcript { display:flex; flex-direction:column; gap:8px; min-height:120px; }
+    .bubble { padding:10px 12px; border-radius:12px; max-width:88%; white-space:pre-wrap; }
+    .bubble.interviewer { background:var(--them); align-self:flex-start; border-bottom-left-radius:4px; }
+    .bubble.candidate { background:var(--me); align-self:flex-end; border-bottom-right-radius:4px; }
+    .bubble small { display:block; color:var(--muted); font-size:11px; margin-bottom:2px; }
+    .bubble.open { outline:1px dashed var(--line); }
+    #log { font:12px/1.4 ui-monospace,Consolas,monospace; color:var(--muted); max-height:220px; overflow:auto; white-space:pre-wrap; }
+    details summary { cursor:pointer; color:var(--muted); font-size:13px; }
+    .notice { color:var(--warn); font-size:13px; min-height:18px; }
+    .check { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-top:10px; }
+    .check input { width:auto; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Prep Sarthi engine test</h1>
+  <p class="sub">Bare test of the browser interviewer. Your key stays in this browser and goes only to Google.</p>
+
+  <div class="card" id="setup">
+    <label>Gemini API key</label>
+    <input id="key" type="password" autocomplete="off" placeholder="AIza...">
+    <div class="row">
+      <div><label>Model</label><input id="model" value="gemini-3.1-flash-live-preview"></div>
+      <div><label>Voice</label>
+        <select id="voice">
+          <option value="">model default</option>
+          <option>Kore</option><option>Aoede</option><option>Leda</option><option>Zephyr</option>
+          <option>Puck</option><option>Charon</option><option>Fenrir</option><option>Orus</option>
+        </select></div>
+    </div>
+    <div class="row">
+      <div><label>Your name</label><input id="name" placeholder="Rahul"></div>
+      <div><label>Language (English, Hinglish, Hindi, auto, or any language)</label><input id="language" value="English"></div>
+    </div>
+    <label>CV text (paste, any format)</label>
+    <textarea id="cv" placeholder="Paste your CV as plain text for now. The real app will read the PDF."></textarea>
+    <label>Job description (optional)</label>
+    <textarea id="jd" style="min-height:60px"></textarea>
+    <div class="row">
+      <div><label>Planned minutes</label><input id="minutes" type="number" value="10" min="3" max="60"></div>
+      <div><label>Half-duplex (mute mic while interviewer speaks; try if it hears itself)</label>
+        <div class="check"><input id="halfduplex" type="checkbox"> <span>on</span></div></div>
+    </div>
+    <div class="actions">
+      <button id="start">Start interview</button>
+      <button id="stop" class="secondary" disabled>Stop</button>
+      <button id="wrap" class="secondary" disabled>Ask to wrap up</button>
+      <span class="status"><i class="dot" id="dot"></i><span id="state">idle</span><span id="clock"></span><span class="meter"><i id="mic"></i></span><span id="spk"></span></span>
+    </div>
+    <div class="notice" id="notice"></div>
+  </div>
+
+  <div class="card"><div id="transcript"></div></div>
+
+  <div class="card">
+    <details><summary>Diagnostics (events, usage, latency) · <a href="#" id="download">download log</a></summary><div id="log"></div></details>
+  </div>
+</main>
+
+<script type="module">
+  import { AudioIO } from "./audio.js";
+  import { GeminiLive } from "./live.js?v=20261012-models38";
+  import { buildInterviewerInstructions, NOTES } from "./interviewer.js?v=20261012-models38";
+
+  const $ = (id) => document.getElementById(id);
+  const KEY_STORE = "ps_gemini_key";
+  try { $("key").value = localStorage.getItem(KEY_STORE) || ""; $("cv").value = localStorage.getItem("ps_cv") || ""; $("name").value = localStorage.getItem("ps_name") || ""; } catch (_) {}
+
+  let audio = null, live = null, startedAt = 0, clockTimer = null;
+  const lines = [];
+  const bubbles = new Map();
+  let lastCandidateVoice = 0, waitingForReply = false;
+
+  function log(name, data) {
+    const t = startedAt ? ((performance.now() / 1000) - startedAt).toFixed(1) : "0.0";
+    const line = `${t.padStart(6)}  ${name}${data && Object.keys(data).length ? " " + JSON.stringify(data) : ""}`;
+    lines.push(line);
+    const el = $("log");
+    el.textContent += line + "\n";
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function setState(s) {
+    $("state").textContent = s;
+    $("dot").className = "dot " + (s === "live" ? "live" : s === "closed" || s === "idle" ? "closed" : "connecting");
+  }
+
+  function renderTranscript(u, done) {
+    let el = bubbles.get(u);
+    if (!el) {
+      el = document.createElement("div");
+      el.className = "bubble " + u.who;
+      el.innerHTML = `<small>${u.who === "interviewer" ? "Interviewer" : "You"}</small><span></span>`;
+      $("transcript").appendChild(el);
+      bubbles.set(u, el);
+    }
+    el.querySelector("span").textContent = u.text + (u.interrupted ? " …" : "");
+    el.classList.toggle("open", !done);
+    el.scrollIntoView({ block: "nearest" });
+  }
+
+  async function start() {
+    const key = $("key").value.trim();
+    if (!key) { $("notice").textContent = "Paste your Gemini key first."; return; }
+    try { localStorage.setItem(KEY_STORE, key); localStorage.setItem("ps_cv", $("cv").value); localStorage.setItem("ps_name", $("name").value); } catch (_) {}
+    $("start").disabled = true; $("stop").disabled = false; $("wrap").disabled = false;
+    $("transcript").innerHTML = ""; bubbles.clear(); $("log").textContent = ""; lines.length = 0;
+    startedAt = performance.now() / 1000;
+    $("notice").textContent = "";
+
+    audio = new AudioIO();
+    try {
+      await audio.start();
+    } catch (err) {
+      $("notice").textContent = "Microphone not available: " + err.message;
+      log("mic_error", { error: String(err) });
+      reset(); return;
+    }
+    log("audio_ready", { deviceRate: audio.sampleRate });
+
+    const halfDuplex = $("halfduplex").checked;
+    audio.onPlaying = (playing) => {
+      $("spk").textContent = playing ? "🔊 interviewer speaking" : "";
+      if (halfDuplex) audio.muted = playing;
+      if (playing && waitingForReply) {
+        waitingForReply = false;
+        log("reply_latency", { seconds: +((performance.now() / 1000) - lastCandidateVoice).toFixed(2) });
+      }
+    };
+    audio.onChunk = (pcm, rms) => {
+      $("mic").style.width = Math.min(100, rms * 800) + "%";
+      if (rms >= 0.005) { lastCandidateVoice = performance.now() / 1000; waitingForReply = true; }
+      live && live.sendAudio(pcm, rms);
+    };
+
+    const opts = {
+      candidateName: $("name").value, cv: $("cv").value, jd: $("jd").value,
+      language: $("language").value, minutes: Number($("minutes").value) || 10,
+    };
+    live = new GeminiLive({
+      apiKey: key,
+      model: $("model").value.trim() || undefined,
+      voice: $("voice").value,
+      instructions: () => buildInterviewerInstructions(opts),
+      onAudio: (pcm) => audio.play(pcm),
+      onInterrupted: () => audio.clear(),
+      onTranscript: renderTranscript,
+      onStatus: setState,
+      onNotice: (m) => { $("notice").textContent = m; log("notice", { m }); },
+      onEvent: log,
+    });
+    live.start();
+    clockTimer = setInterval(() => {
+      const s = Math.floor((performance.now() / 1000) - startedAt);
+      $("clock").textContent = `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+      if (live && s === opts.minutes * 60 - 60) live.sendText(NOTES.wrapUp);
+    }, 1000);
+  }
+
+  function reset() {
+    $("start").disabled = false; $("stop").disabled = true; $("wrap").disabled = true;
+    clearInterval(clockTimer);
+    setState("idle");
+    $("spk").textContent = ""; $("mic").style.width = "0";
+  }
+
+  async function stop() {
+    if (live) { log("usage", live.usage); live.close(); live = null; }
+    if (audio) { await audio.stop(); audio = null; }
+    reset();
+  }
+
+  $("start").onclick = start;
+  $("stop").onclick = stop;
+  $("wrap").onclick = () => live && live.sendText(NOTES.wrapUp);
+  $("download").onclick = (e) => {
+    e.preventDefault();
+    const blob = new Blob([lines.join("\n")], { type: "text/plain" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "prep-sarthi-test-log.txt"; a.click();
+  };
+  window.addEventListener("pagehide", () => { if (live) live.close(); });
+</script>
+</body>
+</html>

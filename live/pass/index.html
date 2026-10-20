@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <title>My pass | Live Sarthi</title>
+  <meta name="description" content="Check the status of your Live Sarthi pass.">
+  <script>
+    // Read private return details before any external script can see the URL.
+    (function () {
+      var q = new URLSearchParams(location.search);
+      var key = q.get("key") || "", order = q.get("order_id") || "";
+      try { if (key) sessionStorage.setItem("ls_pass_key", key); } catch (_) {}
+      window.__livePassReturn = { key: key, order: order };
+      try { history.replaceState(null, "", location.pathname); }
+      catch (_) { window.__livePassPrivateURL = true; }
+    })();
+  </script>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+  <link rel="stylesheet" href="./pass.css?v=20261010-mysarthi">
+  <script defer src="./pass.js?v=20261009-backout"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="logo" href="/live/"><img src="/assets/mark.svg" alt="InterviewSarthi" width="28" height="28"><span>Live <i>Sarthi</i></span></a>
+      <span class="hlinks" style="align-items:center"><a href="/account/" style="display:inline-flex;align-items:center;min-height:36px;padding:6px 10px;border:1px solid #cfdbf4;border-radius:8px;background:#f0f5ff;color:#2355b9;font-size:12px;font-weight:650;text-decoration:none;white-space:nowrap">My Sarthi</a><a href="/help.html">Help</a></span>
+    </header>
+    <main>
+      <p class="eyebrow">Live Sarthi</p>
+      <h1>My pass</h1>
+      <p class="lead">See your pass and when it ends.</p>
+
+      <section class="card" id="lookup-card" aria-labelledby="lookup-title">
+        <h2 id="lookup-title">Find your pass</h2>
+        <form id="lookup">
+          <label for="key">Paste the key from your purchase email</label>
+          <div class="input-row">
+            <input id="key" name="key" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" maxlength="100" placeholder="IS-XXXX-XXXX-XXXX-XXXX" required data-clarity-mask="true">
+            <button class="btn primary" id="lookup-button" type="submit">Show my pass</button>
+          </div>
+        </form>
+      </section>
+
+      <p class="notice" id="notice" role="status" aria-live="polite"></p>
+      <p class="fine" id="payment-back" hidden><button class="text-button" id="back-to-pass" type="button">I didn't pay yet: back to my pass</button></p>
+      <div class="actions" id="payment-actions" hidden>
+        <button class="btn ghost" id="check-payment" type="button">Check payment again</button>
+        <button class="btn ghost" id="retry-payment" type="button" hidden>Try again</button>
+      </div>
+
+      <section class="card success" id="success" hidden aria-labelledby="success-title">
+        <p class="eyebrow">Payment confirmed</p>
+        <h2 id="success-title" tabindex="-1">Your pass is now the 1-Month Pass</h2>
+        <p class="success-end" id="success-end"></p>
+        <p><b id="success-devices">2 computers</b></p>
+        <p>Nothing to reinstall: open Live Sarthi. If it shows the license screen, paste the same key and press Activate.</p>
+        <p id="success-prep" hidden><span id="success-prep-text"></span> <a href="/prep/app/">Open Prep Sarthi →</a></p>
+      </section>
+
+      <section class="card" id="pass-card" hidden aria-labelledby="pass-label">
+        <div class="card-top"><p class="eyebrow">Your pass</p><button class="text-button" id="change-key" type="button">Use another key</button></div>
+        <h2 id="pass-label"></h2>
+        <p class="state" id="pass-state"></p>
+        <p class="fine" id="activation-help" hidden>To start this pass, open Live Sarthi, paste your key and press Activate.</p>
+        <div class="pass-details"><span id="computers"></span><span id="email-hint"></span></div>
+        <p class="gift" id="pass-prep" hidden></p>
+      </section>
+
+      <section class="card upgrade" id="upgrade-card" hidden aria-labelledby="upgrade-title">
+        <p class="eyebrow" id="comeback" hidden>Your ₹99 still counts.</p>
+        <h2 id="upgrade-title">Make this pass a month: ₹200 more</h2>
+        <p class="upgrade-sub">₹299 in all. Same key, nothing to reinstall.</p>
+        <ul class="benefits">
+          <li id="upgrade-end"></li>
+          <li>2 computers</li>
+          <li id="upgrade-prep" hidden></li>
+        </ul>
+        <p class="deadline" id="offer-until"></p>
+        <p class="fine" id="upgrade-window"></p>
+        <button class="btn primary" id="upgrade-pay" type="button">Pay ₹200 with UPI</button>
+        <p class="fine">India only · Secure checkout through Cashfree, using the email and phone of your original order.</p>
+      </section>
+
+      <section class="card" id="unavailable-card" hidden aria-labelledby="unavailable-title">
+        <h2 id="unavailable-title">About this pass</h2>
+        <p id="unavailable-message"></p>
+        <div class="actions" id="buy-links" hidden>
+          <a class="btn primary" href="https://license.interviewsarthi.com/buy?plan=30d">Buy 1-Month Pass · ₹299</a>
+          <a class="btn ghost" href="https://license.interviewsarthi.com/buy?plan=2d">Buy 2-Day Pass · ₹99</a>
+        </div>
+      </section>
+      <p class="fine dates">All dates are shown in India time (IST).</p>
+      <noscript><p>Turn on JavaScript to look up your pass. For help, reply to your key email.</p></noscript>
+    </main>
+    <footer><a href="/help.html">Help</a><p>Questions? Reply to your key email.</p></footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.seo-preview/
+dash-shots/
+
+# Kept off the public repository (owner, 14 Oct 2026): tests, build scripts, research and planning notes stay in
+# the maintainers' working copy. Run scripts/check_site.sh before every push.
+/research/
+/tests/
+/scripts/
+/OWNER_ACTIONS_SEO_GEO.md
+/SEO_AUDIT_AND_GROWTH_PLAN.md
+/SEO_GEO_IMPLEMENTATION_REPORT.md
+/TRACKING_QUERIES.md
+/APPLYSARTHI_SEO.md
+/SITE_FACTS.md

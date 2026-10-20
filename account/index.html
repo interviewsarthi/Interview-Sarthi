@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <title>My Sarthi | Interview Sarthi</title>
+  <meta name="description" content="Your Live Sarthi passes, Prep Sarthi practice, saved interviews and profile in one place.">
+  <script>
+    // Live Sarthi opens this page with ?connect (no code in the URL: the person types the code shown in the app).
+    (function () {
+      var q = new URLSearchParams(location.search);
+      try { if (q.has("connect")) sessionStorage.setItem("ms_connect", "1"); } catch (_) {}
+      window.__msConnect = q.has("connect");
+      // Drop the query, keep the section (#profile): Codex found /account/?review=1#profile opening Home.
+      if (location.search) { try { history.replaceState(null, "", location.pathname + location.hash); } catch (_) {} }
+    })();
+  </script>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+  <link rel="stylesheet" href="./account.css?v=20261010-retry">
+  <script type="module" src="./account.js?v=20261010-retry"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="logo" href="/"><img src="/assets/mark.svg" alt="InterviewSarthi" width="28" height="28"><span>My <i>Sarthi</i></span></a>
+      <nav>
+        <button class="bell" id="bell" type="button" aria-expanded="false" aria-controls="bell-panel" hidden>
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="sr">Notifications</span><span class="badge" id="bell-count" hidden></span>
+        </button>
+        <a href="/help.html">Help</a>
+      </nav>
+    </header>
+    <section class="card bell-panel" id="bell-panel" hidden aria-label="Notifications"><h2>Notifications</h2><ul id="bell-list"></ul></section>
+
+    <main>
+      <p class="notice" id="notice" role="status" aria-live="polite"></p>
+
+      <!-- Signed in, waiting for the account (owner, 10 Oct 2026: a slow answer left the page blank) -->
+      <section class="card loading" id="loading" hidden aria-live="polite">
+        <p id="loading-text">Loading your account…</p>
+        <p class="fine" id="loading-slow" hidden>Still loading. The server is slower than usual right now.</p>
+        <button class="btn ghost" id="loading-retry" type="button" hidden>Try again</button>
+      </section>
+
+      <!-- Signed out -->
+      <section id="signed-out" hidden>
+        <p class="eyebrow">Interview Sarthi</p>
+        <h1>My Sarthi</h1>
+        <p class="lead">Your Live Sarthi passes, your Prep Sarthi practice, your saved interviews and your profile, in one place.</p>
+        <div class="card">
+          <h2>Sign in</h2>
+          <p>Use the Google account you use for Prep Sarthi, or the Gmail you bought Live Sarthi with. Your passes appear by themselves.</p>
+          <div id="gbutton"></div>
+          <form id="test-login" class="input-row" hidden>
+            <label for="test-email" class="sr">Test sign-in email</label><input id="test-email" type="email" placeholder="test sign-in (local preview only)" autocomplete="off">
+            <button class="btn ghost" type="submit">Sign in</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- My Sarthi is switched off on the server -->
+      <section class="card" id="closed" hidden>
+        <h2>My Sarthi opens soon</h2>
+        <p>Your passes and apps work as usual. Come back in a little while.</p>
+        <p><a href="/live/">Live Sarthi</a> · <a href="/prep/app/">Prep Sarthi</a> · <a href="https://apply.interviewsarthi.com/">ApplySarthi</a></p>
+      </section>
+
+      <!-- Signed in -->
+      <div id="signed-in" hidden>
+        <div class="account-intro">
+          <p class="eyebrow">My Sarthi</p>
+          <h1 id="hello">Your account</h1>
+          <p class="lead" id="hello-sub"></p>
+        </div>
+
+        <section class="card connect" id="connect-card" hidden aria-labelledby="connect-title">
+          <p class="eyebrow">Live Sarthi on your PC</p>
+          <h2 id="connect-title">Connect a PC</h2>
+          <form id="connect-form">
+            <label for="connect-code">Type the code shown in Live Sarthi (settings → 5. My Sarthi → Connect)</label>
+            <div class="input-row">
+              <input id="connect-code" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" maxlength="12" placeholder="ABCD-EFGH" required>
+              <button class="btn primary" type="submit">Check code</button>
+            </div>
+            <p class="fine warn">Only type a code you can see on your own screen. If someone sent you a code or a link, do not connect: a connected PC can read your saved resume, job descriptions, examples and Gemini key.</p>
+          </form>
+          <div id="connect-body"></div>
+        </section>
+
+        <!-- One section at a time (owner, 10 Oct 2026): a menu down the side on a laptop, a row of tabs on a phone. -->
+        <p class="menu-hint" aria-hidden="true">Swipe for more sections <span>→</span></p>
+        <div class="dash" id="dash">
+        <nav class="menu" id="menu" aria-label="My Sarthi sections">
+          <a href="#home" data-pane="home"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg><span>Home</span></a>
+          <a href="#live" data-pane="live"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h4"/></svg><span>Live passes</span></a>
+          <a href="#interviews" data-pane="interviews"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-6 4V5a2 2 0 0 1 2-2ZM7 8h10M7 12h7"/></svg><span>Interviews</span></a>
+          <a href="#profile" data-pane="profile"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg><span>Profile</span></a>
+          <a href="#prep" data-pane="prep"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 10v4M8 6v12M12 3v18M16 6v12M20 10v4"/></svg><span>Prep</span></a>
+          <a href="#purchases" data-pane="purchases"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 3h14v18l-3-2-4 2-4-2-3 2ZM8 8h8M8 12h8M8 16h4"/></svg><span>Purchases</span></a>
+          <a href="#help" data-pane="help"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4M12 17h.01"/></svg><span>Help</span></a>
+          <a href="#invite" data-pane="invite" hidden><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m3 11 18-8-8 18-2-8-8-2ZM11 13l10-10"/></svg><span>Invite</span></a>
+          <a href="#apply" data-pane="apply"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12a20 20 0 0 0 18 0M12 12v3"/></svg><span>ApplySarthi</span></a>
+          <a href="#account" data-pane="account"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8" cy="10" r="2"/><path d="M5 16a3 3 0 0 1 6 0M15 9h3M15 13h3"/></svg><span>Account</span></a>
+        </nav>
+        <div class="panes">
+
+        <section class="block" id="home" aria-labelledby="home-title">
+          <h2 class="sr" id="home-title">Home</h2>
+          <div class="tiles" id="home-tiles"></div>
+        </section>
+
+        <section class="block" id="live" aria-labelledby="live-title">
+          <h2 id="live-title">Live Sarthi</h2>
+          <div id="live-keys"></div>
+          <details class="card add-key">
+            <summary>Bought with another email? Add the key</summary>
+            <form id="link-form">
+              <label for="link-key">Paste the key from your purchase email</label>
+              <div class="input-row">
+                <input id="link-key" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" maxlength="100" placeholder="IS-XXXX-XXXX-XXXX-XXXX" required>
+                <button class="btn primary" type="submit">Add key</button>
+              </div>
+            </form>
+          </details>
+          <p class="fine"><a href="https://apps.microsoft.com/detail/9NMKQPSQ1KS8">Download Live Sarthi for Windows</a> · Moving a pass to a new PC? Write to <a href="mailto:support@interviewsarthi.com">support@interviewsarthi.com</a>.</p>
+        </section>
+
+        <section class="block" id="interviews" aria-labelledby="interviews-title">
+          <h2 id="interviews-title">Your Live interviews</h2>
+          <div class="card">
+            <div class="consents">
+              <div class="consent">
+                <label class="switch"><input type="checkbox" id="keep-live"> <span>Keep my Live interviews in My Sarthi</span></label>
+                <p class="fine keep-again" id="keep-again" hidden>We changed what this box does: it now also keeps the interviews from the past year already on your PC. It is off until you tick it again.</p>
+                <p class="fine" id="keep-text"></p>
+              </div>
+              <div class="consent">
+                <label class="switch"><input type="checkbox" id="improve-live"> <span>Also let Sarthi read them to improve Live Sarthi's answers (optional)</span></label>
+                <p class="fine" id="improve-text"></p>
+              </div>
+            </div>
+            <p class="fine" id="no-pc" hidden>Connect Live Sarthi on your PC first: in the app open <b>settings</b>, then <b>5. My Sarthi</b>, then <b>Connect</b>.</p>
+            <ul class="list" id="live-list"></ul>
+            <div class="actions">
+              <button class="btn ghost" id="live-more" type="button" hidden>Show more</button>
+              <button class="btn ghost danger" id="live-delete-all" type="button" hidden>Delete all</button>
+            </div>
+          </div>
+          <article class="card reader" id="reader" hidden aria-labelledby="reader-title">
+            <div class="card-top"><h3 id="reader-title"></h3><button class="text-button" id="reader-close" type="button">Close</button></div>
+            <h4>The interviewer and the screen</h4>
+            <pre id="reader-transcript"></pre>
+            <h4>The answers Live Sarthi showed</h4>
+            <pre id="reader-answers"></pre>
+            <button class="btn ghost danger" id="reader-delete" type="button">Delete this interview</button>
+          </article>
+          <div class="card" id="pcs-card">
+            <div class="card-top"><h3>Your PCs</h3><button class="btn ghost" id="connect-open" type="button">Connect a PC</button></div>
+            <ul class="list" id="pcs"></ul>
+          </div>
+        </section>
+
+        <section class="block" id="profile" aria-labelledby="profile-title">
+          <h2 id="profile-title">Your profile</h2>
+          <div class="card">
+            <p class="fine">Live Sarthi (settings → My Sarthi) and Prep Sarthi fill their empty boxes from this. Nothing here is required.</p>
+            <p id="profile-summary"></p>
+            <button class="btn ghost" id="profile-open" type="button">Edit profile</button>
+            <form id="profile-form" hidden>
+              <div class="grid">
+                <label>Your name<input id="pf-name" maxlength="120" autocomplete="name"></label>
+                <label>Language<input id="pf-language" maxlength="120" placeholder="e.g. English, Hinglish"></label>
+                <label>Target role<input id="pf-role" maxlength="120"></label>
+                <label>Target level<input id="pf-level" maxlength="120" placeholder="e.g. 3 years, senior"></label>
+              </div>
+              <label for="pf-cv">Resume (text)</label>
+              <textarea id="pf-cv" rows="8" maxlength="20000"></textarea>
+              <div class="row-actions"><label class="file">Read a PDF or .txt<input id="pf-cv-file" type="file" accept=".pdf,.txt,.md,application/pdf,text/plain"></label><span class="fine" id="pf-cv-count"></span></div>
+              <h3>Job descriptions</h3>
+              <div id="pf-jds"></div>
+              <button class="btn ghost" id="pf-jd-add" type="button">Add a job description</button>
+              <label for="pf-examples">Your own examples (one real story per paragraph)</label>
+              <textarea id="pf-examples" rows="5" maxlength="8000"></textarea>
+              <div class="actions"><button class="btn primary" type="submit">Save profile</button></div>
+            </form>
+            <div class="key-box">
+              <h3>Gemini key</h3>
+              <p class="fine">Stored encrypted. It is only ever sent back to your own apps: Prep in your browser, or a PC you connected.</p>
+              <p id="gemini-state"></p>
+              <form id="gemini-form" class="input-row" autocomplete="off">
+                <label for="gemini-key" class="sr">Gemini API key</label>
+                <input id="gemini-key" type="password" autocomplete="new-password" spellcheck="false" placeholder="paste your Gemini API key" data-clarity-mask="true" data-lpignore="true" data-1p-ignore="true">
+                <button class="btn ghost" type="submit">Save key</button>
+              </form>
+              <button class="text-button" id="gemini-remove" type="button" hidden>Remove the saved key</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="block" id="prep" aria-labelledby="prep-title">
+          <h2 id="prep-title">Prep Sarthi</h2>
+          <div class="card" id="prep-card"></div>
+        </section>
+
+        <section class="block" id="purchases" aria-labelledby="purchases-title">
+          <h2 id="purchases-title">Purchases</h2>
+          <div class="card"><ul class="list" id="purchase-list"></ul></div>
+        </section>
+
+        <section class="block" id="help" aria-labelledby="help-title">
+          <h2 id="help-title">Help</h2>
+          <div class="card">
+            <ul class="list" id="tickets"></ul>
+            <p class="fine">Questions? Write to <a href="mailto:support@interviewsarthi.com">support@interviewsarthi.com</a> or use <b>help</b> in the Live Sarthi app.</p>
+          </div>
+        </section>
+
+        <section class="block" id="invite" aria-labelledby="invite-title" hidden>
+          <h2 id="invite-title">Invite a friend</h2>
+          <div class="card" id="invite-card"></div>
+        </section>
+
+        <section class="block" id="apply" aria-labelledby="apply-title">
+          <h2 id="apply-title">ApplySarthi</h2>
+          <div class="card">
+            <p>Find jobs and track your applications. ApplySarthi has its own sign-in.</p>
+            <a class="btn ghost" href="https://apply.interviewsarthi.com/">Open ApplySarthi →</a>
+          </div>
+        </section>
+
+        <section class="block" id="account" aria-labelledby="account-title">
+          <h2 id="account-title">Account</h2>
+          <div class="card">
+            <p id="account-line"></p>
+            <div class="actions">
+              <button class="btn ghost" id="sign-out" type="button">Sign out</button>
+              <button class="btn ghost danger" id="profile-delete" type="button">Delete my profile</button>
+            </div>
+            <p class="fine">Signing out here also signs you out of Prep Sarthi in this browser. <a href="/privacy.html">Privacy</a></p>
+          </div>
+        </section>
+        </div>
+        </div>
+        <p class="fine dates">All dates are in India time (IST).</p>
+      </div>
+      <noscript><p>Turn on JavaScript to open My Sarthi.</p></noscript>
+    </main>
+    <footer><a href="/">Interview Sarthi</a> · <a href="/help.html">Help</a> · <a href="/privacy.html">Privacy</a></footer>
+  </div>
+</body>
+</html>

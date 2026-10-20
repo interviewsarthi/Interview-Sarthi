@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>if (location.protocol === "http:" && /interviewsarthi\.com$/.test(location.hostname)) { location.replace("https://" + location.host + location.pathname + location.search + location.hash); }</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Prep Sarthi: mock interview</title>
+  <meta name="description" content="The Prep Sarthi app: a voice mock interview from your CV and target job, with a scored report.">
+  <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,650;9..40,700&display=swap" rel="stylesheet">
+  <script>
+  /* Which screen the visitor asked for, decided before anything is painted.
+   * app.js is a module and runs only after the page is parsed, by which time
+   * the browser has already drawn the first screen; this is what stops the CV
+   * step flashing past on the way to a pass. The app confirms it all a moment
+   * later from the server, and clears these classes as it takes over. */
+  (function () {
+    try {
+      var q = new URLSearchParams(location.search);
+      var buy = q.get("buy"), order = q.get("order_id"), payment = q.get("payment_id");
+      if (buy === "w") buy = "m";   // the 7-day pass was retired on 25 Sep 2026; old links get the month
+      if (buy !== "m") buy = null;
+      if (!buy && !order) return;
+      window.__ps = { buy: buy, order: order || null, payment: payment || null };
+      var c = document.documentElement.classList;
+      c.add("ps-pass");
+      if (buy) c.add("ps-checkout");
+      if (order) c.add("ps-confirm");
+      // The address bar should not keep an instruction that has been carried out.
+      history.replaceState(null, "", location.pathname);
+    } catch (e) { /* any trouble: the app sorts it out as usual */ }
+  })();
+  </script>
+  <link rel="stylesheet" href="../prep.css?v=20261001-what">
+  <link rel="stylesheet" href="./progress-view.css?v=20261001-site">
+  <link rel="stylesheet" href="./demo-offer.css?v=20261006-demo-buy">
+  <style>
+    .screen{display:none;padding:8px 0 40px} .screen.on{display:block}
+    /* the report and the progress screens are dashboards: they get the site's full width (app.js show() sets data-screen) */
+    html[data-screen="s-report"] .narrow,html[data-screen="s-progress"] .narrow,html[data-screen="s-comparison"] .narrow{max-width:1160px;padding:0 24px}
+    @media(max-width:600px){html[data-screen="s-report"] .narrow,html[data-screen="s-progress"] .narrow,html[data-screen="s-comparison"] .narrow{padding:0 14px}}
+    /* the first paint, before app.js has loaded */
+    html.ps-pass #s-cv{display:none}
+    html.ps-pass #s-pass{display:block}
+    html.ps-checkout #buy-block{display:none}
+    html.ps-checkout #checkout{display:block}
+    html.ps-confirm #pass-body{display:none}
+    /* a Live Sarthi test (app.js liveTest): nothing of Prep's to sell in the header */
+    html.ps-livetest #open-progress,html.ps-livetest #open-invite,html.ps-livetest #entitle,html.ps-livetest #acct{display:none !important}
+    /* top-right account: the person's name once signed in, a way in until then (sign-in stays optional) */
+    .acct{position:relative;display:inline-flex}
+    #acct-btn{font:650 12.5px var(--font);padding:6px 12px;border-radius:999px;border:1px solid #c9d5e1;background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap}
+    #acct-btn:hover{background:var(--prep-soft);color:var(--prep)}
+    #acct-btn.in{border-color:transparent;background:var(--prep-soft);color:var(--prep)}
+    #acct-btn.in::after{content:" \25BE";font-size:10px}
+    .acct-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:210px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(15,30,50,.14);padding:12px 14px;z-index:60;text-align:left}
+    .acct-menu p{margin:0;font:600 14px var(--font);color:var(--ink)}
+    .acct-menu small{display:block;margin:2px 0 10px;color:var(--muted);font-size:12.5px;word-break:break-all}
+    .acct-menu .mysarthi-link{display:block;margin:10px 0 8px;padding:10px 12px;border:1px solid #cfdbf4;border-radius:8px;background:var(--prep-soft);color:var(--prep);font-size:13px;font-weight:600;line-height:1.5;text-decoration:none}
+    .acct-menu .mysarthi-link:hover{border-color:#8cabee;background:#e4edff}
+    .mysarthi-save{margin:10px 0 18px}
+    .mysarthi-save:has(> [hidden]){display:none}
+    #jd-notice:empty:has(+ .mysarthi-save > button:not([hidden])){display:none}
+    #save-mysarthi{display:block;min-height:44px;width:100%;padding:10px 12px;border:1px solid #cfdbf4;border-radius:8px;background:var(--prep-soft);color:var(--prep);font-size:13px;font-weight:600;line-height:1.5;text-align:left;text-decoration:none}
+    #save-mysarthi:hover{border-color:#8cabee;background:#e4edff}
+    #save-mysarthi[hidden]{display:none}
+    @media(max-width:600px){#acct-btn{font-size:11.5px;padding:5px 9px}}
+    /* the bar must fit a phone with the account button added: Invite yields first, then everything tightens */
+    @media(max-width:480px){.appbar #open-invite{display:none}}
+    @media(max-width:420px){.appbar .navright{gap:8px}.appbar .chip{font-size:11px;padding:4px 7px}#acct-btn{font-size:11px;padding:4px 8px;max-width:76px;overflow:hidden;text-overflow:ellipsis}
+      .appbar .brand{display:none}.appbar .brand-prod{padding-left:0;border-left:0}}
+    @media(max-width:380px){.appbar .chip{display:inline-block;max-width:104px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}#acct-btn{max-width:64px}}
+    .screen{padding-top:28px}
+    .screen h1{font-size:clamp(30px,5vw,44px);margin:10px 0 12px;letter-spacing:-.03em}
+    .screen h1 em{font-style:normal;color:var(--accent)}
+    .lede{color:var(--muted);font-size:16.5px;margin:0 0 8px;max-width:36em}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .actions .pill{flex:1 1 auto}
+    ol.how{margin:14px 0 0;padding:0;list-style:none;counter-reset:k}
+    ol.how li{counter-increment:k;padding:12px 0 12px 44px;border-top:1px solid var(--line);position:relative;color:var(--muted)}
+    ol.how li::before{content:"0" counter(k);position:absolute;left:0;top:13px;font:700 13px var(--font);color:var(--accent);letter-spacing:.06em}
+    .check{display:flex;gap:10px;align-items:center;margin-top:14px;color:var(--muted);font-size:14.5px}
+    .check input{width:18px;height:18px;accent-color:var(--accent)}
+    /* the call */
+    .call.big{padding:24px 22px 22px;min-height:min(640px,calc(100dvh - 150px));display:flex;flex-direction:column}
+    .call.big .wheelwrap{flex:1;min-height:240px}
+    .call.big .clock{font:650 16px var(--font);font-variant-numeric:tabular-nums;color:var(--dark-ink)}
+    .call.big .clock.low{color:#ff7a70}
+    .prestart{display:grid;gap:14px}
+    .prestart ul{margin:0;padding:0;list-style:none;color:var(--dark-muted);font-size:14.5px}
+    .prestart li{padding:8px 0;border-top:1px solid var(--dark-line)}
+    .prestart li:first-child{border-top:0}
+    .prestart .pill{background:var(--dark-ink);color:var(--dark)}
+    /* report */
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:16px} @media(max-width:700px){.two{grid-template-columns:1fr}}
+    .stack{display:grid;gap:16px}
+    .writing{text-align:center;padding:60px 20px}
+    .writing .wheelwrap{padding:0 0 18px}
+    .writing .wheelwrap::before{display:none}
+    .live-gift-notice{display:flex;align-items:flex-start;gap:12px;margin:12px 0 20px;padding:14px 16px;border:1px solid #a7d9c4;border-radius:12px;background:#f0fdf6}
+    .live-gift-notice[hidden],#live-gift-claim[hidden]{display:none}
+    .live-gift-notice p{margin:0;flex:1}
+    #live-gift-notice-close{flex-shrink:0}
+    #live-gift-claim{margin:18px 0;color:var(--muted);font-size:14px}
+    #live-gift-claim summary{cursor:pointer;color:var(--prep);padding:8px 0;min-height:40px}
+    #live-gift-claim form{margin-top:10px}
+    #live-gift-key{min-width:0;font-family:ui-monospace,Consolas,monospace;font-size:14px}
+    @media(max-width:480px){#live-gift-form .row{flex-direction:column}#live-gift-submit{width:100%}}
+    details.diag{margin:26px 0 0;color:var(--muted);font-size:13px}
+    details.diag summary{cursor:pointer}
+    #log{font:12px/1.45 ui-monospace,Consolas,monospace;max-height:220px;overflow:auto;white-space:pre-wrap;margin-top:10px}
+    #transcript{display:grid;gap:6px;margin-top:10px;font-size:13.5px}
+    #transcript .bubble small{font:700 10.5px var(--font);letter-spacing:.08em;text-transform:uppercase;display:block}
+  </style>
+</head>
+<body>
+<header class="appbar"><div class="appbar-in">
+  <a class="brand" href="/" aria-label="Interview Sarthi home"><img src="/assets/mark.svg" alt="InterviewSarthi" width="26" height="26"><span>Interview<strong>Sarthi</strong></span></a>
+  <a class="brand-prod" href="/prep/">Prep Sarthi</a>
+  <span class="navright"><button class="navlink" id="open-progress" data-pg="open">My progress</button><button class="navlink" id="open-invite">Invite</button><button id="entitle" class="chip" title="Passes">…</button><span class="acct" id="acct" style="display:none"><button id="acct-btn" aria-haspopup="true" aria-expanded="false">Sign in</button><div class="acct-menu" id="acct-menu" hidden><p id="acct-name"></p><small id="acct-mail"></small><a class="linkink mysarthi-link" href="/account/">My Sarthi: passes, interviews, profile</a><button class="linkink" id="acct-out">Sign out</button></div></span></span>
+</div></header>
+<div class="narrow">
+  <aside class="live-gift-notice notice ok" id="live-gift-notice" hidden role="status" aria-live="polite">
+    <p id="live-gift-notice-text"></p>
+    <button class="linkink" id="live-gift-notice-close" type="button" aria-label="Dismiss free days notice">Dismiss</button>
+  </aside>
+
+  <!-- 1. CV -->
+  <section class="screen on" id="s-cv">
+    <span class="label">Step 1 of 3</span>
+    <h1>Practise for <em>your</em> next role.</h1>
+    <p class="lede">Add your CV and an optional job description. Your interviewer adapts questions to your experience, answers and chosen role. When you start, your documents are used only to run this interview and write its report; the documents themselves are never stored. Your practice time starts when your interviewer starts speaking.</p>
+    <div class="card" style="margin-top:22px">
+      <div class="fhead" style="margin-top:0">
+        <label class="f" for="cv">CV</label>
+        <button type="button" class="chip up" id="cvpick">Add file</button>
+        <input type="file" id="cvfile" accept=".pdf,.txt,.md,application/pdf,text/plain" hidden>
+      </div>
+      <textarea id="cv" placeholder="Paste your CV here, or add a PDF with the button above."></textarea>
+      <div class="notice" id="cv-notice"></div>
+      <div class="row">
+        <div><label class="f">Your first name</label><input type="text" id="name" placeholder="Riya" autocomplete="given-name"></div>
+        <div><label class="f">Interview language</label>
+          <select id="language">
+            <option value="English">English</option>
+            <option value="Hinglish">Hinglish</option>
+            <option value="Hindi">Hindi</option>
+            <option value="auto">Match whatever I speak</option>
+            <option value="other">Another language…</option>
+          </select>
+          <input type="text" id="language-other" placeholder="e.g. Tamil, Spanish, German" style="display:none;margin-top:8px">
+        </div>
+      </div>
+      <div class="fhead">
+        <label class="f" for="jd">Job description<span class="opt"> · optional</span></label>
+        <button type="button" class="chip up" id="jdpick">Add file</button>
+        <input type="file" id="jdfile" accept=".pdf,.txt,.md,application/pdf,text/plain" hidden>
+      </div>
+      <textarea id="jd" style="min-height:84px" placeholder="Paste the JD, or add a PDF, and the interviewer will target that role."></textarea>
+      <div class="notice" id="jd-notice"></div>
+      <p class="mysarthi-save"><button type="button" class="linkink" id="save-mysarthi" hidden>Save my CV and job description to My Sarthi</button></p>
+      <div id="no-jd-options">
+        <label class="f" for="practice-focus">Without a job description</label>
+        <select id="practice-focus"><option value="role">Practise for a role</option><option value="general_cv">General CV practice</option></select>
+        <div class="row" id="target-details">
+          <div><label class="f" for="target-role">Target role</label><input id="target-role" type="text" maxlength="150" placeholder="e.g. Backend developer, accountant, sales associate"></div>
+          <div><label class="f" for="target-level">Target level</label><select id="target-level"><option value="">Choose the role level</option><option>Entry-level / fresher</option><option>Individual contributor</option><option>Senior individual contributor</option><option>Lead / manager</option></select></div>
+        </div>
+        <p class="muted" id="no-jd-help">We’ll practise common skills for this role and level. The report won’t claim a match to a specific employer.</p>
+      </div>
+      <div class="row">
+        <div><label class="f">Length</label>
+          <select id="minutes"><option value="8">8 minutes · quick round</option><option value="10">10 minutes</option><option value="12" selected>12 minutes</option><option value="18">18 minutes · full round</option></select></div>
+        <div><label class="f">Interviewer voice</label>
+          <select id="voice"><option value="Kore">Kore · female</option><option value="Aoede">Aoede · female</option><option value="Leda">Leda · female</option><option value="Charon">Charon · male</option><option value="Puck">Puck · male</option><option value="Fenrir">Fenrir · male</option></select></div>
+      </div>
+      <div class="actions"><button class="pill wide" id="to-key">Start interview →</button></div>
+      <p class="muted" id="start-note" style="margin:10px 0 0;font-size:14px"></p>
+    </div>
+  </section>
+
+  <!-- 2. Key -->
+  <section class="screen" id="s-key">
+    <span class="label">Step 2 of 3</span>
+    <h1>One key, <em>yours.</em></h1>
+    <p class="lede" id="key-lede">The interviewer runs on Google's Gemini, on your own free key. It stays in this browser and is sent only to Google, unless you save it to My Sarthi yourself. If you use Live Sarthi or ApplySarthi, it is the same key.</p>
+    <div class="card" style="margin-top:22px">
+      <ol class="how" style="margin-top:0">
+        <li style="border-top:0">Open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>, signed in to any Google account.</li>
+        <li>Tap <b style="color:var(--ink)">Create API key</b>, then copy it.</li>
+        <li>Paste it below. Stuck? <a href="/free-gemini-api-key-guide.html" target="_blank">The guide with pictures</a>.</li>
+      </ol>
+      <label class="f">API key</label>
+      <input type="password" id="key" autocomplete="off" placeholder="Paste the key here">
+      <label class="check"><input type="checkbox" id="remember" checked> Remember on this device</label>
+      <div class="notice" id="key-notice"></div>
+      <div class="actions">
+        <button class="pill ghost" id="back-cv" style="flex:0 0 auto">Back</button>
+        <button class="pill" id="check-key">Check key and continue →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Interview -->
+  <section class="screen" id="s-live">
+    <div class="demo-call-layout">
+    <div class="call big">
+      <div class="top"><span class="live" id="livetag">Ready</span><span class="clock" id="clock">12:00</span></div>
+      <div class="wheelwrap" id="wheel"></div>
+      <p class="caption" id="caption"><span class="hint" id="hint">Your interviewer</span><span id="line">She speaks first. Answer out loud, like a real call.</span></p>
+      <p class="youline" id="youline"></p>
+      <div class="micfix" id="micfix" style="display:none">
+        <p id="micfix-text">I can't hear your microphone.</p>
+        <span class="mini">Microphone</span>
+        <select id="micselect" style="margin-top:6px"></select>
+        <ul>
+          <li>Check the mute key on your laptop or keyboard, and the mute switch on your headset.</li>
+          <li>If you have more than one microphone, pick another one above.</li>
+          <li>Then answer out loud. Your interviewer is waiting.</li>
+        </ul>
+      </div>
+      <div class="prestart" id="pre-live">
+        <ul>
+          <li id="tip-speaker">Use wired earphones if you can. From a loud speaker she can hear herself. Bluetooth earbuds work best with the laptop's microphone.</li>
+          <li id="tip-interrupt">You can interrupt, and so can she.</li>
+          <li>It ends by itself when time is up, then your report appears.</li>
+        </ul>
+        <button class="pill wide" id="start">Start the interview</button>
+      </div>
+      <div class="you" id="youbar" style="display:none">
+        <div class="bars" id="bars"><i></i><i></i><i></i><i></i><i></i></div>
+        <small id="left">You're on</small>
+        <button class="pill small danger" id="end">End</button>
+      </div>
+    </div>
+    <aside class="demo-pass-card" id="demo-call-offer" hidden aria-label="Prep pass">
+      <div id="demo-offer-content">
+        <p class="demo-pass-price"><b id="demo-call-price"></b> <span>· 30 days</span></p>
+        <h2>Not ready today? That's normal.</h2>
+        <ul id="demo-call-benefits"></ul>
+        <button class="pill wide" id="demo-call-buy">Get unlimited practice</button>
+        <p class="demo-pass-note">Your free interview stops here and your report is saved.</p>
+      </div>
+      <div id="demo-exit-card" hidden role="group" aria-labelledby="demo-exit-title">
+        <h2 id="demo-exit-title" tabindex="-1">Leaving the interview?</h2>
+        <p class="demo-exit-copy">That's fine. With a pass you can practise as often as you like.</p>
+        <div class="demo-exit-actions">
+          <button class="pill ghost" id="demo-exit-keep">Keep going</button>
+          <button class="pill" id="demo-exit-buy">Get unlimited practice</button>
+          <button class="linkink" id="demo-exit-end">End and see my report</button>
+        </div>
+      </div>
+    </aside>
+    </div>
+    <div class="notice" id="live-notice"></div>
+    <!-- The free demo when both of our keys are busy (12 interviews at once): the visitor chooses. -->
+    <div class="card" id="demo-full" style="display:none;margin-top:14px">
+      <b>Lots of people are practising right now.</b>
+      <p class="small" style="margin:6px 0 12px">Your free demo is kept for you. Choose one:</p>
+      <div class="actions">
+        <button class="pill" id="demo-full-key">Use my own Gemini key now</button>
+        <button class="pill ghost" id="demo-full-wait">Wait a minute, then try again</button>
+      </div>
+      <div class="notice" id="demo-full-note"></div>
+    </div>
+    <div class="offer" id="live-offer" style="display:none">
+      <p id="live-offer-text"></p>
+      <button class="pill small" id="live-offer-go">See passes</button>
+    </div>
+  </section>
+
+  <!-- Passes and account -->
+  <section class="screen" id="s-pass">
+    <span class="label" id="pass-kicker">Passes</span>
+    <h1 id="pass-title">Unlimited mocks, <em>one payment.</em></h1>
+    <p class="lede" id="pass-lede">No subscription, and it never renews by itself. The clock starts when you pay, and the pass ends exactly on time.</p>
+    <div class="notice" id="pass-notice"></div>
+    <button class="pill" id="see-full-report" style="display:none;margin:0 0 16px">See your full report →</button>
+    <script>
+      /* Fill in what the head decided, as these elements appear. */
+      (function () {
+        if (!window.__ps) return;
+        var n = document.getElementById("pass-notice");
+        if (window.__ps.order) { n.textContent = "Confirming your payment… keep this page open."; }
+      })();
+    </script>
+    <div class="offer warn" id="pass-running" style="display:none">
+      <p>Your interview is still running in the background. Paying opens the payment page and would end it without a report. Finish it first, then buy.</p>
+      <button class="pill small" id="pass-running-back">Back to my interview</button>
+    </div>
+    <div id="pass-body">
+
+      <!-- your account, once a pass is live -->
+      <div class="card account" id="account-card" style="display:none">
+        <div class="acct-top">
+          <div><span class="label">Signed in</span><p id="pass-who" style="margin:4px 0 0"></p></div>
+          <button class="linkink" id="signout">Sign out</button>
+        </div>
+        <div class="passbig"><b id="pass-days"></b><span id="pass-until"></span></div>
+        <div class="actions">
+          <button class="pill" id="go-practise">Start practising →</button>
+          <button class="pill ghost" id="extend">Extend my pass</button>
+        </div>
+        <div id="pass-stats" class="acct-stats"></div>
+      </div>
+
+      <div class="card" id="freedays" style="display:none;margin-top:16px">
+        <span class="label">Free days</span>
+        <p id="freedays-text" style="margin:8px 0 14px"></p>
+        <button class="pill" id="start-days">Start my free days</button>
+        <p style="margin:14px 0 0"><button class="linkink" id="free-days-buy" type="button">Need more days? Buy a pass</button></p>
+      </div>
+
+      <!-- step 1: choose a pass -->
+      <div id="buy-block">
+        <p class="notice ok" id="live-month-included" hidden>Bought a Live Sarthi 1-Month Pass? Prep Sarthi is included: sign in with the same Gmail.</p>
+        <div class="plans">
+          <button class="plan on" data-plan="m"><span class="label">One month</span><b>30 days</b><span class="price">Loading price…</span><small>Unlimited mocks for every interview this month. One payment, never renews.</small></button>
+        </div>
+        <div class="actions"><button class="pill wide" id="buy-cta">Buy the 30-day pass →</button></div>
+        <p class="notice ok" id="invited-note" style="display:none;margin:12px 0 0">Invited by a friend: your first pass lasts 37 days instead of 30.</p>
+        <p class="muted" style="font-size:13.5px;margin:14px 0 0"><span id="pay-methods">UPI, card or netbanking through Cashfree.</span> One payment, no auto-renew. <a href="/refunds.html" target="_blank">Refunds</a>.</p>
+        <p class="muted" id="have-pass-row" style="font-size:14.5px;margin:14px 0 0">Already bought a pass? <button class="linkink" id="have-pass">Sign in to use it here</button></p>
+      </div>
+
+      <!-- step 2: who you are, then pay -->
+      <div class="card" id="checkout" style="display:none">
+        <div class="acct-top">
+          <div><span class="label" id="checkout-label">You are buying</span><p id="checkout-plan" style="margin:4px 0 0;font-weight:600"></p></div>
+          <script>
+            (function () {
+              var buy = window.__ps && window.__ps.buy;
+              if (buy) document.getElementById("checkout-plan").textContent = { m: "30-Day Pass · Loading price…" }[buy];
+            })();
+          </script>
+          <button class="linkink" id="checkout-back">Change</button>
+        </div>
+        <!-- what the pass gives, before payment (1 Oct 2026: a buyer paid for this when he wanted Live Sarthi;
+             both cost Rs 99, and Live's checkout points back here) -->
+        <div id="checkout-what">
+          <span class="label">What you get</span>
+          <ul class="what">
+            <li>Unlimited mock interviews for 30 days</li>
+            <li>Questions from your own CV and the job you want</li>
+            <li>A score and feedback on every answer</li>
+            <li>Works in the browser on your phone or laptop</li>
+          </ul>
+          <p class="muted what-note">Good to know: Prep Sarthi is for practice <b>before</b> your interview. For help <b>during</b> a live interview, use <a href="/live/">Live Sarthi</a>.</p>
+        </div>
+        <div id="pass-signin" style="margin-top:18px">
+          <p class="muted" id="signin-why" style="margin:0 0 14px">Sign in with Google first, so your pass follows you to any phone or laptop.</p>
+          <div id="gbutton"></div>
+          <div id="testlogin" style="display:none;margin-top:12px">
+            <span class="label">Sandbox sign-in (local preview only)</span>
+            <div class="row" style="margin-top:8px"><input type="text" id="testlogin-email" placeholder="tester@example.com"><button class="pill ghost" id="testlogin-go">Test sign-in</button></div>
+          </div>
+        </div>
+        <div id="pass-pay" style="display:none;margin-top:18px">
+          <p class="muted" style="margin:0"><span id="pass-who2"></span> · <button class="linkink" id="signout2">not you?</button></p>
+          <label class="f">Mobile number, for the payment receipt</label>
+          <input type="text" id="phone" inputmode="numeric" autocomplete="tel-national" placeholder="10-digit mobile number">
+          <div class="actions"><button class="pill wide" id="pay">Pay securely →</button></div>
+        </div>
+      </div>
+
+      <details id="live-gift-claim" hidden>
+        <summary>Have a Live Sarthi 1-Month Pass key?</summary>
+        <form id="live-gift-form">
+          <label class="f" for="live-gift-key">Paste it to add your free Prep month.</label>
+          <div class="row"><input id="live-gift-key" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" maxlength="100" placeholder="IS-XXXX-XXXX-XXXX-XXXX" required><button class="pill ghost" id="live-gift-submit" type="submit">Add my free month</button></div>
+          <p class="notice" id="live-gift-error" role="status" aria-live="polite"></p>
+        </form>
+      </details>
+    </div>
+    <div id="heard-from"></div>
+    <div class="actions"><button class="pill ghost" id="pass-back">Back</button></div>
+  </section>
+
+  <!-- Invite -->
+  <section class="screen" id="s-invite">
+    <span class="label">Invite</span>
+    <h1>Practise more, <em>for free.</em></h1>
+    <div id="invite-full" style="margin-top:18px"></div>
+    <div class="actions"><button class="pill ghost" id="invite-back">Back</button></div>
+  </section>
+
+  <!-- 4. Report -->
+  <section class="screen" id="s-report">
+    <div class="offer" id="report-pass-active" hidden>
+      <p><b>Your pass is active.</b> One last step: add your free Gemini key, about a minute.</p>
+      <button class="pill" id="report-key-setup">Set up my key →</button>
+    </div>
+    <p class="notice" id="report-payment-note" hidden role="status"></p>
+    <div class="card writing" id="report-wait">
+      <div class="wheelwrap" id="wheel-wait"></div>
+      <h2 style="font-size:26px">Writing your report</h2>
+      <p class="muted" id="report-status">Scoring every answer against your CV. About twenty seconds.</p>
+    </div>
+    <div id="report" class="stack"></div>
+    <div class="offer sell" id="report-offer" style="display:none">
+      <p id="report-offer-text"></p>
+      <button class="pill" id="report-offer-go">See passes</button>
+    </div>
+    <div id="invite-report" style="margin-top:16px"></div>
+    <div class="actions" id="report-actions">
+      <button class="pill" id="again">Practise again</button>
+      <button class="pill ghost" id="download">Download report</button>
+    </div>
+    <p class="muted" style="margin-top:22px;font-size:14.5px">Real interview coming up? <a href="/live/" target="_blank">Live Sarthi</a> gives you live help on the call itself. Still looking? <a href="/apply/" target="_blank">ApplySarthi</a> finds jobs that match your CV and fills the application for you.</p>
+  </section>
+
+  <!-- 5. The end of a Live Sarthi test (app.js showLiveTestDone, 3 Oct 2026): the Windows app's try-it guide sends
+       new Live Sarthi users here. What they need next is Live Sarthi, never a Prep pass or report. -->
+  <section class="screen" id="s-livetest">
+    <span class="label">Live Sarthi test</span>
+    <h1>Test <em>done.</em></h1>
+    <p class="lede">Did a suggested answer appear in the Live Sarthi window a few seconds after each question? That is how it helps in your real interview, and only you can see it, even when you share your screen.</p>
+    <div class="card" style="margin-top:22px">
+      <h2 style="font-size:24px;margin:0">Have it in your real interview</h2>
+      <p class="muted" id="lt-price" style="margin:8px 0 0">Passes from Rs 99 for 2 days.</p>
+      <div class="actions"><a class="pill wide" id="lt-buy" href="/live/#pricing">Get Live Sarthi →</a></div>
+    </div>
+    <p class="muted" style="margin-top:18px;font-size:14.5px">No answers appeared? Check that Live Sarthi is running and can hear this PC's sound, then test again. <a href="/help.html" target="_blank">Help</a></p>
+    <div class="actions"><button class="pill ghost" id="lt-again">Test again</button></div>
+  </section>
+
+  <!-- /prep/app/#progress opens My progress (progress-view.js reads the hash); this anchor gives the link a target. -->
+  <span id="progress" hidden></span>
+  <section class="screen pg" id="s-progress" aria-labelledby="pg-title"></section>
+  <section class="screen pg" id="s-comparison" aria-label="Answer comparison"></section>
+  <dialog id="pg-dialog" class="pg-dialog" aria-labelledby="pg-dialog-title"></dialog>
+  <div id="pg-toast" class="pg-toast" role="status" aria-live="polite" hidden></div>
+  <details class="diag" id="diagnostics" hidden><summary>Diagnostics</summary><p style="margin:10px 0 0"><button class="pill small ghost" id="copydiag">Copy diagnostics</button> <span id="copydiag-note"></span></p><div id="transcript"></div><div id="log"></div></details>
+  <footer class="site" style="margin-top:30px">Prep Sarthi is part of <a href="/">Interview Sarthi</a> · <a href="/privacy.html">Privacy</a> · <a href="mailto:support@interviewsarthi.com">support@interviewsarthi.com</a></footer>
+</div>
+<script src="/assets/analytics.js" defer></script>
+<script type="module" src="./app.js?v=20261012-models38"></script>
+<script type="module" src="./progress-view.js?v=20261012-models38"></script>
+</body>
+</html>

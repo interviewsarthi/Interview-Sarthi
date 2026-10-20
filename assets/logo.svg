@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="t d">
+  <title id="t">Interview Sarthi mark — chariot wheel</title>
+  <desc id="d">The sarthi's wheel, drawn as a bare glyph in brand blue for the navbar lockup.</desc>
+  <defs>
+    <linearGradient id="ko" x1="10" y1="12" x2="56" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/><stop offset="1" stop-color="#4F46E5"/>
+    </linearGradient>
+  </defs>
+  <!-- Two streaks, not three: at 30px a third faint line closes the gaps and
+       the whole left side reads as fuzz rather than motion. -->
+  <g stroke="url(#ko)" stroke-linecap="round" opacity=".7">
+    <path d="M3 25h9" stroke-width="4"/>
+    <path d="M3 39h9" stroke-width="4"/>
+  </g>
+  <g transform="translate(37 32)">
+    <circle r="17" fill="none" stroke="url(#ko)" stroke-width="5"/>
+    <g stroke="url(#ko)" stroke-width="3.2" stroke-linecap="round">
+      <path d="M0-14.4V14.4M-14.4 0H14.4M-10.2-10.2l20.4 20.4M-10.2 10.2l20.4-20.4"/>
+    </g>
+    <circle r="5" fill="url(#ko)"/>
+  </g>
+</svg>

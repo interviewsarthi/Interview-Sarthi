@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>if(location.protocol==="http:"&&/interviewsarthi\.com$/.test(location.hostname)){location.replace("https://"+location.host+location.pathname+location.search+location.hash);}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="assets/mark.svg"><link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96.png"><link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png"><link rel="apple-touch-icon" href="assets/icon-512.png">
+<title>Interview Sarthi: Help</title>
+<meta name="description" content="Setup and troubleshooting for Interview Sarthi: installation, Gemini API key, audio devices, screen-share invisibility, and license activation.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://interviewsarthi.com/help.html">
+<meta property="og:title" content="Interview Sarthi: Help">
+<meta property="og:description" content="Setup and troubleshooting: installation, Gemini API key, audio devices, screen-share invisibility, license activation.">
+<meta property="og:url" content="https://interviewsarthi.com/help.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Interview Sarthi">
+<meta property="og:image" content="https://interviewsarthi.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<style>
+  :root { --bg:#ffffff; --card:#f6f8fb; --line:#e6eaf1; --text:#0f172a; --muted:#5b6b81; --accent:#2563eb; --ok:#059669; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:"Segoe UI",system-ui,-apple-system,sans-serif; line-height:1.6; }
+  a { color:var(--accent); }
+  .wrap { max-width:860px; margin:0 auto; padding:0 20px 60px; }
+  header { padding:22px 0; display:flex; justify-content:space-between; align-items:center; }
+  .logo { font-weight:700; font-size:18px; text-decoration:none; color:var(--text); }
+  .logo span { color:var(--accent); }
+  h1 { font-size:30px; margin:26px 0 6px; }
+  .lead { color:var(--muted); margin:0 0 26px; }
+  h2 { font-size:20px; margin:34px 0 12px; padding-top:22px; border-top:1px solid var(--line); }
+  details { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:10px 0; }
+  summary { cursor:pointer; font-weight:600; }
+  details p, details ol, details ul { color:var(--muted); font-size:14px; margin:8px 0 0; }
+  code { background:#eef2f7; border:1px solid var(--line); border-radius:5px; padding:1px 6px; font-size:13px; }
+  .note { font-size:13px; color:var(--muted); margin-top:30px; }
+</style>
+<script defer src="assets/analytics.js"></script>
+<script defer src="assets/wa.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://interviewsarthi.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Help & troubleshooting",
+      "item": "https://interviewsarthi.com/help.html"
+    }
+  ]
+}
+</script>
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="logo" href="./"><span class="wm">Interview <i>Sarthi</i></span></a>
+    <nav><a href="/live/#pricing">Pricing</a> · <a href="/account/" style="display:inline-flex;align-items:center;min-height:36px;padding:6px 10px;border:1px solid #cfdbf4;border-radius:8px;background:#f0f5ff;color:#2355b9;font-size:12px;font-weight:650;text-decoration:none;white-space:nowrap">My Sarthi</a></nav>
+  </header>
+
+  <p class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> › Help &amp; troubleshooting</p>
+<h1>Help &amp; troubleshooting</h1>
+  <p class="lead">Find your problem below and follow the steps. Before an interview, try the two-minute test.</p>
+
+  <h2>Setup</h2>
+  <p>Starting with Live Sarthi? Follow <a href="/live/how-it-works.html">the full interview copilot walkthrough</a>, <a href="/live/google-meet-interview-assistant.html">Google Meet audio setup</a> or <a href="/live/resume-based-interview-answers.html">adding your CV, job description and examples</a>.</p>
+  <details open><summary>“Key not working” when I press Test or Save</summary>
+    <p>The key was copied incompletely or from the wrong place.</p>
+    <ol>
+      <li>Open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> (step-by-step: <a href="free-gemini-api-key-guide.html">free Gemini key guide</a>), click <b>Create API key</b>, then <b>Copy</b>.</li>
+      <li>Paste the whole key (a long string: older keys start with <code>AIza</code>, newer ones with <code>AQ.</code>) and press <b>Test</b>.</li>
+      <li>If Google says the key is “not allowed to use Gemini”, create a new key in a <em>new project</em> from the same page.</li>
+    </ol></details>
+  <details><summary>My resume PDF says “no readable text”</summary>
+    <p>It is a scan or a photo. With a Gemini key entered, the app reads it for you automatically. Press Save again. Otherwise export the resume from Word as PDF, or upload the <code>.docx</code> directly.</p></details>
+  <details><summary>How do I change my name, resume, key or audio devices later?</summary>
+    <p>Click <b>setup</b> in the overlay's header (next to <b>pause</b>). The same setup screen opens with everything pre-filled. Change what you need, press <b>Save</b>, and choose <b>Restart now</b> so the new settings apply. Your license and trial are untouched.</p></details>
+  <details><summary>Where do I add the job description or my own examples?</summary>
+    <p>Click <b>setup</b> in the overlay's header. Under your resume are two boxes: <b>Job description for this interview</b> (up to 1,900 characters) and <b>Your own examples</b> (up to 3,300). Paste the job ad into the first. In the second, write a short paragraph for each real story: what happened, what you did, the numbers. Press <b>Save</b> and choose <b>Restart now</b>. Both boxes are optional; empty one and press Save to delete it.</p>
+    <p>Answers then use the role's words and tell your stories with their real details, so you can recognise your own story by its names and numbers. When none of your stories or CV fits a question, the answer says so (“I haven't hit that exact case, but here's how I'd approach it”) instead of making up an incident. No boxes in setup? Download the app again from this site to update.</p></details>
+  <details><summary>Windows SmartScreen blocks the installer</summary>
+    <p>Click <b>More info → Run anyway</b>. The installer is unsigned (signing certificates cost more than the app earns for now). It installs only into your own user folder, needs no admin rights, and adds a Start-menu and Desktop shortcut. Prefer no installer? The portable <code>Interview-Sarthi.exe</code> on the <a href="https://github.com/abhishekchoudhary1710/Interview-Sarthi/releases/latest" target="_blank" rel="noopener">releases page</a> runs from anywhere.</p></details>
+
+  <h2>During a call</h2>
+  <details><summary>Bluetooth earphones: I cannot hear the interviewer, or the app cannot hear them</summary>
+    <p>Best: wired earphones, or the laptop's own speaker and mic, in your meeting app.</p>
+    <p>Bluetooth earphones? Disconnect them, and use wired earphones or the laptop's own speaker and mic in your meeting app.</p>
+    <p>In Interview Sarthi, click <b>setup</b> and keep both sound boxes on <b>Automatic</b>. Then <a href="/prep/app/?from=livesarthi">test with the AI interviewer</a> before your next interview.</p></details>
+  <details><summary>Sound stops during the interview</summary>
+    <p>In Interview Sarthi, click <b>more</b>, then <b>reconnect</b>. Keep your meeting open.</p>
+    <p>If you do not see <b>reconnect</b>, <a href="https://github.com/abhishekchoudhary1710/Interview-Sarthi/releases/latest/download/Interview-Sarthi-Setup.exe">download the update</a> and install it over your old copy. Your key and settings stay.</p></details>
+  <details><summary>I clicked the app icon twice</summary>
+    <p>Open Interview Sarthi once. Clicking its icon again brings the same window forward.</p></details>
+  <details><summary>How do I make the message box bigger?</summary>
+    <p>The message box grows to fit its text. Drag the small grip below it up or down to change its height. Double-click the grip to let it grow automatically again.</p></details>
+  <details><summary>“cannot open system audio: Error 0x80070490” (or “cannot open mic audio”)</summary>
+    <p>Windows found no audio device. This happens on desktop PCs with nothing plugged into the audio jack, or when the sound device is disabled.</p>
+    <ol>
+      <li>Plug in headphones or speakers (and a microphone or headset if you have one).</li>
+      <li>Right-click the speaker icon in the taskbar → <b>Sound settings</b> → make sure an <b>Output</b> device and an <b>Input</b> device are listed and not disabled.</li>
+      <li>Close and start Interview Sarthi again. It listens to whatever Windows plays through, so a working output device is required.</li>
+    </ol></details>
+  <details><summary>The transcript stays empty. The interviewer is never heard</summary>
+    <p>Make sure you can hear the interviewer through this computer. Check, in order:</p>
+    <ol>
+      <li>In your meeting app, choose this computer's speakers or earphones for listening. Keep the call's sound on this computer.</li>
+      <li>Bluetooth earphones? Disconnect them, and use wired earphones or the laptop's own speaker and mic in your meeting app.</li>
+      <li>In Interview Sarthi, click <b>setup</b> and keep both sound boxes on <b>Automatic</b>.</li>
+      <li>Click <b>more</b>, then <b>reconnect</b>, and <a href="/prep/app/?from=livesarthi">try the AI interviewer</a>.</li>
+    </ol></details>
+  <details><summary>It answers my own voice, or answers twice</summary>
+    <p>Put on wired earphones. Bluetooth earphones? Disconnect them, and use wired earphones or the laptop's own speaker and mic in your meeting app.</p>
+    <p>If you are testing a call from your phone, keep the phone away from the laptop, or the app hears you twice.</p></details>
+  <details><summary>I got a one-word or half answer</summary>
+    <p>Someone spoke while the app was answering. Ask the interviewer to repeat the question; the full answer also follows by itself.</p></details>
+  <details><summary>Answers are generic, nothing from my resume</summary>
+    <p>Click <b>setup</b> in the overlay's header and check the resume line says “Resume ready: N lines”. If it says it could not be summarised, press Save again with internet on. Also check <b>Your field</b> is filled. It tunes the answers. The resume is summarised, so for answers that tell a real incident of yours (a bug you fixed, a deadline you saved), write it in <b>Your own examples</b> in setup; that box is used as you wrote it.</p></details>
+  <details><summary>The overlay is visible in my shared screen</summary>
+    <p>On Windows 10 (2004+) and 11, the overlay, and from version 1.0.41 every other window of the app (Setup, Help, the licence screen and pop-ups), is hidden from supported screen sharing in compatible setups with Teams, Zoom, Google Meet, OBS and other apps. Visibility depends on the capture method and your setup. If the panel appears in your share, check your Windows version and sharing settings, then test both sides of a practice call.</p></details>
+  <details><summary>“Gemini Live reconnecting” appears mid-call</summary>
+    <p>Normal: the app reconnects by itself and carries the conversation over. You lose at most a few seconds. From version 1.0.41 this happens quietly and the message no longer shows. If answers keep stopping, your internet is dropping. Switch to a wired connection or mobile hotspot.</p></details>
+
+  <h2>Try it before your interview</h2>
+  <details><summary>How do I test Live Sarthi during the free trial?</summary>
+    <p>Open Interview Sarthi once, put on earphones and <a href="/prep/app/?from=livesarthi">open the AI interviewer</a>. Add your resume and press <b>Start</b>. When the interviewer asks a question, check that a suggested answer appears in Interview Sarthi.</p>
+    <p>Best: wired earphones, or the laptop's own speaker and mic. Bluetooth earphones? Disconnect them. Testing alone with the practice page or a phone? Answer when it asks; if the interviewer talks over an answer, the full answer follows in a moment. If you test from your phone instead, keep the phone away from the laptop, or the app hears you twice. Ask interview questions in English or Hindi.</p></details>
+
+  <h2>Your pass</h2>
+  <details><summary>“Your pass has ended”</summary>
+    <p>The pass ran its 2 or 30 days, or the payment was refunded. Buy a new pass from the <a href="/live/#pricing">pricing section</a>, paste the new key, click <b>Activate</b>. Your resume and settings are kept.</p></details>
+  <details><summary>“Already in use on the maximum number of devices”</summary>
+    <p>A 1-Month key works on two computers, a 2-Day key on one. On the old computer click <b>setup</b> in the overlay's header → License → <b>Release this device</b>. If you no longer have that computer, email us with your key and we will release it.</p></details>
+  <details><summary>I was charged but never got a key</summary>
+    <p>Check spam for your purchase email (from Cashfree in India, Dodo Payments outside India). The key is also shown on the page you were sent to after paying. Still nothing after 15 minutes: email us with the payment email address.</p></details>
+  <details><summary>Refer a friend: where is my invite code, and how do I use a free day?</summary>
+    <p>Your invite code is in the email with your license key, and on the page shown after you pay. You can also paste your key on the <a href="/live/invite.html">invite page</a> to get your link. When a friend buys a pass with your code and activates it on their own computer, you each get a <b>Free Interview Day</b> key by email. It gives 24 hours on one computer and starts only when you activate it; activate it within 30 days. If a pass is still running, use the free day after it ends: the app then shows the license screen, where you paste the key and click <b>Activate</b>. <a href="/terms.html#refer">Full rules</a>.</p></details>
+  <details><summary>Refunds</summary>
+    <p>Please try the free 30 minutes first, on the computer and call app you will use. We refund a pass only if the app does not work on your computer and we could not fix it with you: tell us within 2 days of purchase (Help in the app, the chat on this site, or email) with the payment email address and what happened. We do not refund for a change of mind or for answers you did not like. Refunds go back to the original payment method in 5–7 working days. <a href="/refunds.html">Refund policy</a>.</p></details>
+
+  <p><a href="facts.html">Current trial, pricing and platform facts</a></p><p class="note">Email: <a href="mailto:support@interviewsarthi.com">support@interviewsarthi.com</a>. Include the error text shown in the app; screenshots help.</p>
+  <p class="note" style="border-top:1px solid var(--line);padding-top:16px">© 2026 Interview Sarthi · <a href="./">Home</a> · <a href="free-gemini-api-key-guide.html">Free Gemini key guide</a> · <a href="guides/">All guides</a> · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · <a href="refunds.html">Refunds</a></p>
+</div>
+<p style="max-width:780px;margin:20px auto;padding:0 20px">Use AI assistance only where your employer, interviewer or assessment provider permits it. For preparation, practise in a mock call and review suggestions against your own experience.</p>
+</body>
+</html>

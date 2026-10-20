@@ -1,0 +1,859 @@
+{
+ "about": "Skill dictionary from ApplySarthi (jobhunt/skillvocab.py) and the role figures printed on interviewsarthi.com/apply/ats-resume-checker/. Written by scripts/export_ats_skills.py.",
+ "roles_read": "2 October 2026",
+ "max_scan": 20000,
+ "vocab": {
+  "Python": [
+   "python"
+  ],
+  "Java": [
+   "java"
+  ],
+  "JavaScript": [
+   "javascript",
+   "java script"
+  ],
+  "TypeScript": [
+   "typescript"
+  ],
+  "Go": [
+   "golang",
+   "go lang"
+  ],
+  "Rust": [
+   "rust"
+  ],
+  "Ruby": [
+   "ruby"
+  ],
+  "PHP": [
+   "php"
+  ],
+  "Scala": [
+   "scala"
+  ],
+  "Kotlin": [
+   "kotlin"
+  ],
+  "Swift": [
+   "swift"
+  ],
+  "C++": [
+   "c++"
+  ],
+  "C#": [
+   "c#",
+   ".net",
+   "dotnet"
+  ],
+  "SQL": [
+   "sql"
+  ],
+  "R": [],
+  "MATLAB": [
+   "matlab"
+  ],
+  "Perl": [
+   "perl"
+  ],
+  "Shell scripting": [
+   "bash",
+   "shell scripting",
+   "shell script"
+  ],
+  "React": [
+   "react",
+   "react.js",
+   "reactjs"
+  ],
+  "Angular": [
+   "angular",
+   "angularjs"
+  ],
+  "Vue": [
+   "vue",
+   "vue.js",
+   "vuejs"
+  ],
+  "Next.js": [
+   "next.js",
+   "nextjs"
+  ],
+  "Svelte": [
+   "svelte"
+  ],
+  "Node.js": [
+   "node.js",
+   "nodejs",
+   "node js"
+  ],
+  "HTML": [
+   "html",
+   "html5"
+  ],
+  "CSS": [
+   "css",
+   "css3"
+  ],
+  "Tailwind": [
+   "tailwind"
+  ],
+  "jQuery": [
+   "jquery"
+  ],
+  "Django": [
+   "django"
+  ],
+  "Flask": [
+   "flask"
+  ],
+  "FastAPI": [
+   "fastapi",
+   "fast api"
+  ],
+  "Spring": [
+   "spring boot",
+   "springboot",
+   "spring"
+  ],
+  "Rails": [
+   "rails",
+   "ruby on rails"
+  ],
+  "Laravel": [
+   "laravel"
+  ],
+  "Express": [
+   "express.js",
+   "expressjs"
+  ],
+  "AWS": [
+   "aws",
+   "amazon web services"
+  ],
+  "Azure": [
+   "azure"
+  ],
+  "GCP": [
+   "gcp",
+   "google cloud"
+  ],
+  "Kubernetes": [
+   "kubernetes",
+   "k8s"
+  ],
+  "Docker": [
+   "docker"
+  ],
+  "Terraform": [
+   "terraform"
+  ],
+  "Ansible": [
+   "ansible"
+  ],
+  "Jenkins": [
+   "jenkins"
+  ],
+  "CI/CD": [
+   "ci/cd",
+   "cicd",
+   "ci cd"
+  ],
+  "Linux": [
+   "linux",
+   "unix"
+  ],
+  "Git": [
+   "git",
+   "version control"
+  ],
+  "Serverless": [
+   "serverless",
+   "lambda"
+  ],
+  "Microservices": [
+   "microservices",
+   "micro services"
+  ],
+  "Observability": [
+   "observability",
+   "prometheus",
+   "grafana",
+   "datadog",
+   "opentelemetry"
+  ],
+  "PostgreSQL": [
+   "postgresql",
+   "postgres"
+  ],
+  "MySQL": [
+   "mysql"
+  ],
+  "MongoDB": [
+   "mongodb",
+   "mongo"
+  ],
+  "Redis": [
+   "redis"
+  ],
+  "Elasticsearch": [
+   "elasticsearch",
+   "elastic search",
+   "opensearch"
+  ],
+  "Snowflake": [
+   "snowflake"
+  ],
+  "Databricks": [
+   "databricks"
+  ],
+  "BigQuery": [
+   "bigquery",
+   "big query"
+  ],
+  "Kafka": [
+   "kafka"
+  ],
+  "Spark": [
+   "spark",
+   "pyspark"
+  ],
+  "Hadoop": [
+   "hadoop"
+  ],
+  "Airflow": [
+   "airflow"
+  ],
+  "dbt": [
+   "dbt"
+  ],
+  "ETL": [
+   "etl",
+   "elt"
+  ],
+  "Data modelling": [
+   "data modeling",
+   "data modelling"
+  ],
+  "Data warehousing": [
+   "data warehouse",
+   "data warehousing"
+  ],
+  "Redshift": [
+   "redshift"
+  ],
+  "Machine learning": [
+   "machine learning",
+   "ml models"
+  ],
+  "Deep learning": [
+   "deep learning"
+  ],
+  "PyTorch": [
+   "pytorch"
+  ],
+  "TensorFlow": [
+   "tensorflow"
+  ],
+  "scikit-learn": [
+   "scikit-learn",
+   "sklearn"
+  ],
+  "pandas": [
+   "pandas"
+  ],
+  "NumPy": [
+   "numpy"
+  ],
+  "NLP": [
+   "nlp",
+   "natural language processing"
+  ],
+  "Computer vision": [
+   "computer vision"
+  ],
+  "LLMs": [
+   "llm",
+   "llms",
+   "large language model"
+  ],
+  "LangChain": [
+   "langchain"
+  ],
+  "Hugging Face": [
+   "hugging face",
+   "huggingface"
+  ],
+  "RAG": [
+   "retrieval augmented generation",
+   "rag pipeline"
+  ],
+  "MLOps": [
+   "mlops"
+  ],
+  "Generative AI": [
+   "generative ai",
+   "genai",
+   "gen ai"
+  ],
+  "REST APIs": [
+   "rest api",
+   "restful",
+   "rest apis"
+  ],
+  "GraphQL": [
+   "graphql"
+  ],
+  "gRPC": [
+   "grpc"
+  ],
+  "System design": [
+   "system design",
+   "distributed systems"
+  ],
+  "Android": [
+   "android"
+  ],
+  "iOS": [
+   "ios"
+  ],
+  "React Native": [
+   "react native"
+  ],
+  "Flutter": [
+   "flutter"
+  ],
+  "Selenium": [
+   "selenium"
+  ],
+  "Cypress": [
+   "cypress"
+  ],
+  "Playwright": [
+   "playwright"
+  ],
+  "Test automation": [
+   "test automation",
+   "automation testing"
+  ],
+  "Penetration testing": [
+   "penetration testing",
+   "pentesting"
+  ],
+  "SIEM": [
+   "siem",
+   "splunk"
+  ],
+  "IAM": [
+   "iam",
+   "identity and access management"
+  ],
+  "Salesforce": [
+   "salesforce"
+  ],
+  "SAP": [
+   "sap"
+  ],
+  "Workday": [
+   "workday"
+  ],
+  "ServiceNow": [
+   "servicenow"
+  ],
+  "HubSpot": [
+   "hubspot"
+  ],
+  "Jira": [
+   "jira"
+  ],
+  "Confluence": [
+   "confluence"
+  ],
+  "Figma": [
+   "figma"
+  ],
+  "Tableau": [
+   "tableau"
+  ],
+  "Power BI": [
+   "power bi",
+   "powerbi"
+  ],
+  "Looker": [
+   "looker"
+  ],
+  "Excel": [
+   "excel",
+   "advanced excel"
+  ],
+  "Google Analytics": [
+   "google analytics",
+   "ga4"
+  ],
+  "Agile": [
+   "agile",
+   "scrum",
+   "kanban"
+  ],
+  "Product management": [
+   "product management",
+   "product manager"
+  ],
+  "Stakeholder management": [
+   "stakeholder management",
+   "stakeholder"
+  ],
+  "SaaS": [
+   "saas"
+  ],
+  "B2B": [
+   "b2b"
+  ],
+  "B2C": [
+   "b2c"
+  ],
+  "CRM": [
+   "crm"
+  ],
+  "ERP": [
+   "erp"
+  ],
+  "SEO": [
+   "seo",
+   "search engine optimization",
+   "search engine optimisation"
+  ],
+  "Paid media": [
+   "sem",
+   "google ads",
+   "paid media",
+   "ppc"
+  ],
+  "Content marketing": [
+   "content marketing"
+  ],
+  "Financial modelling": [
+   "financial modeling",
+   "financial modelling"
+  ],
+  "Accounting": [
+   "accounting",
+   "bookkeeping"
+  ],
+  "Supply chain": [
+   "supply chain",
+   "logistics"
+  ],
+  "Talent acquisition": [
+   "talent acquisition",
+   "sourcing candidates",
+   "full cycle recruiting"
+  ],
+  "Customer success": [
+   "customer success"
+  ],
+  "Account management": [
+   "account management"
+  ],
+  "Lead generation": [
+   "lead generation",
+   "lead gen"
+  ],
+  "Cold calling": [
+   "cold calling",
+   "cold call"
+  ]
+ },
+ "ambiguous": {
+  "Excel": [
+   "excel(?!\\s+(?:at|in|with|as|when|under)\\b)",
+   "i"
+  ],
+  "React": [
+   "react(?:\\.?js|\\s+native)?(?!\\s+(?:to|quickly|fast|swiftly|promptly)\\b)",
+   "i"
+  ],
+  "Spring": [
+   "spring\\s*(?:boot|framework|mvc|security|cloud|data)",
+   "i"
+  ],
+  "Swift": [
+   "swift(?:ui)?(?!\\s*(?:ly|\\s+(?:action|execution|decision|response))\\b)",
+   "i"
+  ],
+  "Go": [
+   "\\b(?:golang|go\\s+(?:lang|programming|developer|routines))\\b|(?<![a-z])Go(?=\\s*[,/)\\]])",
+   ""
+  ]
+ },
+ "roles": {
+  "software-engineer": {
+   "label": "Software engineer",
+   "postings": 4281,
+   "jobs": "/jobs-in/india/software-engineer",
+   "skills": [
+    [
+     "Python",
+     21.2
+    ],
+    [
+     "AWS",
+     19.1
+    ],
+    [
+     "Java",
+     17.4
+    ],
+    [
+     "Agile",
+     16.6
+    ],
+    [
+     "CI/CD",
+     15.7
+    ],
+    [
+     "System design",
+     14.4
+    ],
+    [
+     "Azure",
+     11.4
+    ],
+    [
+     "SQL",
+     11.1
+    ],
+    [
+     "Microservices",
+     10.7
+    ],
+    [
+     "Kubernetes",
+     10.5
+    ]
+   ]
+  },
+  "data-scientist": {
+   "label": "Data scientist and AI/ML engineer",
+   "postings": 1558,
+   "jobs": "/jobs-in/india/data-scientist",
+   "skills": [
+    [
+     "Python",
+     43.9
+    ],
+    [
+     "LLMs",
+     30.6
+    ],
+    [
+     "AWS",
+     29.2
+    ],
+    [
+     "Machine learning",
+     25.7
+    ],
+    [
+     "Azure",
+     25.0
+    ],
+    [
+     "SQL",
+     23.3
+    ],
+    [
+     "Generative AI",
+     22.2
+    ],
+    [
+     "CI/CD",
+     20.8
+    ],
+    [
+     "RAG",
+     17.8
+    ],
+    [
+     "GCP",
+     16.9
+    ]
+   ]
+  },
+  "data-analyst": {
+   "label": "Data analyst",
+   "postings": 1442,
+   "jobs": "/jobs-in/india/data-analyst",
+   "skills": [
+    [
+     "Excel",
+     26.9
+    ],
+    [
+     "SQL",
+     26.1
+    ],
+    [
+     "Python",
+     18.1
+    ],
+    [
+     "Stakeholder management",
+     15.0
+    ],
+    [
+     "Tableau",
+     13.6
+    ],
+    [
+     "Power BI",
+     13.3
+    ],
+    [
+     "Accounting",
+     11.0
+    ],
+    [
+     "Agile",
+     9.8
+    ],
+    [
+     "AWS",
+     7.0
+    ],
+    [
+     "Azure",
+     6.1
+    ]
+   ]
+  },
+  "devops-engineer": {
+   "label": "DevOps and cloud engineer",
+   "postings": 969,
+   "jobs": "/jobs-in/india/devops-engineer",
+   "skills": [
+    [
+     "AWS",
+     32.8
+    ],
+    [
+     "Python",
+     32.0
+    ],
+    [
+     "CI/CD",
+     26.6
+    ],
+    [
+     "Kubernetes",
+     24.3
+    ],
+    [
+     "Azure",
+     23.1
+    ],
+    [
+     "Observability",
+     21.3
+    ],
+    [
+     "Terraform",
+     19.7
+    ],
+    [
+     "GCP",
+     17.8
+    ],
+    [
+     "Linux",
+     16.7
+    ],
+    [
+     "Agile",
+     13.6
+    ]
+   ]
+  },
+  "qa-engineer": {
+   "label": "QA and test engineer",
+   "postings": 385,
+   "jobs": "/jobs-in/india/qa-engineer",
+   "skills": [
+    [
+     "Test automation",
+     34.8
+    ],
+    [
+     "Python",
+     28.8
+    ],
+    [
+     "CI/CD",
+     28.8
+    ],
+    [
+     "Selenium",
+     22.9
+    ],
+    [
+     "Agile",
+     22.9
+    ],
+    [
+     "Java",
+     21.0
+    ],
+    [
+     "Playwright",
+     19.0
+    ],
+    [
+     "SQL",
+     16.1
+    ],
+    [
+     "Jenkins",
+     16.1
+    ],
+    [
+     "Jira",
+     15.8
+    ]
+   ]
+  },
+  "frontend-developer": {
+   "label": "Front-end developer",
+   "postings": 128,
+   "jobs": "/jobs-in/india/frontend-engineer",
+   "skills": [
+    [
+     "React",
+     57.0
+    ],
+    [
+     "JavaScript",
+     46.9
+    ],
+    [
+     "CSS",
+     44.5
+    ],
+    [
+     "HTML",
+     40.6
+    ],
+    [
+     "Agile",
+     35.9
+    ],
+    [
+     "TypeScript",
+     34.4
+    ],
+    [
+     "Git",
+     31.2
+    ],
+    [
+     "REST APIs",
+     28.1
+    ],
+    [
+     "CI/CD",
+     23.4
+    ],
+    [
+     "Angular",
+     22.7
+    ]
+   ]
+  },
+  "product-manager": {
+   "label": "Product and project manager",
+   "postings": 638,
+   "jobs": "/jobs-in/india/product-manager",
+   "skills": [
+    [
+     "Product management",
+     30.9
+    ],
+    [
+     "Stakeholder management",
+     29.8
+    ],
+    [
+     "Agile",
+     21.0
+    ],
+    [
+     "SQL",
+     16.0
+    ],
+    [
+     "Excel",
+     11.3
+    ],
+    [
+     "Jira",
+     11.0
+    ],
+    [
+     "Customer success",
+     6.6
+    ],
+    [
+     "AWS",
+     6.1
+    ],
+    [
+     "Generative AI",
+     6.0
+    ],
+    [
+     "Azure",
+     5.6
+    ]
+   ]
+  },
+  "finance-accounts": {
+   "label": "Finance and accounts",
+   "postings": 536,
+   "jobs": "/jobs-in/india/accountant",
+   "skills": [
+    [
+     "Accounting",
+     46.5
+    ],
+    [
+     "Excel",
+     25.6
+    ],
+    [
+     "Stakeholder management",
+     19.4
+    ],
+    [
+     "ERP",
+     15.5
+    ],
+    [
+     "SAP",
+     12.5
+    ],
+    [
+     "SQL",
+     5.8
+    ],
+    [
+     "Financial modelling",
+     5.8
+    ],
+    [
+     "Workday",
+     5.4
+    ]
+   ]
+  }
+ }
+}

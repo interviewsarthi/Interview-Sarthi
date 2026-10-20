@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="presentation" aria-hidden="true">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse"><stop stop-color="#FFFFFF"/><stop offset=".58" stop-color="#F8FBFF"/><stop offset="1" stop-color="#EFF6FF"/></linearGradient>
+    <radialGradient id="orbOne" cx="0" cy="0" r="1" gradientTransform="translate(1280 185) rotate(136) scale(415 455)" gradientUnits="userSpaceOnUse"><stop stop-color="#60A5FA" stop-opacity=".34"/><stop offset="1" stop-color="#DBEAFE" stop-opacity="0"/></radialGradient>
+    <radialGradient id="orbTwo" cx="0" cy="0" r="1" gradientTransform="translate(220 755) rotate(-25) scale(405 370)" gradientUnits="userSpaceOnUse"><stop stop-color="#A5B4FC" stop-opacity=".25"/><stop offset="1" stop-color="#E0E7FF" stop-opacity="0"/></radialGradient>
+    <linearGradient id="stroke" x1="406" y1="121" x2="1420" y2="637" gradientUnits="userSpaceOnUse"><stop stop-color="#BFDBFE" stop-opacity=".18"/><stop offset=".5" stop-color="#818CF8" stop-opacity=".45"/><stop offset="1" stop-color="#38BDF8" stop-opacity=".12"/></linearGradient>
+    <pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.6" fill="#2563EB" fill-opacity=".10"/></pattern>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#base)"/>
+  <rect width="1600" height="900" fill="url(#dots)" opacity=".55"/>
+  <ellipse cx="1280" cy="185" rx="455" ry="415" fill="url(#orbOne)"/>
+  <ellipse cx="220" cy="755" rx="370" ry="405" fill="url(#orbTwo)"/>
+  <path d="M764 99c154 8 247 84 288 185 46 111 42 225 142 288 79 50 194 44 312 112" fill="none" stroke="url(#stroke)" stroke-width="2"/>
+  <path d="M641 186c107 3 184 38 226 110 55 94 12 207 113 280 91 66 217 42 322 111" fill="none" stroke="url(#stroke)" stroke-width="2" stroke-dasharray="6 14"/>
+  <path d="M1060 125c93 35 154 95 177 173 33 112-12 233 102 311" fill="none" stroke="#93C5FD" stroke-opacity=".23" stroke-width="11" stroke-linecap="round" filter="url(#blur)"/>
+  <g fill="#2563EB">
+    <circle cx="1052" cy="284" r="6" fill-opacity=".42"/><circle cx="1196" cy="461" r="5" fill-opacity=".34"/><circle cx="1353" cy="545" r="7" fill-opacity=".25"/><circle cx="862" cy="296" r="4" fill-opacity=".32"/>
+  </g>
+  <g fill="#4F46E5" fill-opacity=".14"><circle cx="166" cy="636" r="38"/><circle cx="286" cy="772" r="18"/><circle cx="340" cy="665" r="9"/></g>
+</svg>
