@@ -37,6 +37,7 @@
   <link rel="stylesheet" href="../prep.css?v=20261001-what">
   <link rel="stylesheet" href="./progress-view.css?v=20261001-site">
   <link rel="stylesheet" href="./demo-offer.css?v=20261006-demo-buy">
+  <link rel="stylesheet" href="./support-view.css?v=20261021-prephelp">
   <style>
     .screen{display:none;padding:8px 0 40px} .screen.on{display:block}
     /* the report and the progress screens are dashboards: they get the site's full width (app.js show() sets data-screen) */
@@ -120,7 +121,7 @@
 <header class="appbar"><div class="appbar-in">
   <a class="brand" href="/" aria-label="Interview Sarthi home"><img src="/assets/mark.svg" alt="InterviewSarthi" width="26" height="26"><span>Interview<strong>Sarthi</strong></span></a>
   <a class="brand-prod" href="/prep/">Prep Sarthi</a>
-  <span class="navright"><button class="navlink" id="open-progress" data-pg="open">My progress</button><button class="navlink" id="open-invite">Invite</button><button id="entitle" class="chip" title="Passes">…</button><span class="acct" id="acct" style="display:none"><button id="acct-btn" aria-haspopup="true" aria-expanded="false">Sign in</button><div class="acct-menu" id="acct-menu" hidden><p id="acct-name"></p><small id="acct-mail"></small><a class="linkink mysarthi-link" href="/account/">My Sarthi: passes, interviews, profile</a><button class="linkink" id="acct-out">Sign out</button></div></span></span>
+  <span class="navright"><button class="navlink" id="open-progress" data-pg="open">My progress</button><button type="button" class="navlink" id="open-help" aria-haspopup="dialog" aria-controls="support-dialog">Help<span id="support-unread" class="sh-unread" aria-hidden="true" hidden></span></button><button class="navlink" id="open-invite">Invite</button><button id="entitle" class="chip" title="Passes">…</button><span class="acct" id="acct" style="display:none"><button id="acct-btn" aria-haspopup="true" aria-expanded="false">Sign in</button><div class="acct-menu" id="acct-menu" hidden><p id="acct-name"></p><small id="acct-mail"></small><a class="linkink mysarthi-link" href="/account/">My Sarthi: passes, interviews, profile</a><button class="linkink" id="acct-out">Sign out</button></div></span></span>
 </div></header>
 <div class="narrow">
   <aside class="live-gift-notice notice ok" id="live-gift-notice" hidden role="status" aria-live="polite">
@@ -221,6 +222,7 @@
           <li>If you have more than one microphone, pick another one above.</li>
           <li>Then answer out loud. Your interviewer is waiting.</li>
         </ul>
+        <button type="button" class="linkink support-hook" data-support="prep_voice" data-support-from="mic_fix">Report this</button>
       </div>
       <div class="prestart" id="pre-live">
         <ul>
@@ -393,7 +395,7 @@
       <p><b>Your pass is active.</b> One last step: add your free Gemini key, about a minute.</p>
       <button class="pill" id="report-key-setup">Set up my key →</button>
     </div>
-    <p class="notice" id="report-payment-note" hidden role="status"></p>
+    <p class="notice" id="report-payment-note" hidden role="status"><button type="button" class="linkink support-hook" data-support="prep_payment" data-support-from="payment_note">Report this</button></p>
     <div class="card writing" id="report-wait">
       <div class="wheelwrap" id="wheel-wait"></div>
       <h2 style="font-size:26px">Writing your report</h2>
@@ -439,5 +441,6 @@
 <script src="/assets/analytics.js" defer></script>
 <script type="module" src="./app.js?v=20261021-prephelp"></script>
 <script type="module" src="./progress-view.js?v=20261012-models38"></script>
+<script type="module" src="./support-view.js?v=20261021-prephelp"></script>
 </body>
 </html>
