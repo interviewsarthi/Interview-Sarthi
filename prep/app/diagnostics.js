@@ -4,6 +4,10 @@ export { errorClass } from './diagnostics-data.js';
 const LOCAL = typeof location !== 'undefined' && /^(127\.0\.0\.1|localhost)$/.test(location.hostname);
 const API = LOCAL ? 'https://interview-sarthi-license-test.interview-sarthi-license.workers.dev' : 'https://license.interviewsarthi.com';
 const KEY = 'ps_diagnostic_outbox_v1', DAY = 86400000;
+// The last few attempts' ids and tokens, kept after their events are sent, so a Help report can name them and the
+// server can read their timelines (support.js reads this key, 21 Oct 2026). Only storage links the two: a new export
+// here would break the app for a visitor whose browser still has the old copy of this file cached.
+const IDS = 'ps_diagnostic_ids_v1', IDS_KEEP = 3, IDS_DAYS = 30;
 function browserStorage() { try { return globalThis.localStorage; } catch { return undefined; } }
 export function createDiagnostics({ api = API, storage = browserStorage(), fetcher = (...a) => fetch(...a), now = Date.now, uuid = () => crypto.randomUUID(), schedule = setTimeout } = {}) {
   let attempts = [], current = null, pending = null, scheduled = false, retry = 1000;
@@ -24,8 +28,15 @@ export function createDiagnostics({ api = API, storage = browserStorage(), fetch
     if (current.events.length > 250) { current.events.splice(100, 1); current.dropped = (current.dropped || 0) + 1; }
     persist(); later();
   }
+  function ids() {
+    try {
+      const list = JSON.parse(storage?.getItem(IDS) || '[]');
+      return (Array.isArray(list) ? list : []).filter(a => a && typeof a.id === 'string' && typeof a.token === 'string' && now() - a.started < IDS_DAYS * DAY);
+    } catch { return []; }
+  }
   function begin(metadata = {}) {
     current = { id: uuid(), token: uuid().replaceAll('-', '') + uuid().replaceAll('-', ''), started: now(), seq: 0, registered: false, metadata: cleanData(metadata), events: [] };
+    try { storage?.setItem(IDS, JSON.stringify([...ids(), { id: current.id, token: current.token, started: current.started }].slice(-IDS_KEEP))); } catch { /* memory only */ }
     attempts = [...attempts.filter(a => a.events.length && now() - a.started < DAY), current].slice(-3);
     event('attempt_start', metadata); void flush();
     return current.id;

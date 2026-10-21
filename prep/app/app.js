@@ -22,11 +22,13 @@ import { assessmentText } from "./assessment-view.js?v=20260923-jd-plan";
 import { reportHtml, wireReport } from "./report-view.js?v=20261001-site";
 import { generateInterviewPlan } from "./plan-request.js?v=20261012-models38";
 import { interviewContext } from "./interview-plan.js";
-import { keyHash, entitlement, entitlementBySession, tick, rememberInvite, rememberSource, requestDemo, requestLiveTest, demoTransport, demoUsed, demoReplace, deviceInvite, session as accountSession } from "./billing.js?v=20261009-live-gift";
+import { keyHash, entitlement, entitlementBySession, tick, rememberInvite, rememberSource, requestDemo, requestLiveTest, demoTransport, demoUsed, demoReplace, deviceInvite, session as accountSession, LICENSE_API } from "./billing.js?v=20261009-live-gift";
 import { initPasses, isIntl, noticeLiveGift, openPasses, priceOf, refreshPasses, renderInvite } from "./pass.js?v=20261009-polish";
 import { Wheel } from "../wheel.js";
 import { MIC_HELP, MIC_DEAD_RMS } from "./miccheck.js";
 import { beginDiagnostics, diagnosticEvent, errorClass, flushDiagnostics } from './diagnostics.js';
+// Help: report a problem, and the rating under a report (owner, 21 Oct 2026). Logic here; screens in support-view.js.
+import { createSupport, recentAttempts } from "./support.js?v=20261021-prephelp";
 // Progress across the month (plan approved 29 Sep 2026). These modules hold the logic; the screens that show
 // it are drawn elsewhere and reach this page through window.prepApp and the prep:* events below.
 import { HISTORY_EVENTS, flushOutbox, getInterview, knownPeriods, knownSummaries, saveInterview, saveItem } from "./history.js";
@@ -68,6 +70,8 @@ const MIC_MUTED_RMS = 0.00002;   // exact digital silence: a mute key or a dead 
 const LOW_FREE_SECONDS = 5 * 60;      // when the pass offer appears during a free interview
 
 const S = { cv: "", jd: "", practiceFocus: "role", targetRole: "", targetLevel: "", name: "", language: "English", minutes: 12, voice: "Kore", key: "", hash: "", ent: null, plan: "m" };
+// This build, in the diagnostics timelines and Help reports: compare problems before and after a release by it.
+const RELEASE = "20261021-prephelp";
 let lastScreen = "s-cv";
 let assessmentPlan = null, planPending = null, startController = null;
 let audio = null, live = null, timer = null, startedAt = 0, plannedSeconds = 0, ending = false;
@@ -97,6 +101,8 @@ let coaching = "";             // a pass holder's earlier practice, for the inte
 let redrill = null;            // { source } while one question is being answered again (redrill.js)
 let reportWriting = false;     // a report is being written: no new interview starts until it has arrived
 let googleDrop = false;        // the last drop or silence was Google's (1011, reply timeout), not this connection's
+let lastMic = null;            // the last call's microphone, for a Help report after the call: { label, hands_free, sink }
+let lastEnd = "";              // why the last interview ended (time, user, failed...), for the same
 const wheel = new Wheel($("wheel"));
 const waitWheel = new Wheel($("wheel-wait"));
 
@@ -110,7 +116,19 @@ function show(id) {
   window.dispatchEvent(new CustomEvent("prep:screen", { detail: { id } }));
   if (id === "s-report") { paintReportPass(); revealReportOffer(); }
 }
-function notice(id, text, cls = "") { const el = $(id); el.textContent = text || ""; el.className = "notice " + cls; }
+function notice(id, text, cls = "") {
+  const el = $(id); el.textContent = text || ""; el.className = "notice " + cls;
+  // A problem on screen can be reported right where it shows (owner, 21 Oct 2026); support-view.js styles the button.
+  if (cls === "bad" && text && NOTICE_HOOKS[id]) el.append(" ", supportHook(NOTICE_HOOKS[id], id));
+}
+const NOTICE_HOOKS = { "live-notice": "auto", "key-notice": "prep_key" };
+function supportHook(problem, from, label = "Report this") {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "linkink support-hook"; b.dataset.support = problem; b.dataset.supportFrom = from; b.textContent = label;
+  return b;
+}
+/** A notice's message without its "Report this" button. */
+const noticeText = (id) => [...$(id).childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join("").trim();
 function log(name, data) {
   // The DB timeline uses an allowlist; the optional local support log remains separate.
   diagnosticEvent(name, { ...data, ...(data?.error ? { error: errorClass(data.error) } : {}) });
@@ -745,7 +763,7 @@ async function startInterview() {
     catch (err) { show("s-cv"); notice("jd-notice", err.message, "bad"); return; }
   }
   beginDiagnostics({ kind: redrill ? 'redrill' : S.ent?.kind || 'none', minutes: S.minutes,
-    device: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop', release: '20261012-models38' });
+    device: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop', release: RELEASE });
   phase = "preparing";
   const controller = new AbortController();
   startController = controller;
@@ -803,6 +821,7 @@ async function startInterview() {
     }
   }
   log("mic", { label: audio.micLabel, deviceRate: audio.sampleRate, handsFree: audio.handsFree, sink: audio.sink, micPreferred: audio.micPreferred });
+  lastMic = { label: String(audio.micLabel || "").slice(0, 120), hands_free: !!audio.handsFree, sink: audio.sink || "" };
   // Bluetooth earbuds (micpick.js): say which microphone was taken instead, or that this
   // browser cannot play through a headset in call mode.
   if (audio.micPreferred) notice("live-notice", `Using ${audio.micLabel || "the laptop's microphone"}, so your Bluetooth earbuds stay in stereo.`, "ok");
@@ -1030,6 +1049,7 @@ $("end").onclick = () => {
 async function endInterview(reason) {
   if (ending) return;
   ending = true;
+  lastEnd = reason;
   clearInterval(timer);
   $("end").disabled = true;
   const elapsed = Math.round(live ? live.activeSeconds : 0);
@@ -1087,7 +1107,7 @@ async function endInterview(reason) {
     return;
   }
   if (reason === "failed" && turns.length === 0) {
-    const why = $("live-notice").textContent || "Gemini refused the session.";
+    const why = noticeText("live-notice") || "Gemini refused the session.";
     ending = false; preLive();
     if (S.key) { showKeyStep(); notice("key-notice", why + " Check the key, then continue.", "bad"); return; }
     notice("live-notice", why + " Fix the key or try again.", "bad");
@@ -1169,6 +1189,7 @@ function reportBusyWait(seconds, err, job) {
   if (!box) {
     box = document.createElement("div"); box.className = "actions"; box.id = "report-busy-actions";
     box.innerHTML = `<button class="pill" id="report-retry">Try now</button><button class="pill ghost" id="report-later">Stop trying</button>`;
+    box.append(supportHook("prep_report", "report_busy", "Still stuck? Report this"));
     $("report-wait").appendChild(box);
   }
   return new Promise((resolve) => {
@@ -1240,7 +1261,7 @@ async function writeReport(turns, elapsed, usage, pending = null) {
     const reason = err.busy ? "Google's servers are busy: their side, not your microphone or this app."
       : err.network ? "Google could not be reached from your connection." : escapeHtml(err.message);
     const keep = err.busy || err.network ? ` It will also be written by itself the next time you open Prep Sarthi on this device${job.demo && !S.key ? " within the hour" : ""}.` : "";
-    $("report").innerHTML = `<div class="card"><h2 style="font-size:28px">${err.busy ? "Google is busy right now" : "The report could not be written"}</h2><p class="muted">${reason}</p><p class="muted">Your answers are kept. Try again now, or download your transcript below.${keep}</p><div class="actions"><button class="pill" id="report-retry">Write my report again</button></div></div>`;
+    $("report").innerHTML = `<div class="card"><h2 style="font-size:28px">${err.busy ? "Google is busy right now" : "The report could not be written"}</h2><p class="muted">${reason}</p><p class="muted">Your answers are kept. Try again now, or download your transcript below.${keep}</p><div class="actions"><button class="pill" id="report-retry">Write my report again</button></div><p class="muted support-hook-row"><button type="button" class="linkink support-hook" data-support="prep_report" data-support-from="report_failed">Report this problem</button></p></div>`;
     // The same interview again, not a new one: both Hyderabad demos that lost their report on 30 Sep were redone in full.
     $("report-retry").onclick = () => { track("mock_report_retry", { demo: !!job.demo }); void whileWriting(() => writeReport(turns, elapsed, usage, job)); };
     window.__lastReport = { turns, metrics, elapsed };
@@ -1498,8 +1519,56 @@ async function openInterview(id) {
   show("s-report");
   return r;
 }
+/* What a Help report says about this visit (support.js): the page, what they own, the last interview, the microphone,
+ * the message on screen, and that interview's transcript (sent unless they untick it). Never the CV, the job
+ * description or the Gemini key. */
+async function supportContext() {
+  const r = window.__lastReport || null, pending = readPendingReport();
+  const turns = (r && (r.transcript || r.turns)) || (pending && pending.turns) || [];
+  let last = null;
+  if (r || pending) {
+    const rep = r && r.report;
+    const redrilled = !!(r && window.__lastRedrill && r.at === window.__lastRedrill.at);
+    const score = rep && rep.overall_score !== null && Number.isFinite(Number(rep.overall_score)) ? Math.round(Number(rep.overall_score)) : null;
+    last = { at: (r && r.at) || (pending && pending.at) || undefined, minutes: Math.round(((r && r.elapsed) || (pending && pending.elapsed) || 0) / 60),
+      answers: turns.filter((u) => u.who === "candidate" && String(u.text || "").trim()).length,
+      questions: rep && Array.isArray(rep.questions) ? rep.questions.length : undefined,
+      report: rep ? "ok" : pending ? "busy" : redrilled ? "redrill" : "failed",
+      ...(score !== null ? { score } : {}), demo: !!((r && r.demo) || (pending && pending.demo)), ...(lastEnd ? { ended: lastEnd } : {}) };
+  }
+  let permission = "";
+  try { permission = (await navigator.permissions.query({ name: "microphone" })).state; } catch (_) { /* Safari, Firefox */ }
+  const account = S.ent && S.ent.account;
+  return {
+    release: RELEASE, userAgent: navigator.userAgent, screen: document.documentElement.dataset.screen || lastScreen, online: navigator.onLine,
+    // Nobody has pressed Start yet: a first visitor is on the demo, unless it is used.
+    kind: S.ent ? S.ent.kind : passCtx.demoOn && !demoUsed.get() ? "demo" : "none",
+    signedIn: !!account, hasKey: !!S.key, demoUsed: demoUsed.get(), language: S.language, minutes: S.minutes,
+    lastInterview: last, mic: lastMic || permission ? { ...(lastMic || {}), ...(permission ? { permission } : {}) } : null,
+    notice: visibleNotice(), attempts: recentAttempts(),
+    transcript: turns.map((u) => ({ who: u.who, text: u.text })), interviewAt: (last && last.at) || null,
+    reportId: (r && r.report && r.id) || null, email: account ? account.email : "",
+  };
+}
+/** The problem message the person is looking at, if any. */
+function visibleNotice() {
+  const screen = document.documentElement.dataset.screen || lastScreen;
+  if ($("micfix").style.display === "block") return $("micfix-text").textContent.trim();
+  if (screen === "s-report") {
+    if ($("report-wait").style.display === "block") return `${$("report-wait").querySelector("h2").textContent}: ${$("report-status").textContent}`.trim();
+    const failed = $("report").querySelector(".card h2");
+    if (failed && !$("report").querySelector(".rd")) return failed.textContent.trim();
+  }
+  const id = { "s-live": "live-notice", "s-key": "key-notice" }[screen];
+  return id && $(id).classList.contains("bad") ? noticeText(id) : "";
+}
+const support = createSupport({ api: LICENSE_API, context: supportContext, session: () => accountSession.get(), track });
+support.wire();
+
 window.prepApp = {
   startRedrill, openInterview,
+  /** Help and the rating (support.js): send, poll, watch, rate, open; events prep:support, -open, -reply. */
+  support,
   navigate(id) {
     if (!["s-progress", "s-comparison", "s-cv"].includes(id)) return;
     if (["call", "preparing"].includes(phase) || ending && $("report-wait").style.display !== "none") {
@@ -1536,6 +1605,7 @@ booting.then(() => { bootDone = true; }, () => {});
 // Saves that could not reach the server last time, and any weekly or end-of-pass review now due.
 booting.then(() => {
   flushOutbox().catch(() => {});
+  support.checkReplies().catch(() => {});          // a reply to an earlier report: support-view.js shows the dot
   if (S.ent && S.ent.kind === "pass" && S.key) refreshAnalyses({ apiKey: S.key, language: S.language }).catch(() => {});
   window.dispatchEvent(new CustomEvent("prep:ready"));
 });
