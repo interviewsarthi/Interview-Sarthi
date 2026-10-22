@@ -19,7 +19,7 @@
  * Google.
  */
 
-import { NOTES } from "./interviewer.js?v=20261012-models38";
+import { NOTES } from "./interviewer.js?v=20261022-hour";
 
 // Two voice models that both answer the free tier. The first is the default; the other takes over when Google
 // retires the first, or when the first keeps failing mid-call (3 and 4 Oct 2026: "Internal error encountered"
@@ -120,6 +120,7 @@ export class GeminiLive {
    * @param {function} [o.onNotice]      (text) => void   human-readable
    * @param {function} [o.onEvent]       (name, data) => void   diagnostics
    * @param {{opening?:string, reconnect?:string}} [o.notes]  replaces the full interview's stage notes (a re-answer call)
+   * @param {function} [o.partContext]   () => short context for a planned part switch (the 60-minute interview, hour.js)
    */
   constructor(o) {
     this.apiKey = o.apiKey;
@@ -127,6 +128,7 @@ export class GeminiLive {
     this.instructions = o.instructions;
     this.notes = { ...NOTES, ...(o.notes || {}) };
     this.getInterviewProgress = o.getInterviewProgress;
+    this.partContext = o.partContext || null;
     this.model = o.model || DEFAULT_MODEL;
     this.voice = o.voice || "";
     this.temperature = o.temperature ?? 0.6;
@@ -238,7 +240,9 @@ export class GeminiLive {
 
   _setupMessage() {
     let text = this.instructions();
-    const context = this._resumeHandle ? "" : this.transcript.asContext();
+    // A planned part switch (60-minute interview) starts from the last few turns; every other fresh session gets the
+    // whole transcript.
+    const context = this._resumeHandle ? "" : ((this._segmentNote && this.partContext && this.partContext()) || this.transcript.asContext());
     if (context) text += "\n\n" + context;
     if (this.getInterviewProgress) text += "\n\nCURRENT APP CLOCK:\n" + JSON.stringify(this.getInterviewProgress());
     const setup = {
@@ -260,7 +264,8 @@ export class GeminiLive {
           prefixPaddingMs: 100,
           // Let soft endings and brief thinking pauses finish before replying.
           endOfSpeechSensitivity: "END_SENSITIVITY_LOW",
-          silenceDurationMs: 800,
+          // 2 s (was 0.8 s, 22 Oct 2026): candidates who pause mid-answer, e.g. to read the next line, were cut off.
+          silenceDurationMs: 2000,
         },
       },
     };
@@ -287,7 +292,7 @@ export class GeminiLive {
     this._firstAudioAt = null;
     this._event('connection_attempt', { model: this.model, attempt: this._failures + 1, resumed: !!this._resumeHandle });
     this._resuming = !!this._resumeHandle;
-    this._status(this.sessions ? "reconnecting" : "connecting");
+    if (!this._silentRefresh) this._status(this.sessions ? "reconnecting" : "connecting");
     let ws;
     try { ws = new WebSocket(this.authToken ? LIVE_TOKEN_URL + encodeURIComponent(this.authToken) : LIVE_URL + encodeURIComponent(this.apiKey)); }
     catch (_) { this._event("connect_error", {}); return this._retry(); }
@@ -354,7 +359,7 @@ export class GeminiLive {
     if (this.stopped) return;
     this._event("reconnect", { reason });
     this._disconnect();
-    this._notice(reason === "reply_timeout" || reason === "setup_timeout"
+    if (!this._silentRefresh) this._notice(reason === "reply_timeout" || reason === "setup_timeout"
       ? "Google's voice service went quiet (their side, not your microphone or this app). Reconnecting to your interviewer. Your answers are kept and the practice timer is paused."
       : "Reconnecting to your interviewer. Your answers are kept and the practice timer is paused.");
     this._retry();
@@ -375,7 +380,8 @@ export class GeminiLive {
     if (++this._failures > MAX_RETRIES && !this.sessions) {
       return this._fail("The connection could not recover. Your answers are kept. Check your connection and Gemini quota, then try again.", 'exhausted');
     }
-    this._status(this.sessions ? "reconnecting" : "connecting");
+    if (this._silentRefresh && this._failures > 1) this._silentRefresh = false;   // the planned switch failed: a normal reconnect from here
+    if (!this._silentRefresh) this._status(this.sessions ? "reconnecting" : "connecting");
     if (this.sessions && this._failures === STILL_TRYING_AFTER + 1) {
       this._notice("Still reconnecting. If your internet is down, press End: your report is written from what you have said so far.");
     }
@@ -469,7 +475,7 @@ export class GeminiLive {
     // silent (4 Oct 2026). Only in the pause after the interviewer's turn has fully ended.
     if (!this.getInterviewProgress || !this.connected || this._modelSpeaking || this._playing) return;
     if (this._replyPendingAt !== null || t - this._lastVoiced < 2) return;
-    const p = this.getInterviewProgress();
+    const p = this.getInterviewProgress({ forNote: true });
     if (!p || !(p.remainingSeconds > 0)) return;
     if (p.canWrapUp) {
       if (this._closeNoted) return;
@@ -533,7 +539,8 @@ export class GeminiLive {
         this._audioEnded = false;
         this.sessions++;
         this._event("connected", { model: this.model, session: this.sessions, duration_ms: connectMs, resumed: this._resuming });
-        this._status("live");
+        if (!this._silentRefresh) this._status("live");
+        this._silentRefresh = false;
         if (this._resuming) {
           // An extra user turn would interrupt the restored conversation, unless something is owed: the
           // interviewer was cut off mid-question, or the candidate had answered and the reply was in flight
@@ -544,7 +551,9 @@ export class GeminiLive {
           else if (this._replyPendingAt !== null) this._replyPendingAt = t;   // still answering: let them finish
         } else {
           const resumed = this.transcript.turns.length > 0;
-          this.sendText(resumed ? this.notes.reconnect : this.notes.opening);
+          if (this._segmentNote) { this.sendText(this._segmentNote, { turnComplete: false }); this._segmentNote = null; }   // planned part switch: context only
+          else this.sendText(resumed ? this.notes.reconnect : this.notes.opening);
+          if (resumed && this.partContext) this._lastClockNoteAt = -1e9;   // 60-minute interview: the clock note (no-close rule, asked list) at the next pause
         }
         this._cutOff = false;
         this._settledAt = null;
@@ -571,7 +580,7 @@ export class GeminiLive {
 
     if (content.interrupted) {
       this._event("interrupted", {});
-      const u = this.transcript.close("interviewer", { interrupted: true });
+      this._trimUnspoken(); const u = this.transcript.close("interviewer", { interrupted: true });
       if (u && this.onTranscript) this.onTranscript(u, true);
       this._modelSpeaking = false;
       if (this.onInterrupted) this.onInterrupted();
@@ -600,6 +609,7 @@ export class GeminiLive {
         if (this._activeSince === null) this._activeSince = t;
         if (!this._modelSpeaking) { this._modelSpeaking = true; this._event("model_audio_start", {}); }
         const buf = unb64(inline.data);
+        this._spokenSamples = (this._spokenSamples || 0) + buf.byteLength / 2;
         if (this.onAudio && buf.byteLength >= 2) this.onAudio(new Int16Array(buf.byteLength % 2 ? buf.slice(0, buf.byteLength - 1) : buf));
       } else if (part.text) {
         // A text-mode model would answer here; native audio never does.
@@ -616,7 +626,7 @@ export class GeminiLive {
     if (content.turnComplete) {
       this._settledAt = null;
       this._modelSpeaking = false;
-      const u = this.transcript.close("interviewer");
+      this._trimUnspoken(); const u = this.transcript.close("interviewer");
       if (u && this.onTranscript) this.onTranscript(u, true);
       const c = this.transcript.close("candidate");
       if (c && this.onTranscript) this.onTranscript(c, true);
@@ -629,10 +639,48 @@ export class GeminiLive {
   _settle(t) {
     this._modelSpeaking = false;
     this._settledAt = t;
-    const u = this.transcript.close("interviewer");
+    this._trimUnspoken(); const u = this.transcript.close("interviewer");
     if (u && this.onTranscript) this.onTranscript(u, true);
     this._event("turn_settled", { quiet_s: Math.round((t - this._lastOutput) * 10) / 10 });
     if (u) this._nudgeIfClosingEarly(u.text, t);
+  }
+
+  /* Written text far longer than the audio is not what was said: on 22 Oct 2026 Google put ~1,400 words of an unrelated
+   * maths solution into the transcript of a 13-second question. Cut it back to the question. */
+  _trimUnspoken() {
+    const u = this.transcript.open.interviewer;
+    const secs = (this._spokenSamples || 0) / 24000;
+    this._spokenSamples = 0;
+    if (!u || !u.text) return;
+    const words = u.text.trim().split(/\s+/);
+    const max = Math.ceil(secs * 4.5) + 8;
+    if (words.length <= max) return;
+    let kept = words.slice(0, max).join(" ");
+    const q = kept.indexOf("?");   // an interviewer turn ends with its question; the junk itself had "?" and "1.5"
+    if (q > 20) kept = kept.slice(0, q + 1);
+    this._event("transcript_trimmed", { spoken_s: Math.round(secs * 10) / 10, words: words.length, kept: kept.split(/\s+/).length });
+    u.text = kept;
+  }
+
+  /* The 60-minute interview (hour.js): is this the pause right after the interviewer's question? */
+  quietAfterQuestion() {
+    return this.connected && !this.stopped && !this._modelSpeaking && !this._playing
+      && this._replyPendingAt === null && this._now() - this._lastVoiced >= 1;
+  }
+
+  /* A planned part switch: a fresh session on the main model with the part's brief, the last turns (partContext) and a
+   * context-only note; no "reconnecting" status or notice (owner, 15 Oct: no connection messages mid-interview). */
+  refreshForPart(note) {
+    if (this.stopped || !this.connected) return false;
+    this._segmentNote = note;
+    this._silentRefresh = true;
+    this._resumeHandle = null;
+    if (this.model !== LIVE_MODELS[0]) {
+      this._event("model_back", { from: this.model, to: LIVE_MODELS[0] });
+      this.model = LIVE_MODELS[0]; this._trouble = []; this._modelSwitches = Math.max(0, this._modelSwitches - 1);
+    }
+    this._reconnect("part");
+    return true;
   }
 
   _append(who, piece, t) {

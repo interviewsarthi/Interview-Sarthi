@@ -7,7 +7,7 @@ import { diagnosticEvent, measuredRequest } from './diagnostics.js';
  * kept apart from the AI's suggested answer. Pass holders only (plan approved 29 Sep 2026).
  */
 
-import { interviewerPersona, languageNote } from "./interviewer.js?v=20261012-models38";
+import { interviewerPersona, languageNote } from "./interviewer.js?v=20261022-hour";
 import { evidenceTurns } from "./interview-plan.js";
 
 export const REDRILL_SECONDS = 180;

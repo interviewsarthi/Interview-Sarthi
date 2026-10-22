@@ -12,8 +12,9 @@
  */
 
 import { AudioIO } from "./audio.js?v=20261008-bluetooth";
-import { GeminiLive } from "./live.js?v=20261012-models38";
-import { buildInterviewerInstructions, interviewerPersona } from "./interviewer.js?v=20261012-models38";
+import { GeminiLive } from "./live.js?v=20261022-hour";
+import { buildInterviewerInstructions, interviewerPersona } from "./interviewer.js?v=20261022-hour";
+import { createHearingCheck, createLongInterview, isLongInterview, speechTermsFrom } from "./hour.js?v=20261022-hour";
 import { readDocFile, tidy, guessName } from "./cv.js";
 import { computeMetrics } from "./metrics.js";
 import { RUBRIC_VERSION, generateReport } from "./report.js?v=20261012-models38";
@@ -36,7 +37,7 @@ import { fillFrom, readProfile, saveFromPrep, saveKey } from "./mysarthi.js?v=20
 import { carryFocus, reportChanges, summarize, trackKey } from "./progress.js";
 import { coachingBrief } from "./coaching.js?v=20261001-faststart";
 import { refreshAnalyses } from "./insights.js?v=20261012-models38";
-import { REDRILL_SECONDS, buildRedrillInstructions, compareAnswers, redrillItem, redrillNotes, redrillProgress, redrillSource } from "./redrill.js?v=20261012-models38";
+import { REDRILL_SECONDS, buildRedrillInstructions, compareAnswers, redrillItem, redrillNotes, redrillProgress, redrillSource } from "./redrill.js?v=20261022-hour";
 
 const $ = (id) => document.getElementById(id);
 // Technical output is available only when support explicitly requests this URL.
@@ -71,7 +72,7 @@ const LOW_FREE_SECONDS = 5 * 60;      // when the pass offer appears during a fr
 
 const S = { cv: "", jd: "", practiceFocus: "role", targetRole: "", targetLevel: "", name: "", language: "English", minutes: 12, voice: "Kore", key: "", hash: "", ent: null, plan: "m" };
 // This build, in the diagnostics timelines and Help reports: compare problems before and after a release by it.
-const RELEASE = "20261021-prephelp";
+const RELEASE = "20261022-hour";
 let lastScreen = "s-cv";
 let assessmentPlan = null, planPending = null, startController = null;
 let audio = null, live = null, timer = null, startedAt = 0, plannedSeconds = 0, ending = false;
@@ -90,6 +91,8 @@ let demoPurchase = (() => {
     return saved && Date.now() - saved.at < 24 * 3600_000 ? saved : null;
   } catch { return null; }
 })();
+let hour = null;               // the 60-minute interview's topic and part logic (hour.js), null for shorter ones
+let hearing = null;            // "move on after two requests to repeat" (hour.js), every interview
 let liveTrouble = 0;           // Google drops and silences in this call (a demo ruined by them is replaced, not spent)
 let booted = false;
 const bubbles = new Map();
@@ -680,6 +683,10 @@ $("demo-full-wait").onclick = () => {
 /* The live engine retains the full transcript for the report. The call shows
  * current captions only; support can explicitly enable the diagnostic view. */
 function onTranscript(u, done) {
+  if (done && u.who === "interviewer" && live && !ending) {
+    if (hearing) hearing(u);
+    if (hour) hour.onInterviewerTurn(u).catch((e) => log("hour_error", { error: String(e && e.message || e).slice(0, 120) }));
+  }
   if (diagnosticsEnabled) {
     let el = bubbles.get(u);
     if (!el) {
@@ -919,16 +926,23 @@ function startCall() {
   $("left").textContent = "You're on";
   wheel.setState("reconnecting");
 
-  const brief = { candidateName: S.name, cv: S.cv, jd: S.jd, language: S.language, voice: S.voice, minutes: plannedSeconds / 60, focus: focusCarried, coaching };
+  // 22 Oct 2026: 45+ planned minutes run as a long interview (hour.js); every interview gets the CV's names and terms.
+  hour = !redrill && !demo && isLongInterview(plannedSeconds)
+    ? createLongInterview({ apiKey: S.key, cv: S.cv, targetRole: S.targetRole, targetLevel: S.targetLevel, plannedSeconds,
+      plan: planPending, progress: currentProgress, onEvent: (name, data) => log(name, data) })
+    : null;
+  const brief = { candidateName: S.name, cv: S.cv, jd: S.jd, language: S.language, voice: S.voice, minutes: plannedSeconds / 60, focus: focusCarried, coaching,
+    speechTerms: speechTermsFrom(S.cv), ...(hour ? { long: true, targetRole: S.targetRole, targetLevel: S.targetLevel } : {}) };
   live = new GeminiLive({
     apiKey: S.key,
     authToken: demo ? demo.token : "",
     voice: S.voice,
     instructions: () => redrill
       ? buildRedrillInstructions({ candidateName: S.name, language: redrill.source.language || S.language, voice: S.voice, source: redrill.source, cv: S.cv })
-      : buildInterviewerInstructions(brief),
+      : buildInterviewerInstructions(hour ? { ...brief, part: hour.part() } : brief),
     notes: redrill ? redrillNotes() : undefined,
-    getInterviewProgress: currentProgress,
+    getInterviewProgress: (args) => hour ? hour.progress(currentProgress(), args) : currentProgress(),
+    partContext: hour ? hour.partContext : undefined,
     onAudio: (pcm) => !exitCardOpen && !ending && audio && audio.play(pcm),
     onInterrupted: () => audio && audio.clear(),
     onTranscript,
@@ -964,6 +978,8 @@ function startCall() {
     },
   });
   live.start();
+  hearing = redrill ? null : createHearingCheck(live, (name, data) => log(name, data));
+  if (hour) hour.attach(live);
   track(redrill ? "mock_redrill_start" : "mock_start", { minutes: Math.round(plannedSeconds / 60), language: S.language, entitlement: S.ent.kind, focus: !!focusCarried });
   timer = setInterval(onSecond, 1000);
 }
@@ -1051,6 +1067,7 @@ async function endInterview(reason) {
   ending = true;
   lastEnd = reason;
   clearInterval(timer);
+  if (hour) { hour.stop(); }
   $("end").disabled = true;
   const elapsed = Math.round(live ? live.activeSeconds : 0);
   log("interview_end", { reason, elapsed });
