@@ -1,5 +1,18 @@
 {
   "latest": "1.0.41",
   "note": "Answers too short? 1.0.41 gives full detailed answers (15-25 lines) with steps, and more depth when the interviewer asks. Update now.",
-  "url": "https://interviewsarthi.com/#download"
+  "url": "https://interviewsarthi.com/#download",
+  "products": {
+    "prep": {
+      "prices": [
+        {"title": "Free demo", "price": "Free", "detail": "One 7-minute demo interview. No card, no sign-up."},
+        {"title": "30-day pass", "price": "Rs 99", "detail": "Unlimited mock interviews for 30 days. One payment, never renews."}
+      ]
+    },
+    "apply": {
+      "prices": [
+        {"title": "Always free", "price": "Free", "detail": "No paid plan. Browsing jobs needs no account. The first tailored CV is free; after that it uses your free Google AI key, the same kind Live Sarthi uses."}
+      ]
+    }
+  }
 }
