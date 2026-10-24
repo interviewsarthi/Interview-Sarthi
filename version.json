@@ -20,7 +20,13 @@
           "price": "Free",
           "detail": "30 days of unlimited Prep Sarthi with Live Sarthi's 1-Month Pass. Offer until 30 Nov 2026."
         }
-      ]
+      ],
+      "offer": {
+        "title": "Free with Live Sarthi's 1-Month Pass",
+        "detail": "Have Live Sarthi's 1-Month Pass? Your Prep month is free: open the checkout, sign in with Google and paste your Live pass key.",
+        "button": "Claim my free month",
+        "until": "2026-11-30"
+      }
     },
     "apply": {
       "prices": [
