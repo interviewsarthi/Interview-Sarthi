@@ -1,0 +1,599 @@
+/* Diwali price, 29 Oct - 10 Nov 2026: the 2-Day Pass stays Rs 99 until 10 Nov, Rs 149 from 11 Nov.
+   India only. Remove this file, its <link>s, the Yatra One font link and the markup (search "diwali") after 10 Nov.
+   - .diwali-top: strip at the top of the home page and the Live page, hidden when html[data-region=intl]
+     (home: region-prices.js; Live page: its own region script sets the same flag).
+   - .diwali, .badge--diwali, .festive: Live pricing. They carry data-intl="", so abroad the Live page's
+     region script empties them and :empty hides them.
+   Decorations (.dw__*) are drawn here as inline SVG; nothing extra is downloaded except the subset font. */
+
+.dw {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  background:
+    radial-gradient(circle at 10% 115%, rgba(255, 212, 59, .55), transparent 38%),
+    radial-gradient(circle at 90% 115%, rgba(255, 146, 43, .6), transparent 38%),
+    radial-gradient(circle at 50% -35%, rgba(255, 107, 154, .5), transparent 55%),
+    linear-gradient(115deg, #3d0b82 0%, #8f1574 36%, #c2255c 62%, #e8590c 85%, #f59f00 100%);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 224, 102, .55), 0 16px 44px rgba(143, 21, 116, .3)
+}
+
+.dw p {
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(50, 0, 30, .55)
+}
+
+/* marigold garland with mango leaves along the top */
+.dw__toran {
+  position: absolute;
+  z-index: 2;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='46' viewBox='0 0 96 46'%3E%3Cpath d='M0 20 Q48 -10 96 20' fill='none' stroke='%237a3e12' stroke-width='1'/%3E%3Cellipse cx='22' cy='17.4' rx='3.2' ry='7.5' fill='%232f9e44' stroke='%231b6e2c' stroke-width='.8'/%3E%3Cline x1='22' y1='10.4' x2='22' y2='23.4' stroke='%231b6e2c' stroke-width='.6'/%3E%3Cellipse cx='74' cy='17.4' rx='3.2' ry='7.5' fill='%232f9e44' stroke='%231b6e2c' stroke-width='.8'/%3E%3Cline x1='74' y1='10.4' x2='74' y2='23.4' stroke='%231b6e2c' stroke-width='.6'/%3E%3Ccircle cx='0.0' cy='20.0' r='4.6' fill='%23ff8c1a' stroke='%23e8590c' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='0.0' cy='20.0' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='8.0' cy='15.4' r='4.6' fill='%23ffc93c' stroke='%23f59f00' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='8.0' cy='15.4' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='16.0' cy='11.7' r='4.6' fill='%23ff8c1a' stroke='%23e8590c' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='16.0' cy='11.7' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='24.0' cy='8.8' r='4.6' fill='%23ffc93c' stroke='%23f59f00' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='24.0' cy='8.8' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='32.0' cy='6.7' r='4.6' fill='%23ff8c1a' stroke='%23e8590c' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='32.0' cy='6.7' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='40.0' cy='5.4' r='4.6' fill='%23ffc93c' stroke='%23f59f00' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='40.0' cy='5.4' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='48.0' cy='5.0' r='4.6' fill='%23ff8c1a' stroke='%23e8590c' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='48.0' cy='5.0' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='56.0' cy='5.4' r='4.6' fill='%23ffc93c' stroke='%23f59f00' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='56.0' cy='5.4' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='64.0' cy='6.7' r='4.6' fill='%23ff8c1a' stroke='%23e8590c' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='64.0' cy='6.7' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='72.0' cy='8.8' r='4.6' fill='%23ffc93c' stroke='%23f59f00' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='72.0' cy='8.8' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='80.0' cy='11.7' r='4.6' fill='%23ff8c1a' stroke='%23e8590c' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='80.0' cy='11.7' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='88.0' cy='15.4' r='4.6' fill='%23ffc93c' stroke='%23f59f00' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='88.0' cy='15.4' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='96.0' cy='20.0' r='4.6' fill='%23ff8c1a' stroke='%23e8590c' stroke-width='2.5' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='96.0' cy='20.0' r='1.6' fill='%23b8430b'/%3E%3Ccircle cx='48.0' cy='13.0' r='3.7' fill='%23ffc93c' stroke='%23f59f00' stroke-width='2.0' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='48.0' cy='13.0' r='1.3' fill='%23b8430b'/%3E%3Ccircle cx='48.0' cy='20.5' r='3.7' fill='%23ff8c1a' stroke='%23e8590c' stroke-width='2.0' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='48.0' cy='20.5' r='1.3' fill='%23b8430b'/%3E%3Ccircle cx='48.0' cy='28.0' r='3.7' fill='%23ffc93c' stroke='%23f59f00' stroke-width='2.0' stroke-dasharray='1.5 1.1'/%3E%3Ccircle cx='48.0' cy='28.0' r='1.3' fill='%23b8430b'/%3E%3Cpath d='M44.5 32 L48 44 L51.5 32 Z' fill='%23e03131'/%3E%3Ccircle cx='48' cy='32' r='2.2' fill='%23ffd43b'/%3E%3C/svg%3E") repeat-x center top / auto 40px;
+  filter: drop-shadow(0 3px 2px rgba(60, 0, 40, .35));
+  pointer-events: none
+}
+
+/* rangoli in the bottom corners, turning slowly */
+.dw__rangoli {
+  position: absolute;
+  z-index: 0;
+  width: 190px;
+  height: 190px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ff6b9a' transform='rotate(0.0 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ffd43b' transform='rotate(22.5 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ff6b9a' transform='rotate(45.0 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ffd43b' transform='rotate(67.5 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ff6b9a' transform='rotate(90.0 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ffd43b' transform='rotate(112.5 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ff6b9a' transform='rotate(135.0 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ffd43b' transform='rotate(157.5 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ff6b9a' transform='rotate(180.0 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ffd43b' transform='rotate(202.5 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ff6b9a' transform='rotate(225.0 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ffd43b' transform='rotate(247.5 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ff6b9a' transform='rotate(270.0 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ffd43b' transform='rotate(292.5 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ff6b9a' transform='rotate(315.0 50 50)'/%3E%3Cellipse cx='50' cy='13' rx='5' ry='11' fill='%23ffd43b' transform='rotate(337.5 50 50)'/%3E%3Cellipse cx='50' cy='28' rx='7' ry='12' fill='%23ff922b' transform='rotate(22.5 50 50)'/%3E%3Cellipse cx='50' cy='28' rx='7' ry='12' fill='%23ff922b' transform='rotate(67.5 50 50)'/%3E%3Cellipse cx='50' cy='28' rx='7' ry='12' fill='%23ff922b' transform='rotate(112.5 50 50)'/%3E%3Cellipse cx='50' cy='28' rx='7' ry='12' fill='%23ff922b' transform='rotate(157.5 50 50)'/%3E%3Cellipse cx='50' cy='28' rx='7' ry='12' fill='%23ff922b' transform='rotate(202.5 50 50)'/%3E%3Cellipse cx='50' cy='28' rx='7' ry='12' fill='%23ff922b' transform='rotate(247.5 50 50)'/%3E%3Cellipse cx='50' cy='28' rx='7' ry='12' fill='%23ff922b' transform='rotate(292.5 50 50)'/%3E%3Cellipse cx='50' cy='28' rx='7' ry='12' fill='%23ff922b' transform='rotate(337.5 50 50)'/%3E%3Cellipse cx='50' cy='33' rx='4.5' ry='9' fill='%2363e6be' transform='rotate(0 50 50)'/%3E%3Cellipse cx='50' cy='33' rx='4.5' ry='9' fill='%2363e6be' transform='rotate(45 50 50)'/%3E%3Cellipse cx='50' cy='33' rx='4.5' ry='9' fill='%2363e6be' transform='rotate(90 50 50)'/%3E%3Cellipse cx='50' cy='33' rx='4.5' ry='9' fill='%2363e6be' transform='rotate(135 50 50)'/%3E%3Cellipse cx='50' cy='33' rx='4.5' ry='9' fill='%2363e6be' transform='rotate(180 50 50)'/%3E%3Cellipse cx='50' cy='33' rx='4.5' ry='9' fill='%2363e6be' transform='rotate(225 50 50)'/%3E%3Cellipse cx='50' cy='33' rx='4.5' ry='9' fill='%2363e6be' transform='rotate(270 50 50)'/%3E%3Cellipse cx='50' cy='33' rx='4.5' ry='9' fill='%2363e6be' transform='rotate(315 50 50)'/%3E%3Ccircle cx='50' cy='50' r='12' fill='%23845ef7'/%3E%3Ccircle cx='50' cy='50' r='7' fill='%23ffd43b'/%3E%3Ccircle cx='50' cy='50' r='2.6' fill='%23fff'/%3E%3Ccircle cx='97.0' cy='50.0' r='1.6' fill='%23fff'/%3E%3Ccircle cx='95.4' cy='62.2' r='1.6' fill='%23fff'/%3E%3Ccircle cx='90.7' cy='73.5' r='1.6' fill='%23fff'/%3E%3Ccircle cx='83.2' cy='83.2' r='1.6' fill='%23fff'/%3E%3Ccircle cx='73.5' cy='90.7' r='1.6' fill='%23fff'/%3E%3Ccircle cx='62.2' cy='95.4' r='1.6' fill='%23fff'/%3E%3Ccircle cx='50.0' cy='97.0' r='1.6' fill='%23fff'/%3E%3Ccircle cx='37.8' cy='95.4' r='1.6' fill='%23fff'/%3E%3Ccircle cx='26.5' cy='90.7' r='1.6' fill='%23fff'/%3E%3Ccircle cx='16.8' cy='83.2' r='1.6' fill='%23fff'/%3E%3Ccircle cx='9.3' cy='73.5' r='1.6' fill='%23fff'/%3E%3Ccircle cx='4.6' cy='62.2' r='1.6' fill='%23fff'/%3E%3Ccircle cx='3.0' cy='50.0' r='1.6' fill='%23fff'/%3E%3Ccircle cx='4.6' cy='37.8' r='1.6' fill='%23fff'/%3E%3Ccircle cx='9.3' cy='26.5' r='1.6' fill='%23fff'/%3E%3Ccircle cx='16.8' cy='16.8' r='1.6' fill='%23fff'/%3E%3Ccircle cx='26.5' cy='9.3' r='1.6' fill='%23fff'/%3E%3Ccircle cx='37.8' cy='4.6' r='1.6' fill='%23fff'/%3E%3Ccircle cx='50.0' cy='3.0' r='1.6' fill='%23fff'/%3E%3Ccircle cx='62.2' cy='4.6' r='1.6' fill='%23fff'/%3E%3Ccircle cx='73.5' cy='9.3' r='1.6' fill='%23fff'/%3E%3Ccircle cx='83.2' cy='16.8' r='1.6' fill='%23fff'/%3E%3Ccircle cx='90.7' cy='26.5' r='1.6' fill='%23fff'/%3E%3Ccircle cx='95.4' cy='37.8' r='1.6' fill='%23fff'/%3E%3C/svg%3E") center / contain no-repeat;
+  opacity: .2;
+  animation: dw-spin 60s linear infinite;
+  pointer-events: none
+}
+
+.dw__rangoli--l {
+  left: -70px;
+  bottom: -80px
+}
+
+.dw__rangoli--r {
+  right: -70px;
+  bottom: -80px;
+  animation-direction: reverse
+}
+
+/* fireworks */
+.dw__burst {
+  position: absolute;
+  z-index: 0;
+  width: 92px;
+  height: 92px;
+  opacity: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cline x1='59.0' y1='50.0' x2='86.0' y2='50.0' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='93.0' cy='50.0' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='58.1' y1='53.9' x2='82.4' y2='65.6' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='88.7' cy='68.7' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='55.6' y1='57.0' x2='72.4' y2='78.1' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='76.8' cy='83.6' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='52.0' y1='58.8' x2='58.0' y2='85.1' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='59.6' cy='91.9' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='48.0' y1='58.8' x2='42.0' y2='85.1' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='40.4' cy='91.9' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='44.4' y1='57.0' x2='27.6' y2='78.1' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='23.2' cy='83.6' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='41.9' y1='53.9' x2='17.6' y2='65.6' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='11.3' cy='68.7' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='41.0' y1='50.0' x2='14.0' y2='50.0' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='7.0' cy='50.0' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='41.9' y1='46.1' x2='17.6' y2='34.4' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='11.3' cy='31.3' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='44.4' y1='43.0' x2='27.6' y2='21.9' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='23.2' cy='16.4' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='48.0' y1='41.2' x2='42.0' y2='14.9' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='40.4' cy='8.1' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='52.0' y1='41.2' x2='58.0' y2='14.9' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='59.6' cy='8.1' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='55.6' y1='43.0' x2='72.4' y2='21.9' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='76.8' cy='16.4' r='2.6' fill='%23fff3bf'/%3E%3Cline x1='58.1' y1='46.1' x2='82.4' y2='34.4' stroke='%23ffd43b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='88.7' cy='31.3' r='2.6' fill='%23fff3bf'/%3E%3C/svg%3E") center / contain no-repeat;
+  animation: dw-burst 3.6s ease-out infinite;
+  pointer-events: none
+}
+
+.dw__burst.b1 { top: 18%; left: 16% }
+.dw__burst.b2 { top: 8%; right: 17%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cline x1='59.0' y1='50.0' x2='86.0' y2='50.0' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='93.0' cy='50.0' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='58.1' y1='53.9' x2='82.4' y2='65.6' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='88.7' cy='68.7' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='55.6' y1='57.0' x2='72.4' y2='78.1' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='76.8' cy='83.6' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='52.0' y1='58.8' x2='58.0' y2='85.1' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='59.6' cy='91.9' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='48.0' y1='58.8' x2='42.0' y2='85.1' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='40.4' cy='91.9' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='44.4' y1='57.0' x2='27.6' y2='78.1' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='23.2' cy='83.6' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='41.9' y1='53.9' x2='17.6' y2='65.6' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='11.3' cy='68.7' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='41.0' y1='50.0' x2='14.0' y2='50.0' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='7.0' cy='50.0' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='41.9' y1='46.1' x2='17.6' y2='34.4' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='11.3' cy='31.3' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='44.4' y1='43.0' x2='27.6' y2='21.9' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='23.2' cy='16.4' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='48.0' y1='41.2' x2='42.0' y2='14.9' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='40.4' cy='8.1' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='52.0' y1='41.2' x2='58.0' y2='14.9' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='59.6' cy='8.1' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='55.6' y1='43.0' x2='72.4' y2='21.9' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='76.8' cy='16.4' r='2.6' fill='%23ffe3f1'/%3E%3Cline x1='58.1' y1='46.1' x2='82.4' y2='34.4' stroke='%23ff8cc6' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='88.7' cy='31.3' r='2.6' fill='%23ffe3f1'/%3E%3C/svg%3E"); animation-delay: 1.2s }
+.dw__burst.b3 { bottom: -6%; left: 52%; width: 70px; height: 70px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cline x1='59.0' y1='50.0' x2='86.0' y2='50.0' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='93.0' cy='50.0' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='58.1' y1='53.9' x2='82.4' y2='65.6' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='88.7' cy='68.7' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='55.6' y1='57.0' x2='72.4' y2='78.1' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='76.8' cy='83.6' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='52.0' y1='58.8' x2='58.0' y2='85.1' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='59.6' cy='91.9' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='48.0' y1='58.8' x2='42.0' y2='85.1' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='40.4' cy='91.9' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='44.4' y1='57.0' x2='27.6' y2='78.1' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='23.2' cy='83.6' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='41.9' y1='53.9' x2='17.6' y2='65.6' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='11.3' cy='68.7' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='41.0' y1='50.0' x2='14.0' y2='50.0' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='7.0' cy='50.0' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='41.9' y1='46.1' x2='17.6' y2='34.4' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='11.3' cy='31.3' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='44.4' y1='43.0' x2='27.6' y2='21.9' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='23.2' cy='16.4' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='48.0' y1='41.2' x2='42.0' y2='14.9' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='40.4' cy='8.1' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='52.0' y1='41.2' x2='58.0' y2='14.9' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='59.6' cy='8.1' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='55.6' y1='43.0' x2='72.4' y2='21.9' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='76.8' cy='16.4' r='2.6' fill='%23e6fcf5'/%3E%3Cline x1='58.1' y1='46.1' x2='82.4' y2='34.4' stroke='%2363e6be' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='88.7' cy='31.3' r='2.6' fill='%23e6fcf5'/%3E%3C/svg%3E"); animation-delay: 2.4s }
+.diwali-top .dw__burst.b1 { top: 30%; left: 7% }
+.diwali-top .dw__burst.b3 { bottom: 4%; left: 76% }
+
+/* floating golden sparks */
+.dw__glow {
+  position: absolute;
+  z-index: 0;
+  bottom: -10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff3bf;
+  box-shadow: 0 0 8px 3px rgba(255, 212, 59, .8);
+  opacity: 0;
+  animation: dw-rise 6s linear infinite;
+  pointer-events: none
+}
+
+.dw__glow.g1 { left: 6% }
+.dw__glow.g2 { left: 19%; animation-delay: 1.5s; width: 4px; height: 4px }
+.dw__glow.g3 { left: 31%; animation-delay: 3.1s }
+.dw__glow.g4 { left: 44%; animation-delay: .7s; width: 5px; height: 5px }
+.dw__glow.g5 { left: 58%; animation-delay: 2.3s }
+.dw__glow.g6 { left: 70%; animation-delay: 4s; width: 4px; height: 4px }
+.dw__glow.g7 { left: 83%; animation-delay: 1s }
+.dw__glow.g8 { left: 94%; animation-delay: 3.6s; width: 5px; height: 5px }
+
+/* greeting and gold text */
+.dw__hindi {
+  font-family: "Yatra One", "Noto Sans Devanagari", "Nirmala UI", "Mangal", serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  background: linear-gradient(90deg, #fff3bf, #ffd43b 30%, #ffa94d 50%, #ffd43b 70%, #fff3bf);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  animation: dw-shimmer 4s linear infinite;
+  filter: drop-shadow(0 2px 6px rgba(60, 0, 40, .45))
+}
+
+.dw__en {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid rgba(255, 224, 102, .6);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .14);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  vertical-align: middle
+}
+
+.dw__gold {
+  background: linear-gradient(90deg, #fff3bf, #ffd43b 35%, #ffa94d 55%, #ffd43b 75%, #fff3bf);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  animation: dw-shimmer 3s linear infinite;
+  filter: drop-shadow(0 2px 4px rgba(60, 0, 40, .4))
+}
+
+/* gold button with a light sweep */
+.dw__cta {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  flex: 0 0 auto;
+  padding: 13px 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff3bf, #ffd43b 45%, #f59f00);
+  color: #6b0f45 !important;
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none !important;
+  white-space: nowrap;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, .5), 0 8px 22px rgba(60, 0, 40, .35);
+  transition: transform .15s
+}
+
+.dw__cta::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .85), transparent);
+  transform: skewX(-20deg);
+  animation: dw-sweep 3.2s ease-in-out infinite
+}
+
+.dw__cta:hover {
+  transform: translateY(-2px) scale(1.04)
+}
+
+/* clay diya with a gold band, flame and halo */
+.diya {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 66px;
+  height: 68px
+}
+
+.diya::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  bottom: 6px;
+  height: 25px;
+  border-radius: 6px 6px 44px 44px;
+  background:
+    radial-gradient(circle, #ffe066 1.3px, transparent 1.9px) 2px 9px / 8px 8px repeat-x,
+    linear-gradient(180deg, #ffb347 0, #e8590c 45%, #a8290a 100%);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, .4), inset 0 -4px 6px rgba(80, 10, 0, .35), 0 6px 14px rgba(60, 0, 30, .4)
+}
+
+.diya::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  width: 64px;
+  height: 64px;
+  margin-left: -32px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 224, 102, .55), rgba(255, 146, 43, .18) 45%, transparent 70%);
+  animation: dw-halo 2.2s ease-in-out infinite alternate;
+  z-index: -1
+}
+
+.diya b {
+  position: absolute;
+  left: 50%;
+  bottom: 29px;
+  width: 16px;
+  height: 27px;
+  margin-left: -8px;
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  background: radial-gradient(circle at 50% 72%, #fff 0 16%, #ffe066 34%, #ff9f1c 78%);
+  box-shadow: 0 0 16px 5px rgba(255, 200, 60, .8), 0 0 36px 12px rgba(255, 140, 40, .35);
+  transform-origin: 50% 100%;
+  animation: dw-flicker 1.3s ease-in-out infinite alternate
+}
+
+.diya--2 b,
+.diya--2::after {
+  animation-delay: .5s
+}
+
+/* top strip */
+.diwali-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 46px 28px 22px;
+  border-radius: 18px;
+  text-align: left;
+  font-family: inherit
+}
+
+html[data-region=intl] .diwali-top,
+html[data-region=intl] .diwali-top-wrap {
+  display: none
+}
+
+.diwali-top__text {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0
+}
+
+.diwali-top__greet {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 2px !important
+}
+
+.diwali-top__greet .dw__hindi {
+  font-size: 30px;
+  line-height: 1.25
+}
+
+.diwali-top__title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.3px;
+  line-height: 1.3;
+  text-shadow: 0 2px 10px rgba(60, 0, 40, .35)
+}
+
+.diwali-top__note {
+  margin-top: 6px !important;
+  font-size: 13.5px;
+  line-height: 1.5;
+  opacity: .96
+}
+
+.diwali-top__note b {
+  color: #ffe066
+}
+
+.diwali-top .diya {
+  width: 54px;
+  height: 58px
+}
+
+.diwali-top .diya::before {
+  height: 21px
+}
+
+.diwali-top .diya b {
+  bottom: 25px;
+  width: 14px;
+  height: 23px;
+  margin-left: -7px
+}
+
+/* Live pricing banner */
+.diwali {
+  margin: 26px 0 30px;
+  padding: 52px 24px 28px;
+  border-radius: 20px
+}
+
+.diwali:empty {
+  display: none
+}
+
+.diwali__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  text-align: center
+}
+
+.diwali__greet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 4px !important
+}
+
+.diwali__greet .dw__hindi {
+  font-size: 40px;
+  line-height: 1.25
+}
+
+.diwali__title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+  line-height: 1.2;
+  text-shadow: 0 2px 12px rgba(60, 0, 40, .35)
+}
+
+.diwali__note {
+  margin-top: 8px !important;
+  font-size: 15px;
+  opacity: .96
+}
+
+.diwali__stack {
+  max-width: 640px;
+  margin: 18px auto 0 !important;
+  padding: 12px 18px;
+  border: 1px solid rgba(255, 224, 102, .55);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .14);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  font-size: 14px;
+  line-height: 1.55
+}
+
+.diwali__stack b {
+  color: #ffe066
+}
+
+/* 2-Day card */
+.plan .badge--diwali {
+  overflow: hidden;
+  background: linear-gradient(90deg, #8f1574, #d6336c 45%, #f59f00);
+  box-shadow: 0 0 0 2px #fff3bf, 0 4px 12px rgba(214, 51, 108, .4)
+}
+
+.plan .badge--diwali::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .7), transparent);
+  transform: skewX(-20deg);
+  animation: dw-sweep 3.2s ease-in-out infinite
+}
+
+.plan .badge--diwali:empty,
+.plan .festive:empty {
+  display: none
+}
+
+.plan:has(.badge--diwali:not(:empty)) {
+  border: 2px solid #f59f00;
+  background: radial-gradient(circle at 100% 0, rgba(255, 212, 59, .22), transparent 40%), linear-gradient(180deg, #fff6e5, #fff 50%);
+  box-shadow: 0 0 0 5px rgba(245, 159, 0, .13), 0 14px 32px rgba(214, 51, 108, .16)
+}
+
+.plan .festive {
+  margin: 4px 0 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #c2255c
+}
+
+@keyframes dw-spin { to { transform: rotate(360deg) } }
+
+@keyframes dw-burst {
+  0% { opacity: 0; transform: scale(.15) }
+  12% { opacity: 1 }
+  65% { opacity: .85; transform: scale(1) }
+  100% { opacity: 0; transform: scale(1.12) }
+}
+
+@keyframes dw-rise {
+  0% { opacity: 0; transform: translateY(0) }
+  15% { opacity: 1 }
+  100% { opacity: 0; transform: translateY(-170px) }
+}
+
+@keyframes dw-shimmer { to { background-position: -200% 0 } }
+
+@keyframes dw-sweep {
+  0%, 55% { left: -60% }
+  100% { left: 130% }
+}
+
+@keyframes dw-flicker {
+  0% { transform: scale(1) rotate(-3deg) }
+  100% { transform: scale(1.08, .93) rotate(3deg) }
+}
+
+@keyframes dw-halo {
+  0% { opacity: .75; transform: scale(.92) }
+  100% { opacity: 1; transform: scale(1.08) }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dw *, .dw *::before, .dw *::after, .plan .badge--diwali::after { animation: none !important }
+  .dw__burst { opacity: .5 }
+}
+
+@media (max-width: 760px) {
+  .diwali-top {
+    flex-direction: column;
+    gap: 12px;
+    padding: 44px 16px 18px;
+    text-align: center
+  }
+
+  .diwali-top .diya,
+  .diwali .diya {
+    position: absolute;
+    top: 30px;
+    left: 2px
+  }
+
+  .diwali-top .diya--2,
+  .diwali .diya--2 {
+    left: auto;
+    right: 2px
+  }
+
+  .diwali-top__text {
+    padding: 0 30px
+  }
+
+  .diwali-top__greet {
+    flex-direction: column;
+    gap: 4px
+  }
+
+  .diwali-top__greet .dw__hindi {
+    font-size: 27px
+  }
+
+  .diwali-top__title {
+    font-size: 18px
+  }
+
+  .diwali-top__note {
+    font-size: 12.5px
+  }
+
+  .dw__cta {
+    width: 100%;
+    text-align: center
+  }
+
+  .diwali {
+    padding: 48px 16px 22px
+  }
+
+  .diwali__body {
+    display: block
+  }
+
+  .diwali .diya {
+    top: -6px
+  }
+
+  .diwali__greet {
+    flex-direction: column;
+    gap: 4px
+  }
+
+  .diwali__greet .dw__hindi {
+    font-size: 32px
+  }
+
+  .diwali__title {
+    font-size: 21px
+  }
+
+  .diwali__nw {
+    display: block;
+    white-space: nowrap
+  }
+
+  .diwali__note {
+    font-size: 13.5px
+  }
+
+  .diwali__stack {
+    font-size: 13px;
+    padding: 10px 12px
+  }
+
+  .diya {
+    width: 46px;
+    height: 54px
+  }
+
+  .diya::before {
+    left: 2px;
+    right: 2px;
+    height: 18px
+  }
+
+  .diya::after {
+    width: 48px;
+    height: 48px;
+    margin-left: -24px;
+    bottom: 18px
+  }
+
+  .diya b,
+  .diwali-top .diya b {
+    bottom: 22px;
+    width: 12px;
+    height: 20px;
+    margin-left: -6px
+  }
+
+  .dw__rangoli {
+    width: 130px;
+    height: 130px;
+    left: -55px;
+    bottom: -55px
+  }
+
+  .dw__rangoli--r {
+    left: auto;
+    right: -55px
+  }
+
+  .dw__burst.b1,
+  .diwali-top .dw__burst.b1 {
+    top: auto;
+    bottom: 2%;
+    left: -3%;
+    width: 60px;
+    height: 60px
+  }
+
+  .dw__burst.b3,
+  .dw__burst.b2,
+  .dw__glow.g2,
+  .dw__glow.g6 {
+    display: none
+  }
+}
+
+/* Placement of the top strip on each page. */
+.hero-clear > .diwali-top {
+  margin-bottom: 26px
+}
+
+.diwali-top-wrap {
+  margin-top: -50px;
+  margin-bottom: 40px
+}
+
+@media (max-width: 760px) {
+  .diwali-top-wrap {
+    margin-top: -40px;
+    margin-bottom: 28px
+  }
+}
