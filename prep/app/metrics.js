@@ -43,7 +43,8 @@ export function computeMetrics(turns, voice) {
     fillersTotal: answers.reduce((s, a) => s + a.fillers, 0),
     fillersPerMinute: totalSeconds ? round(answers.reduce((s, a) => s + a.fillers, 0) / (totalSeconds / 60)) : 0,
     longestPause: round(Math.max(0, ...answers.map((a) => a.longestPause))),
-    candidateTalkSeconds: Math.round(talk("candidate")),
+    // Gemini can send a whole answer in one burst, so transcript timing alone reads near zero; these seconds use the mic.
+    candidateTalkSeconds: Math.round(totalSeconds),
     interviewerTalkSeconds: Math.round(talk("interviewer")),
     interruptions: turns.filter((u) => u.who === "interviewer" && u.interrupted).length,
     answerCount: answers.length,
