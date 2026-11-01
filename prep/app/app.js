@@ -115,6 +115,7 @@ function show(id) {
   if (id !== "s-pass" && id !== "s-invite") lastScreen = id;
   for (const s of document.querySelectorAll(".screen")) s.classList.toggle("on", s.id === id);
   document.documentElement.dataset.screen = id;      // the report and progress screens take the full width
+  if (id === "s-cv") renderBuyerStrip();             // the demo may have been used since it was drawn
   window.scrollTo({ top: 0 });
   window.dispatchEvent(new CustomEvent("prep:screen", { detail: { id } }));
   if (id === "s-report") { paintReportPass(); revealReportOffer(); }
@@ -1105,6 +1106,7 @@ $("end").onclick = () => {
     $("demo-exit-card").hidden = false;
     $("demo-call-buy").textContent = `Buy now · ${monthPrice()} →`;
     $("demo-exit-buy").textContent = `Buy now · ${monthPrice()}`;
+    window.scrollTo({ top: 0 });                     // on a small phone the card sits above the End button
     $("demo-exit-title").focus({ preventScroll: true });
     return;
   }
@@ -1643,7 +1645,7 @@ window.prepApp = {
     if (id === "s-cv") { redrill = null; ending = false; }
     show(id);
   },
-  openPasses: () => openPasses(),
+  openPasses: (message, opts) => openPasses(message, opts),
   cancelRedrill() { redrill = null; },
   /** Who is here and what they own, for deciding what the progress screens show. */
   state: () => ({
