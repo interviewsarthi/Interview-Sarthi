@@ -385,5 +385,15 @@
   }
 })();
 </script>
+<script>
+/* Someone already signed in has nothing to "start free": the same buttons open their Prep Sarthi. */
+try {
+  if (localStorage.getItem("ps_session")) {
+    document.querySelectorAll('a.pill[href="app/"]').forEach(function (a) { a.textContent = "Open Prep Sarthi →"; });
+    var back = document.querySelector(".trust.returning");
+    if (back) back.hidden = true;
+  }
+} catch (e) { /* private mode */ }
+</script>
 </body>
 </html>

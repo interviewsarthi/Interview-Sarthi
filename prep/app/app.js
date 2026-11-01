@@ -24,7 +24,7 @@ import { reportHtml, wireReport } from "./report-view.js?v=20261001-site";
 import { generateInterviewPlan } from "./plan-request.js?v=20261012-models38";
 import { interviewContext } from "./interview-plan.js";
 import { keyHash, entitlement, entitlementBySession, tick, rememberInvite, rememberSource, requestDemo, requestLiveTest, demoTransport, demoUsed, demoReplace, deviceInvite, session as accountSession, LICENSE_API } from "./billing.js?v=20261009-live-gift";
-import { initPasses, isIntl, noticeLiveGift, openPasses, priceOf, refreshPasses, renderInvite } from "./pass.js?v=20261009-polish";
+import { initPasses, isIntl, noticeLiveGift, openPasses, priceOf, refreshPasses, renderInvite } from "./pass.js?v=20261101-flow";
 import { Wheel } from "../wheel.js";
 import { MIC_HELP, MIC_DEAD_RMS } from "./miccheck.js";
 import { beginDiagnostics, diagnosticEvent, errorClass, flushDiagnostics } from './diagnostics.js';
@@ -184,7 +184,7 @@ function renderEntitlement() {
   // Nothing known yet: a dash while the server is being asked, and the honest
   // default for a first-time visitor once it is clear nobody is signed in.
   // A first-time visitor is offered the 7-minute demo (25 Sep 2026); the free minutes need a saved key.
-  if (!e) { el.textContent = !booted ? "\u2026" : passCtx.demoOn ? "Free demo \u00b7 7 min" : (store.get("ps_from") === "applysarthi" ? "30 min free" : "20 min free"); el.className = "chip"; return; }
+  if (!e) { el.textContent = !booted ? "\u2026" : passCtx.demoOn ? (demoUsed.get() ? "Get a pass" : "Free demo \u00b7 7 min") : (store.get("ps_from") === "applysarthi" ? "30 min free" : "20 min free"); el.className = "chip"; return; }
   if (e.kind === "demo") { el.textContent = "Free demo · 7 min"; el.className = "chip ok"; return; }
   if (e.kind === "livetest") { el.textContent = "Live Sarthi test"; el.className = "chip ok"; return; }
   if (e.kind === "pass") { el.textContent = `Pass · ${fmtLong(e.secondsLeft)} left`; el.className = "chip ok"; }
@@ -239,8 +239,10 @@ const passCtx = {
     redrill = null;
     $("pass-back").textContent = "Back";
     if (["call", "preparing"].includes(phase)) { show("s-live"); return; }
+    if (S.ent && S.ent.kind === "pass") { showHome(); return; }
     if (S.key && S.ent) preLive(); else if (S.cv || $("cv").value) showKeyStep(); else show("s-cv");
   },
+  showHome,
   restoreReport() {
     if (demoPurchase?.reportId) {
       let record;
@@ -315,6 +317,47 @@ async function restore() {
   booted = true;
   renderEntitlement();
   fillFromMySarthi();
+}
+
+/* A signed-in buyer's home. Only from the first screen: a job handed over, a #progress link or a payment coming back
+ * have already chosen where this visit goes. */
+function showHome() {
+  const a = S.ent.account, first = a ? ((a.name || "").trim().split(/\s+/)[0] || a.email.split("@")[0]) : "";
+  $("home-title").textContent = first ? `Welcome back, ${first}.` : "Welcome back.";
+  $("home-pass").textContent = S.ent.expiresAt
+    ? `Your pass is active until ${new Date(S.ent.expiresAt).toLocaleDateString("en-IN", { dateStyle: "medium" })}. Practise as often as you like.`
+    : "Your pass is active. Practise as often as you like.";
+  $("home-cv").textContent = store.get("ps_cv") ? "CV saved on this device." : "Add your CV to start.";
+  $("home-key").textContent = store.get("ps_gemini_key") ? "AI key ready on this device." : "AI key: set up once when you start, about a minute.";
+  track("mock_home_view");
+  show("s-home");
+}
+$("home-start").onclick = () => {
+  track("mock_home_start", { has_cv: !!store.get("ps_cv"), has_key: !!store.get("ps_gemini_key") });
+  show("s-cv");
+  if (store.get("ps_cv")) $("to-key").click();
+};
+$("home-edit").onclick = () => show("s-cv");
+$("home-pass-open").onclick = () => openPasses();
+$("home-progress").onclick = () => $("open-progress").click();
+$("acct-home").onclick = () => { $("acct-menu").hidden = true; if (S.ent && S.ent.kind === "pass") showHome(); else show("s-cv"); };
+function goHomeIfBuyer() {
+  if (!S.ent || S.ent.kind !== "pass" || liveTest || location.hash || window.__ps) return;
+  if ($("s-cv").classList.contains("on") && !$("jd").value.trim()) showHome();
+}
+/* Above the form, for anyone not signed in: a buyer on a new device must not fall into the free demo. */
+function renderBuyerStrip() {
+  const strip = $("buyer-strip");
+  const signedIn = !!(S.ent && S.ent.account);
+  strip.hidden = signedIn || liveTest || !passCtx.passesOn;
+  if (strip.hidden) return;
+  const used = demoUsed.get();
+  $("buyer-strip-text").textContent = used ? "You've used your free demo." : "Already bought a pass?";
+  $("buyer-strip-go").textContent = used ? "See the 30-day pass, or sign in" : "Sign in with Google";
+  $("buyer-strip-go").onclick = () => {
+    track("mock_signin_click", { where: "strip" });
+    if (used) openPasses(); else openPasses("", { signin: true });
+  };
 }
 
 /* My Sarthi (interviewsarthi.com/account/): signed in, the EMPTY boxes fill from the profile saved there, once per
@@ -575,7 +618,8 @@ function showDemoOffer() {
   $("s-live").classList.add("demo-active");
   document.documentElement.classList.add("demo-call-on");
   $("demo-call-price").textContent = monthPrice();
-  $("demo-exit-buy").textContent = `Get unlimited practice · ${monthPrice()}`;
+  $("demo-call-buy").textContent = `Buy now · ${monthPrice()} →`;
+  $("demo-exit-buy").textContent = `Buy now · ${monthPrice()}`;
   const benefits = [...$("checkout-what").querySelectorAll("li")];
   $("demo-call-benefits").replaceChildren(...[benefits[0], benefits[2]].filter(Boolean).map((source) => {
     const item = document.createElement("li"); item.textContent = source.textContent; return item;
@@ -981,6 +1025,7 @@ function startCall() {
   hearing = redrill ? null : createHearingCheck(live, (name, data) => log(name, data));
   if (hour) hour.attach(live);
   track(redrill ? "mock_redrill_start" : "mock_start", { minutes: Math.round(plannedSeconds / 60), language: S.language, entitlement: S.ent.kind, focus: !!focusCarried });
+  if (!redrill && S.ent.kind === "pass") track("mock_pass_start", { minutes: Math.round(plannedSeconds / 60) });
   timer = setInterval(onSecond, 1000);
 }
 
@@ -1055,7 +1100,8 @@ $("end").onclick = () => {
     speaking = false; live?.setPlaying(false); wheel.setState("idle");
     $("demo-offer-content").hidden = true;
     $("demo-exit-card").hidden = false;
-    $("demo-exit-buy").textContent = `Get unlimited practice · ${monthPrice()}`;
+    $("demo-call-buy").textContent = `Buy now · ${monthPrice()} →`;
+    $("demo-exit-buy").textContent = `Buy now · ${monthPrice()}`;
     $("demo-exit-title").focus({ preventScroll: true });
     return;
   }
@@ -1616,7 +1662,8 @@ window.addEventListener("pagehide", () => {
 rememberInvite();
 rememberSource();
 const booting = restore().then(() => { if (!takeAtsHandoff()) return loadJobFromApply(); })
-  .then(() => initPasses(passCtx)).then(renderEntitlement);
+  .then(() => initPasses(passCtx)).then(renderEntitlement).then(() => { renderBuyerStrip(); goHomeIfBuyer(); });
+window.addEventListener("prep:account", renderBuyerStrip);
 let bootDone = false;
 booting.then(() => { bootDone = true; }, () => {});
 // Saves that could not reach the server last time, and any weekly or end-of-pass review now due.

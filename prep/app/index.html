@@ -36,7 +36,7 @@
   </script>
   <link rel="stylesheet" href="../prep.css?v=20261001-what">
   <link rel="stylesheet" href="./progress-view.css?v=20261001-site">
-  <link rel="stylesheet" href="./demo-offer.css?v=20261006-demo-buy">
+  <link rel="stylesheet" href="./demo-offer.css?v=20261101-flow">
   <link rel="stylesheet" href="./support-view.css?v=20261021-prephelp">
   <style>
     .screen{display:none;padding:8px 0 40px} .screen.on{display:block}
@@ -121,7 +121,7 @@
 <header class="appbar"><div class="appbar-in">
   <a class="brand" href="/" aria-label="Interview Sarthi home"><img src="/assets/mark.svg" alt="InterviewSarthi" width="26" height="26"><span>Interview<strong>Sarthi</strong></span></a>
   <a class="brand-prod" href="/prep/">Prep Sarthi</a>
-  <span class="navright"><button class="navlink" id="open-progress" data-pg="open">My progress</button><button type="button" class="navlink" id="open-help" aria-haspopup="dialog" aria-controls="support-dialog">Help<span id="support-unread" class="sh-unread" aria-hidden="true" hidden></span></button><button class="navlink" id="open-invite">Invite</button><button id="entitle" class="chip" title="Passes">…</button><span class="acct" id="acct" style="display:none"><button id="acct-btn" aria-haspopup="true" aria-expanded="false">Sign in</button><div class="acct-menu" id="acct-menu" hidden><p id="acct-name"></p><small id="acct-mail"></small><a class="linkink mysarthi-link" href="/account/">My Sarthi: passes, interviews, profile</a><button class="linkink" id="acct-out">Sign out</button></div></span></span>
+  <span class="navright"><button class="navlink" id="open-progress" data-pg="open">My progress</button><button type="button" class="navlink" id="open-help" aria-haspopup="dialog" aria-controls="support-dialog">Help<span id="support-unread" class="sh-unread" aria-hidden="true" hidden></span></button><button class="navlink" id="open-invite">Invite</button><button id="entitle" class="chip" title="Passes">…</button><span class="acct" id="acct" style="display:none"><button id="acct-btn" aria-haspopup="true" aria-expanded="false">Sign in</button><div class="acct-menu" id="acct-menu" hidden><p id="acct-name"></p><small id="acct-mail"></small><button class="linkink" id="acct-home" type="button">My Prep</button><a class="linkink mysarthi-link" href="/account/">My Sarthi: passes, interviews, profile</a><button class="linkink" id="acct-out">Sign out</button></div></span></span>
 </div></header>
 <div class="narrow">
   <aside class="live-gift-notice notice ok" id="live-gift-notice" hidden role="status" aria-live="polite">
@@ -130,8 +130,24 @@
   </aside>
 
   <!-- 1. CV -->
+  <!-- A signed-in buyer's home (owner, 1 Nov 2026): what they own and one way to start. -->
+  <section class="screen" id="s-home" aria-labelledby="home-title">
+    <span class="label">My Prep</span>
+    <h1 id="home-title"></h1>
+    <p class="lede" id="home-pass"></p>
+    <div class="card" style="margin-top:22px">
+      <button class="pill wide" id="home-start">Start a mock interview →</button>
+      <ul class="home-setup">
+        <li><span id="home-cv"></span> <button class="linkink" id="home-edit" type="button">Edit</button></li>
+        <li id="home-key"></li>
+      </ul>
+    </div>
+    <p class="home-links"><button class="linkink" id="home-progress" type="button">My progress</button> · <button class="linkink" id="home-pass-open" type="button">My pass</button> · <a class="linkink" href="/account/">My Sarthi account</a></p>
+  </section>
+
   <section class="screen on" id="s-cv">
-    <span class="label">Step 1 of 3</span>
+    <p class="notice buyer-strip" id="buyer-strip" hidden><span id="buyer-strip-text"></span> <button class="linkink" id="buyer-strip-go" type="button"></button></p>
+    <span class="label">Your interview</span>
     <h1>Practise for <em>your</em> next role.</h1>
     <p class="lede">Add your CV and an optional job description. Your interviewer adapts questions to your experience, answers and chosen role. When you start, your documents are used only to run this interview and write its report; the documents themselves are never stored. Your practice time starts when your interviewer starts speaking.</p>
     <div class="card" style="margin-top:22px">
@@ -185,7 +201,7 @@
 
   <!-- 2. Key -->
   <section class="screen" id="s-key">
-    <span class="label">Step 2 of 3</span>
+    <span class="label">Your AI key</span>
     <h1>One key, <em>yours.</em></h1>
     <p class="lede" id="key-lede">The interviewer runs on Google's Gemini, on your own free key. It stays in this browser and is sent only to Google, unless you save it to My Sarthi yourself. If you use Live Sarthi or ApplySarthi, it is the same key.</p>
     <div class="card" style="margin-top:22px">
@@ -241,17 +257,17 @@
     <aside class="demo-pass-card" id="demo-call-offer" hidden aria-label="Prep pass">
       <div id="demo-offer-content">
         <p class="demo-pass-price"><b id="demo-call-price"></b> <span>· 30 days</span></p>
-        <h2>Not ready today? That's normal.</h2>
+        <h2>Prep Sarthi 30-day pass</h2>
         <ul id="demo-call-benefits"></ul>
-        <button class="pill wide" id="demo-call-buy">Get unlimited practice</button>
-        <p class="demo-pass-note">Your free interview stops here and your report is saved.</p>
+        <button class="pill wide" id="demo-call-buy">Buy now</button>
+        <p class="demo-pass-note">One payment, no auto-renew. Your free demo stops here and your report is saved.</p>
       </div>
       <div id="demo-exit-card" hidden role="group" aria-labelledby="demo-exit-title">
         <h2 id="demo-exit-title" tabindex="-1">Leaving the interview?</h2>
         <p class="demo-exit-copy">That's fine. With a pass you can practise as often as you like.</p>
         <div class="demo-exit-actions">
           <button class="pill ghost" id="demo-exit-keep">Keep going</button>
-          <button class="pill" id="demo-exit-buy">Get unlimited practice</button>
+          <button class="pill" id="demo-exit-buy">Buy now</button>
           <button class="linkink" id="demo-exit-end">End and see my report</button>
         </div>
       </div>
@@ -439,7 +455,7 @@
   <footer class="site" style="margin-top:30px">Prep Sarthi is part of <a href="/">Interview Sarthi</a> · <a href="/privacy.html">Privacy</a> · <a href="mailto:support@interviewsarthi.com">support@interviewsarthi.com</a></footer>
 </div>
 <script src="/assets/analytics.js" defer></script>
-<script type="module" src="./app.js?v=20261022-hour"></script>
+<script type="module" src="./app.js?v=20261101-flow"></script>
 <script type="module" src="./progress-view.js?v=20261012-models38"></script>
 <script type="module" src="./support-view.js?v=20261021-prephelp"></script>
 </body>

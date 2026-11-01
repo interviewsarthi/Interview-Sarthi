@@ -43,3 +43,8 @@ html.demo-call-on[data-screen="s-live"] .narrow{max-width:1100px;padding:0 24px}
   #s-live.demo-active .micfix ul{margin:4px 0}
   #s-live.demo-active .micfix li{padding:2px 0}
 }
+.buyer-strip[hidden]{display:none}
+.buyer-strip{margin:0 0 18px}
+.home-setup{list-style:none;margin:18px 0 0;padding:0;font-size:14.5px;color:var(--muted)}
+.home-setup li{padding:10px 0;border-top:1px solid var(--line)}
+.home-links{margin:18px 0 0;font-size:14.5px;color:var(--muted)}

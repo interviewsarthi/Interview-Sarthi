@@ -121,7 +121,11 @@ export async function initPasses(context) {
     const label = phone.previousElementSibling;
     if (label) label.style.display = "none";
   }
-  $("entitle").onclick = () => openPasses();
+  // The badge goes where its words say: an unused free demo is on this screen, so it leads to the form, not a price.
+  $("entitle").onclick = () => {
+    if ($("entitle").textContent.startsWith("Free demo") && $("s-cv").classList.contains("on")) { $("cv").focus(); return; }
+    openPasses();
+  };
   // The header's Sign in / name button (owner, 3 Oct 2026): sign-in stays
   // optional, but the way in should not hide inside the pass screen.
   if (ctx.passesOn) $("acct").style.display = "inline-flex";
@@ -264,22 +268,29 @@ function paint() {
   $("pass-signin").style.display = account ? "none" : "block";
   $("pass-pay").style.display = account && !signinOnly ? "block" : "none";
   $("have-pass-row").style.display = account ? "none" : "block";
-  $("checkout-label").textContent = signinOnly ? "Welcome back" : "You are buying";
+  $("checkout-label").textContent = signinOnly ? "Google sign-in" : "You are buying";
   $("checkout-plan").style.display = signinOnly ? "none" : "block";
   $("checkout-what").style.display = signinOnly ? "none" : "block";
   $("checkout-back").textContent = signinOnly ? "Back" : "Change";
+  $("checkout-back").style.display = signinOnly ? "none" : "";   // the page's own Back is right below
   $("signin-why").textContent = signinOnly
     ? "Sign in with the Google account you bought with, and your pass appears here."
     : "Sign in with Google first, so your pass follows you to any phone or laptop.";
   if (account) $("pass-who2").textContent = `Signed in as ${account.email}`;
 
   // Words at the top follow the state, so the page never asks for money twice.
+  if (signinOnly) {
+    $("pass-kicker").textContent = "Sign in";
+    $("pass-title").innerHTML = 'Welcome <em>back.</em>';
+    $("pass-lede").textContent = "New here? Continuing with Google creates your account. There is no password to remember.";
+  } else {
   $("pass-kicker").textContent = live ? "Your account" : freeReady ? "Free days" : "Passes";
   $("pass-title").innerHTML = live ? 'Your pass is <em>live.</em>' : freeReady ? 'Your free days are <em>ready.</em>' : 'Unlimited mocks, <em>one payment.</em>';
   $("pass-lede").textContent = live
     ? "Practise as much as you like until it ends. Buying again adds the days on top, and nothing renews by itself."
     : freeReady ? "Start them when you are ready to practise. Your free days wait until you press Start."
       : "No subscription, and it never renews by itself. The clock starts when you pay, and the pass ends exactly on time.";
+  }
 
   // Arrived through a friend's link: the first pass is a week longer, so say so where the price is.
   const note = $("invited-note");
@@ -343,6 +354,7 @@ async function onGoogle(credential) {
     ctx.track("mock_sign_in", { with_key: !!ctx.state.hash, to_buy: !cameToSignIn });
     const live = ctx.state.ent.kind === "pass";
     const freeReady = (ctx.state.ent.invite?.banked_days || 0) > 0;
+    if (cameToSignIn && live && ctx.showHome) { step = "choose"; say(""); paint(); ctx.showHome(); return; }
     if (cameToSignIn) { step = "choose"; say(live ? "Welcome back. Your pass is live." : freeReady ? "Signed in. You have free days ready to start." : "Signed in. Choose a pass below.", live || freeReady ? "ok" : ""); }
     else say("");
     paint();
