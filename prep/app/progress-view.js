@@ -176,7 +176,7 @@ function decorateReport(record, locked=false) {
   // data-qi: the assessment rows above them share the .q class, so counting .q would shift every index.
   $('report').querySelectorAll('.q[data-qi]').forEach(q=>{
     const i=Number(q.dataset.qi);
-    q.insertAdjacentHTML('beforeend',`<div class="pg-toolbar" style="margin-top:16px">${button('redrill','Answer this again · 3 min',`data-id="${esc(record.id)}" data-question="${i}" ${!state().pass?'disabled':''}`)}</div>`);
+    q.insertAdjacentHTML('beforeend',`<div class="pg-toolbar" style="margin-top:16px">${button('redrill',state().pass?'Answer this again · 3 min':'Answer this again · with a pass',`data-id="${esc(record.id)}" data-question="${i}" ${!state().pass?'disabled':''}`)}</div>`);
   });
 }
 async function openEvidence(id, turn) {
