@@ -357,6 +357,18 @@ function renderBuyerStrip() {
   const used = demoUsed.get();
   $("buyer-strip-text").textContent = used ? "You've used your free demo." : "Already bought a pass?";
   $("buyer-strip-go").textContent = used ? "See the 30-day pass, or sign in" : "Sign in with Google";
+  // A free demo's report stays in this browser; reloading the page must not lose the way back to it.
+  $("buyer-strip-report").hidden = !(used && store.get("ps_last_report"));
+  $("buyer-strip-report").onclick = () => {
+    let record = null;
+    try { record = JSON.parse(store.get("ps_last_report", "null")); } catch { /* corrupt storage */ }
+    if (!record || !record.report) { $("buyer-strip-report").hidden = true; return; }
+    window.__lastReport = record;
+    $("report-wait").style.display = "none";
+    renderReport(record);
+    offerReport("That was your free demo.", record.report, "demo_report");
+    show("s-report");
+  };
   $("buyer-strip-go").onclick = () => {
     track("mock_signin_click", { where: "strip" });
     if (used) openPasses(); else openPasses("", { signin: true });
@@ -591,9 +603,9 @@ function showReportOffer(lead, rep) {
   const scored = (rep.questions || []).filter((q) => Number.isFinite(Number(q.score)) && q.question);
   const weakest = scored.reduce((a, q) => (!a || Number(q.score) < Number(a.score) ? q : a), null);
   const ask = weakest && Number(weakest.score) < 7
-    ? ` Your weakest answer was "${clip(weakest.question, 90)}" (${Number(weakest.score)}/10). Practise it again tonight, as many times as you like.`
-    : " Practise again tonight, as many times as you like.";
-  showOffer("report-offer", `${lead}${ask} A 30-day pass gives you unlimited mock interviews.`);
+    ? ` Your weakest answer was "${clip(weakest.question, 90)}" (${Number(weakest.score)}/10). With a 30-day pass you can practise it again tonight, as many times as you like.`
+    : " With a 30-day pass you can practise again tonight, as many times as you like.";
+  showOffer("report-offer", `${lead}${ask}`);
   $("report-offer-go").textContent = `Get 30 days for ${monthPrice()} →`;
   const top = $("report").querySelector(".rd-top") || $("report").firstElementChild;
   if (top) top.after($("report-offer"));
