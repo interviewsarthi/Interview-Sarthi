@@ -188,6 +188,7 @@ function renderEntitlement() {
   if (e.kind === "demo") { el.textContent = "Free demo · 7 min"; el.className = "chip ok"; return; }
   if (e.kind === "livetest") { el.textContent = "Live Sarthi test"; el.className = "chip ok"; return; }
   if (e.kind === "pass") { el.textContent = `Pass · ${fmtLong(e.secondsLeft)} left`; el.className = "chip ok"; }
+  else if (!e.account && e.kind === "none" && passCtx.demoOn && !demoUsed.get()) { el.textContent = "Free demo \u00b7 7 min"; el.className = "chip"; }
   else if (e.account && e.invite?.banked_days > 0) { el.textContent = `${e.invite.banked_days} free days`; el.className = "chip ok"; }
   else if (e.kind === "trial") { el.textContent = `Free · ${fmtLong(e.secondsLeft)} left`; el.className = "chip"; }
   // Signed in, but no Gemini key in this browser yet: no free-minute count to show.
@@ -328,6 +329,7 @@ function showHome() {
     ? `Your pass is active until ${new Date(S.ent.expiresAt).toLocaleDateString("en-IN", { dateStyle: "medium" })}. Practise as often as you like.`
     : "Your pass is active. Practise as often as you like.";
   $("home-cv").textContent = store.get("ps_cv") ? "CV saved on this device." : "Add your CV to start.";
+  $("home-edit").textContent = store.get("ps_cv") ? "Edit" : "Add";
   $("home-key").textContent = store.get("ps_gemini_key") ? "AI key ready on this device." : "AI key: set up once when you start, about a minute.";
   track("mock_home_view");
   show("s-home");
@@ -455,6 +457,7 @@ $("to-key").onclick = async () => {
   redrill = null;
   readForm();
   if (S.cv.length < 80) { notice("cv-notice", "Add your CV first: a file or pasted text.", "bad"); return; }
+  notice("cv-notice", "");
   try { interviewContext(S); }
   catch (err) { notice("jd-notice", err.message, "bad"); return; }
   notice("jd-notice", "");
@@ -1663,7 +1666,10 @@ rememberInvite();
 rememberSource();
 const booting = restore().then(() => { if (!takeAtsHandoff()) return loadJobFromApply(); })
   .then(() => initPasses(passCtx)).then(renderEntitlement).then(() => { renderBuyerStrip(); goHomeIfBuyer(); });
-window.addEventListener("prep:account", renderBuyerStrip);
+window.addEventListener("prep:account", () => {
+  renderBuyerStrip();
+  if ($("s-home").classList.contains("on") && !(S.ent && S.ent.kind === "pass")) show("s-cv");   // signed out, or the pass ended
+});
 let bootDone = false;
 booting.then(() => { bootDone = true; }, () => {});
 // Saves that could not reach the server last time, and any weekly or end-of-pass review now due.

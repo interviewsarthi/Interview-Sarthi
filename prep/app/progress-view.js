@@ -152,7 +152,7 @@ function reviewsView() {
 
 async function settings() {
   const prefs=await getPrefs();
-  if(!state().signedIn) { await window.prepApp.openPasses(); return; }
+  if(!state().signedIn) { await window.prepApp.openPasses("", { signin: true }); return; }
   if(!prefs) { toast('Could not load your history setting. Please try again.'); return; }
   data.prefs=prefs;
   showDialog('Your interviews, your choice.', `<div class="pg-consent"><p>When account saving is on, we keep your reports, interview transcripts, delivery numbers, progress analyses, re-answers, and the short CV or job-description quotes cited in your report.</p><p>We never keep your CV or job-description documents, or your voice. Saved items are kept for <strong>12 months</strong>, remain readable after your pass ends, and can be deleted at any time.</p><p>Progress analyses use your saved interviews with Google’s Gemini on your own key. <a href="/privacy.html" target="_blank" rel="noopener">Read the privacy policy</a>.</p><label class="pg-switch" for="pg-saving"><span><strong>Save interviews to my account</strong><br><span class="pg-caption">Turning this off stops new saves; it does not delete history.</span></span><input class="pg-toggle" type="checkbox" role="switch" id="pg-saving" ${prefs.enabled?'checked':''} ${!prefs.enabled&&!state().pass?'disabled':''}></label>${!state().pass?'<p class="pg-caption">An active pass is needed to turn on new account saves.</p>':''}
@@ -202,7 +202,7 @@ document.addEventListener('click',async event=>{
     switch(action) {
       case 'open': await openProgress(); break;
       case 'practice': window.prepApp.navigate('s-cv'); break;
-      case 'passes': await window.prepApp.openPasses(); break;
+      case 'passes': await window.prepApp.openPasses("", state().signedIn ? {} : { signin: true }); break;
       case 'refresh': await refresh(); break;
       case 'tab': tab=el.dataset.tab; selectedDay=''; render(); $('s-progress').querySelector(`[data-tab="${tab}"]`)?.focus(); break;
       case 'day': selectedDay=el.dataset.day; tab='history'; render(); $('pg-title')?.focus({preventScroll:true}); break;

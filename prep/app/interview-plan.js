@@ -9,7 +9,7 @@ export const TARGET_LEVELS = ["Entry-level / fresher", "Individual contributor",
 export function interviewContext({ jd = "", practiceFocus = "role", targetRole = "", targetLevel = "" } = {}) {
   if (clean(jd)) return { mode: "job_description", targetRole: "", targetLevel: "" };
   if (practiceFocus === "general_cv") return { mode: "general_cv", targetRole: "General CV practice", targetLevel: "No target seniority" };
-  if (!clean(targetRole)) throw new Error("Without a JD, enter the role you want to practise for, or choose General CV practice.");
+  if (!clean(targetRole)) throw new Error("Without a job description, enter the role you want to practise for, or choose General CV practice.");
   if (!TARGET_LEVELS.includes(targetLevel)) throw new Error("Choose the level of the role you want to practise for.");
   return { mode: "role_baseline", targetRole: clean(targetRole), targetLevel };
 }
