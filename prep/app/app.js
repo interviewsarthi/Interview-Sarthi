@@ -1478,7 +1478,15 @@ function announceReport(record) {
 
 const currentPeriod = () => { const p = knownPeriods().find((x) => x.current); return p ? { start: p.start, end: p.end, ...("from" in p ? { from: p.from } : {}) } : null; };
 
-$("again").onclick = () => { ending = false; redrill = null; preLive(); };
+$("again").onclick = () => {
+  ending = false; redrill = null;
+  // The free demo is one interview: without a pass or a key of their own, practising again means buying.
+  if (!S.key && !(S.ent && S.ent.kind === "pass") && demoUsed.get() && passCtx.passesOn) {
+    openPasses("You've had your free demo. A pass gives you unlimited mock interviews.");
+    return;
+  }
+  preLive();
+};
 $("download").onclick = () => {
   const r = window.__lastReport;
   if (!r) return;
