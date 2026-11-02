@@ -36,7 +36,7 @@
   </script>
   <link rel="stylesheet" href="../prep.css?v=20261001-what">
   <link rel="stylesheet" href="./progress-view.css?v=20261001-site">
-  <link rel="stylesheet" href="./demo-offer.css?v=20261101-flow4">
+  <link rel="stylesheet" href="./demo-offer.css?v=20261102-look">
   <link rel="stylesheet" href="./support-view.css?v=20261021-prephelp">
   <style>
     .screen{display:none;padding:8px 0 40px} .screen.on{display:block}
@@ -158,19 +158,7 @@
       </div>
       <textarea id="cv" placeholder="Paste your CV here, or add a PDF with the button above."></textarea>
       <div class="notice" id="cv-notice"></div>
-      <div class="row">
-        <div><label class="f">Your first name</label><input type="text" id="name" placeholder="Riya" autocomplete="given-name"></div>
-        <div><label class="f">Interview language</label>
-          <select id="language">
-            <option value="English">English</option>
-            <option value="Hinglish">Hinglish</option>
-            <option value="Hindi">Hindi</option>
-            <option value="auto">Match whatever I speak</option>
-            <option value="other">Another language…</option>
-          </select>
-          <input type="text" id="language-other" placeholder="e.g. Tamil, Spanish, German" style="display:none;margin-top:8px">
-        </div>
-      </div>
+      <label class="f" for="name">Your first name</label><input type="text" id="name" placeholder="Riya" autocomplete="given-name">
       <div class="fhead">
         <label class="f" for="jd">Job description<span class="opt"> · optional</span></label>
         <button type="button" class="chip up" id="jdpick">Add file</button>
@@ -188,12 +176,24 @@
         </div>
         <p class="muted" id="no-jd-help">We’ll practise common skills for this role and level. The report won’t claim a match to a specific employer.</p>
       </div>
+      <details class="settings" id="settings">
+        <summary><span class="label">Interview settings</span> <span id="settings-sum"></span> <span class="linkink">Change</span></summary>
+        <label class="f" for="language">Interview language</label>
+          <select id="language">
+            <option value="English">English</option>
+            <option value="Hinglish">Hinglish</option>
+            <option value="Hindi">Hindi</option>
+            <option value="auto">Match whatever I speak</option>
+            <option value="other">Another language…</option>
+          </select>
+          <input type="text" id="language-other" placeholder="e.g. Tamil, Spanish, German" style="display:none;margin-top:8px">
       <div class="row">
         <div><label class="f">Length</label>
           <select id="minutes"><option value="8">8 minutes · quick round</option><option value="10">10 minutes</option><option value="12" selected>12 minutes</option><option value="18">18 minutes · full round</option><option value="60">60 minutes · long round</option></select></div>
         <div><label class="f">Interviewer voice</label>
           <select id="voice"><option value="Kore">Kore · female</option><option value="Aoede">Aoede · female</option><option value="Leda">Leda · female</option><option value="Charon">Charon · male</option><option value="Puck">Puck · male</option><option value="Fenrir">Fenrir · male</option></select></div>
       </div>
+      </details>
       <div class="actions"><button class="pill wide" id="to-key">Start interview →</button></div>
       <p class="muted" id="start-note" style="margin:10px 0 0;font-size:14px"></p>
     </div>
@@ -455,7 +455,7 @@
   <footer class="site" style="margin-top:30px">Prep Sarthi is part of <a href="/">Interview Sarthi</a> · <a href="/privacy.html">Privacy</a> · <a href="mailto:support@interviewsarthi.com">support@interviewsarthi.com</a></footer>
 </div>
 <script src="/assets/analytics.js" defer></script>
-<script type="module" src="./app.js?v=20261101-flow6"></script>
+<script type="module" src="./app.js?v=20261102-look"></script>
 <script type="module" src="./progress-view.js?v=20261101-flow7"></script>
 <script type="module" src="./support-view.js?v=20261021-prephelp"></script>
 </body>

@@ -1,0 +1,60 @@
+/* /prep/ only: the landing page's layout (2 Nov 2026). Colours and type stay Prep's own, from prep.css. */
+.prep-landing{--band-tint:#f1f5fa}
+.prep-landing .topbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.prep-landing .nav{padding:12px 0}
+.prep-landing .hero{gap:56px;padding:56px 0 40px}
+.prep-landing .hero h1{font-size:clamp(34px,4.3vw,52px);line-height:1.08;margin:16px 0 18px}
+.prep-landing h1,.prep-landing section.band h2{text-wrap:balance}
+.prep-landing .lead{font-size:17.5px;margin-bottom:24px}
+.prep-landing .trust{margin-top:14px}
+.prep-landing .trust.returning{margin-top:8px;font-weight:600}
+.prep-landing .call{box-shadow:0 30px 60px -30px rgba(15,34,54,.6)}
+.prep-landing .proof-row{justify-content:flex-start;gap:10px;padding:0 0 48px}
+.prep-landing .proof-row li{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+.prep-landing section.band{border-top:0;padding:72px 0}
+.prep-landing section.band h2{margin:10px 0 28px}
+.tone-white{background:#fff}
+.tone-white2{background:#fff;padding-top:0!important}
+.tone-tint{background:var(--band-tint)}
+/* how it works */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.steps .step{display:block;padding:24px;border:1px solid var(--line);border-top:3px solid var(--prep);border-radius:var(--r);background:#fff}
+.steps .step .n{display:block;margin-bottom:12px}
+.steps .step h3{margin-bottom:8px;font-size:21px}
+/* the report and pricing */
+.prep-landing .sample .card{box-shadow:0 12px 30px -24px rgba(20,43,67,.5)}
+.prep-landing .prices{max-width:none;grid-template-columns:1fr 1.25fr;gap:16px}
+.prep-landing .pricecard{padding:28px}
+/* what it will not do */
+.prep-landing .wont{gap:16px}
+.prep-landing .wont div{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.prep-landing #progress .row{gap:16px}
+/* questions */
+.prep-landing .faq details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin-bottom:10px}
+.prep-landing .faq summary{font-size:16.5px}
+.prep-landing .faq .wrap{max-width:860px}
+/* link lists become cards */
+.prep-landing .more{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.prep-landing section.more{display:block}
+.prep-landing section.more .wrap>div{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.prep-landing .more a{border:1px solid var(--line);border-radius:12px;padding:13px 16px;background:#fff;font-weight:550;font-size:15px;line-height:1.4}
+.prep-landing .more a:hover{border-color:var(--prep)}
+/* the close */
+.tone-dark{background:var(--dark);color:var(--dark-ink)}
+.tone-dark h2 em{color:#9db4ff!important}
+.tone-dark h2{margin-bottom:22px!important}
+.tone-dark .trust{color:var(--dark-muted)}
+.prep-landing .closing h2{margin-left:auto;margin-right:auto}
+.prep-landing footer.site{border-top:0;padding-top:24px}
+.prep-landing footer.site + *,.prep-landing .wrap>p.muted{margin-top:28px}
+@media(max-width:860px){
+  .prep-landing .hero{padding:28px 0 28px;gap:28px}
+  .steps,.prep-landing .prices{grid-template-columns:1fr}
+  .prep-landing section.band{padding:52px 0}
+  .prep-landing .proof-row{padding-bottom:32px}
+}
+@media(max-width:640px){
+  .prep-landing .more,.prep-landing section.more .wrap>div{grid-template-columns:1fr}
+  .prep-landing .ctas .pill{width:100%}
+  .prep-landing .proof-row li{border-radius:12px}
+}

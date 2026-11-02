@@ -1686,8 +1686,15 @@ window.addEventListener("pagehide", () => {
 });
 rememberInvite();
 rememberSource();
+/* The settings row says what will happen, so most people never need to open it. */
+function renderSettingsSum() {
+  const lang = $("language").value === "other" ? ($("language-other").value.trim() || "Another language")
+    : $("language").value === "auto" ? "Match what I speak" : $("language").value;
+  $("settings-sum").textContent = `${lang} · ${$("minutes").value} minutes · ${$("voice").value}`;
+}
+for (const id of ["language", "language-other", "minutes", "voice"]) $(id).addEventListener("input", renderSettingsSum);
 const booting = restore().then(() => { if (!takeAtsHandoff()) return loadJobFromApply(); })
-  .then(() => initPasses(passCtx)).then(renderEntitlement).then(() => { renderBuyerStrip(); goHomeIfBuyer(); });
+  .then(() => initPasses(passCtx)).then(renderEntitlement).then(() => { renderSettingsSum(); renderBuyerStrip(); goHomeIfBuyer(); });
 window.addEventListener("prep:account", () => {
   renderBuyerStrip();
   if ($("s-home").classList.contains("on") && !(S.ent && S.ent.kind === "pass")) show("s-cv");   // signed out, or the pass ended
