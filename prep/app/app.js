@@ -23,8 +23,8 @@ import { assessmentText } from "./assessment-view.js?v=20260923-jd-plan";
 import { reportHtml, wireReport } from "./report-view.js?v=20261001-site";
 import { generateInterviewPlan } from "./plan-request.js?v=20261012-models38";
 import { interviewContext } from "./interview-plan.js";
-import { keyHash, entitlement, entitlementBySession, tick, rememberInvite, rememberSource, requestDemo, requestLiveTest, demoTransport, demoUsed, demoReplace, deviceInvite, session as accountSession, LICENSE_API } from "./billing.js?v=20261009-live-gift";
-import { initPasses, isIntl, noticeLiveGift, openPasses, priceOf, refreshPasses, renderInvite } from "./pass.js?v=20261101-flow";
+import { keyHash, entitlement, entitlementBySession, tick, rememberInvite, rememberSource, requestDemo, requestLiveTest, demoTransport, demoUsed, demoReplace, deviceInvite, session as accountSession, LICENSE_API } from "./billing.js?v=20261102-offload";
+import { initPasses, isIntl, noticeLiveGift, openPasses, priceOf, refreshPasses, renderInvite } from "./pass.js?v=20261102-offload";
 import { Wheel } from "../wheel.js";
 import { MIC_HELP, MIC_DEAD_RMS } from "./miccheck.js";
 import { beginDiagnostics, diagnosticEvent, errorClass, flushDiagnostics } from './diagnostics.js';
@@ -33,7 +33,7 @@ import { createSupport, recentAttempts } from "./support.js?v=20261021-prephelp"
 // Progress across the month (plan approved 29 Sep 2026). These modules hold the logic; the screens that show
 // it are drawn elsewhere and reach this page through window.prepApp and the prep:* events below.
 import { HISTORY_EVENTS, flushOutbox, getInterview, knownPeriods, knownSummaries, saveInterview, saveItem } from "./history.js";
-import { fillFrom, readProfile, saveFromPrep, saveKey } from "./mysarthi.js?v=20261010-mysarthi";
+import { fillFrom, readProfile, saveFromPrep, saveKey } from "./mysarthi.js?v=20261102-offload";
 import { carryFocus, reportChanges, summarize, trackKey } from "./progress.js";
 import { coachingBrief } from "./coaching.js?v=20261001-faststart";
 import { refreshAnalyses } from "./insights.js?v=20261012-models38";

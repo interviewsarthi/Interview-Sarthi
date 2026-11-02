@@ -6,7 +6,7 @@
  *
  * Silent by design: if My Sarthi is not open yet (the server answers 404), the person is signed out, or the network
  * fails, every call answers null and Prep carries on exactly as before. */
-import { LICENSE_API, session } from "./billing.js?v=20261009-live-gift";   // the same URL app.js loads, so one copy
+import { LICENSE_API, session } from "./billing.js?v=20261102-offload";   // the same URL app.js loads, so one copy
 
 async function post(path, body = {}) {
   const token = session.get();

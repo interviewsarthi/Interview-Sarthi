@@ -4,7 +4,8 @@
 // localStorage key, so a visitor sees one currency across both pages.
 (() => {
   'use strict';
-  const GEO = 'https://license.interviewsarthi.com/geo';
+  // Cloudflare answers this at the edge; the licence worker is not run for it (2 Nov 2026, see prep/app/billing.js).
+  const GEO = 'https://license.interviewsarthi.com/cdn-cgi/trace';
   const KEY = 'sarthi-region';
   const els = document.querySelectorAll('[data-intl]');
   const name = document.getElementById('region-name');
@@ -40,7 +41,8 @@
   let zone = '';
   try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { /* old browser */ }
   if (zone && zone !== 'Asia/Kolkata' && zone !== 'Asia/Calcutta') apply('intl');
-  fetch(GEO).then(r => r.json()).then(d => {
-    if (d && d.country) apply(d.country === 'IN' ? 'in' : 'intl');
+  fetch(GEO).then(r => r.text()).then(t => {
+    const m = /^loc=([A-Z]{2})$/m.exec(t);
+    if (m) apply(m[1] === 'IN' ? 'in' : 'intl');
   }).catch(() => { /* no answer: keep the guess */ });
 })();

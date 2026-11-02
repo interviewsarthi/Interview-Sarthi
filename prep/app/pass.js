@@ -13,7 +13,7 @@
  * score worth showing.
  */
 
-import { LICENSE_API, LOCAL, claimLiveGift, config, deviceInvite, inviteLink, invitedBy, orderStatus, session, signIn, startFreeDays, startOrder } from "./billing.js?v=20261009-live-gift";
+import { LICENSE_API, LOCAL, claimLiveGift, config, deviceInvite, inviteLink, invitedBy, orderStatus, session, signIn, startFreeDays, startOrder } from "./billing.js?v=20261102-offload";
 import { reportPaidOrder } from "./purchase-analytics.js?v=20261006-demo-buy";
 
 const $ = (id) => document.getElementById(id);

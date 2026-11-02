@@ -376,10 +376,12 @@
     var seen = sessionStorage.getItem("ps_geo");
     if (seen) return show(seen);
   } catch (e) { /* private mode */ }
-  fetch("https://license.interviewsarthi.com/geo")
-    .then(function (r) { return r.json(); })
-    .then(function (d) {
-      var c = String((d && d.country) || "IN").toUpperCase();
+  // Cloudflare's trace answers at the edge without running the licence worker (2 Nov 2026).
+  fetch("https://license.interviewsarthi.com/cdn-cgi/trace")
+    .then(function (r) { return r.text(); })
+    .then(function (t) {
+      var m = /^loc=([A-Z]{2})$/m.exec(t);
+      var c = m ? m[1] : "IN";
       try { sessionStorage.setItem("ps_geo", c); } catch (e) { /* ignore */ }
       show(c);
     })

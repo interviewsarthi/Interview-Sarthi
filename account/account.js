@@ -118,7 +118,8 @@ async function showSignedOut() {
   if (wantConnect) say("Sign in to connect your PC to My Sarthi.");
   if (LOCAL) $("test-login").hidden = false;
   try {
-    const cfg = await call("/mock/config", {}, { auth: false });
+    // The sign-in id is in a plain file on the site (prep/app/billing.js says why); the test worker keeps its sandbox login.
+    const cfg = LOCAL ? await call("/mock/config", {}, { auth: false }) : await (await fetch("/prep/app/config.json?v=20261102")).json();
     if (!cfg.google_client_id) return;
     await new Promise((resolve, reject) => {
       if (window.google && window.google.accounts) return resolve();

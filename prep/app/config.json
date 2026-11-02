@@ -1,0 +1,6 @@
+{
+  "google_client_id": "272955098922-tdb9pvbn96p394dkculinjfc98ruphe7.apps.googleusercontent.com",
+  "plans": { "m": { "amount": 99, "days": 30, "label": "30-Day Pass", "usd": 999 } },
+  "cashfree_mode": "production",
+  "demo": { "seconds": 420 }
+}

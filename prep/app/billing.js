@@ -125,7 +125,30 @@ export async function tick(hash, seconds) {
 
 // ---- passes
 
-export const config = () => post("/mock/config", {});
+/* Plans, the sign-in id and the free demo's length come from a plain file on the site, and the region from
+ * Cloudflare's trace on the licence host, which answers at the edge without running the worker. Until 2 Nov 2026 every
+ * app load asked the worker for this, and an outside client replaying that call used up most of the worker's free
+ * 100,000 requests a day. Local previews keep the test worker: its sandbox sign-in and region override are not in the
+ * file. A price change goes in mock.js MOCK_PLANS and prep/app/config.json together; scripts/check_prep_config.py
+ * fails the push when they differ. */
+export const TRACE_URL = "https://license.interviewsarthi.com/cdn-cgi/trace";
+const CONFIG_URL = "./config.json?v=20261102";
+export async function visitorCountry() {
+  try {
+    const res = await fetch(TRACE_URL, { cache: "no-store" });
+    const m = /^loc=([A-Z]{2})$/m.exec(await res.text());
+    return m ? m[1] : "";
+  } catch (_) { return ""; }       // no answer: rupees, the safe default (pass.js intl)
+}
+export async function config() {
+  if (LOCAL) return post("/mock/config", {});
+  const [file, country] = await Promise.all([
+    fetch(CONFIG_URL).then((r) => { if (!r.ok) throw new Error(`config ${r.status}`); return r.json(); }),
+    visitorCountry(),
+  ]);
+  const region = country && country !== "IN" ? "intl" : "in";
+  return { ...file, region, currency: region === "in" ? "INR" : "USD" };
+}
 
 /* `hash` is optional: someone buying straight from the pricing page has no
  * Gemini key in this browser yet. The invite code rides along so it still counts. */
