@@ -2322,8 +2322,10 @@
       var zone = "";
       try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) { }
       apply(zone && zone !== "Asia/Kolkata" && zone !== "Asia/Calcutta" ? "intl" : "in");
-      fetch(API + "/geo").then(function (r) { return r.json(); }).then(function (d) {
-        if (d && d.country) apply(d.country === "IN" ? "in" : "intl");
+      // Cloudflare's trace answers at the edge without running the licence worker (2 Nov 2026; /geo is blocked).
+      fetch(API + "/cdn-cgi/trace").then(function (r) { return r.text(); }).then(function (t) {
+        var m = /^loc=([A-Z]{2})$/m.exec(t);
+        if (m) apply(m[1] === "IN" ? "in" : "intl");
       }).catch(function () { });
     }
     // Wait until the closing purchase button exists so every checkout link
