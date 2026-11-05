@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://interviewsarthi.com/</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/about.html</loc>
@@ -130,7 +130,7 @@
   </url>
   <url>
     <loc>https://interviewsarthi.com/guides/</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/guides/accenture-cognizant-capgemini-hr-interview.html</loc>
@@ -246,7 +246,7 @@
   </url>
   <url>
     <loc>https://interviewsarthi.com/help.html</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/hinglish-interview-help.html</loc>
@@ -258,23 +258,27 @@
   </url>
   <url>
     <loc>https://interviewsarthi.com/live/</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/live/google-meet-interview-assistant.html</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/live/how-it-works.html</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/live/international.html</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-10-11</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/live/resume-based-interview-answers.html</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://interviewsarthi.com/meeting/</loc>
+    <lastmod>2026-11-05</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/online-interview-tips.html</loc>
@@ -282,7 +286,7 @@
   </url>
   <url>
     <loc>https://interviewsarthi.com/prep/</loc>
-    <lastmod>2026-11-01</lastmod>
+    <lastmod>2026-10-11</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/prep/ai-mock-interview-price-india.html</loc>
@@ -310,7 +314,7 @@
   </url>
   <url>
     <loc>https://interviewsarthi.com/privacy.html</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-10-06</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/refunds.html</loc>
@@ -326,7 +330,7 @@
   </url>
   <url>
     <loc>https://interviewsarthi.com/vs-final-round-ai.html</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://interviewsarthi.com/vs-lockedin-ai.html</loc>
@@ -338,6 +342,6 @@
   </url>
   <url>
     <loc>https://interviewsarthi.com/vs-parakeet-ai.html</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
 </urlset>
