@@ -146,8 +146,12 @@ class PlaybackProcessor extends AudioWorkletProcessor {
     }
     if (!this.queue.length) {
       this.silent += out.length;
-      if (this.prebuffer > 0) this.filling = true;     // ran dry mid-turn: buffer again before going on
-      if (this.silent >= this.grace) this.setPlaying(false);
+      // Only a real end of speech buffers again: re-buffering every mid-turn gap made longer pauses between sentences
+      // (the owner's test on WebView2, 7 Nov 2026 -- Gemini sends audio at exactly real time, so every refill showed).
+      if (this.silent >= this.grace) {
+        this.setPlaying(false);
+        if (this.prebuffer > 0) this.filling = true;
+      }
     } else this.silent = 0;
     return true;
   }

@@ -11,7 +11,7 @@
  * interviewer she or he: see interviewerPersona.
  */
 
-import { AudioIO } from "./audio.js?v=20261107-light";
+import { AudioIO } from "./audio.js?v=20261107-pause";
 import { GeminiLive } from "./live.js?v=20261107-appdemo";
 import { buildInterviewerInstructions, interviewerPersona } from "./interviewer.js?v=20261022-hour";
 import { createHearingCheck, createLongInterview, isLongInterview, speechTermsFrom } from "./hour.js?v=20261022-hour";
