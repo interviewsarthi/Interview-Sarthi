@@ -12,7 +12,7 @@
  */
 
 import { AudioIO } from "./audio.js?v=20261008-bluetooth";
-import { GeminiLive } from "./live.js?v=20261022-hour";
+import { GeminiLive } from "./live.js?v=20261107-usage";
 import { buildInterviewerInstructions, interviewerPersona } from "./interviewer.js?v=20261022-hour";
 import { createHearingCheck, createLongInterview, isLongInterview, speechTermsFrom } from "./hour.js?v=20261022-hour";
 import { readDocFile, tidy, guessName } from "./cv.js";
@@ -72,7 +72,7 @@ const LOW_FREE_SECONDS = 5 * 60;      // when the pass offer appears during a fr
 
 const S = { cv: "", jd: "", practiceFocus: "role", targetRole: "", targetLevel: "", name: "", language: "English", minutes: 12, voice: "Kore", key: "", hash: "", ent: null, plan: "m" };
 // This build, in the diagnostics timelines and Help reports: compare problems before and after a release by it.
-const RELEASE = "20261022-hour";
+const RELEASE = "20261107-usage";
 let lastScreen = "s-cv";
 let assessmentPlan = null, planPending = null, startController = null;
 let audio = null, live = null, timer = null, startedAt = 0, plannedSeconds = 0, ending = false;
