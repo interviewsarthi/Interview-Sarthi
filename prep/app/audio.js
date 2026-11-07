@@ -223,6 +223,13 @@ export class AudioIO {
     };
     this.playback.connect(this.ctx.destination);
 
+    if (this.externalMic) {
+      // Inside the Windows app (1.0.46): the app owns the microphone and sends the same sound Live hears
+      // (feedExternal). Two openers of one mic did not work on the Windows test laptop.
+      this.micLabel = "Interview Sarthi app microphone"; this.micId = ""; this.handsFree = false; this.sink = "default";
+      if (this.onExternalStart) this.onExternalStart();
+      return;
+    }
     await this.useMic(deviceId);
     // Left to choose and handed a Bluetooth Hands-Free microphone: take another
     // one, so the earbuds stay in stereo (micpick.js). useMic stops the Hands-Free
@@ -303,7 +310,18 @@ export class AudioIO {
   set muted(v) { this._muted = !!v; }
   get muted() { return this._muted; }
 
+  /* One 100 ms block of 16 kHz PCM from the app. While the interviewer's voice plays, and for 0.4 s after, the page
+   * passes silence on: through laptop speakers she would hear herself (the app's mic has no echo canceller). */
+  feedExternal(pcm, rms) {
+    if (!this.externalMic || !this.ctx || this._muted || !this.onChunk) return;
+    const now = performance.now();
+    if (this.speaking) this._spokeAt = now;
+    if (this.speaking || now - (this._spokeAt ?? -Infinity) < 400) this.onChunk(new Int16Array(pcm.length), 0);
+    else this.onChunk(pcm, rms);
+  }
+
   async stop() {
+    if (this.externalMic && this.ctx && this.onExternalStop) this.onExternalStop();
     if (this.stream) for (const t of this.stream.getTracks()) t.stop();
     if (this.ctx) { try { await this.ctx.close(); } catch (_) { /* already closed */ } }
     this.ctx = null; this.stream = null; this.source = null; this.capture = null; this.playback = null;

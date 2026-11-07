@@ -66,6 +66,8 @@ const liveTest = (() => {
 const inApp = appDemo();
 // Any page the Windows app opens (the demo, or Practise): from=interview-sarthi-app.
 const appView = new URLSearchParams(location.search).get("from") === "interview-sarthi-app";
+// The app owns the microphone and hands the page the same sound Live hears (owner, 7 Nov 2026: both must hear him).
+const sharedMic = appView && !!(window.__sarthiApp && window.__sarthiApp.sharedMic);
 const track = (name, params) => {
   const renamed = inApp ? name.replace(/^mock_/, "appdemo_") : liveTest ? name.replace(/^mock_/, "livetest_") : name;
   try { if (window.gtag) window.gtag("event", renamed, params || {}); } catch (_) { /* analytics off */ }
@@ -867,6 +869,11 @@ async function startInterview() {
     audio.prebufferMs = 300;
     audio.lightMic = true;
   }
+  if (sharedMic) {
+    audio.externalMic = true;
+    audio.onExternalStart = () => tellApp("mic_wanted", {});
+    audio.onExternalStop = () => tellApp("mic_done", {});
+  }
   audio.onMicMuted = (muted) => {
     log("mic_track_muted", { muted });
     if (muted && phase !== "idle") showMicFix("Your system reports the microphone as muted. Unmute it, then answer out loud.");
@@ -1299,6 +1306,12 @@ function beginAppDemo() {
 window.sarthiApp = {
   start: () => pressAppStart("app"),                  // the app's own Start button, if it shows one
   end: () => { if (phase === "call") void endInterview("app"); },
+  // The app's microphone (sharedMic): one 100 ms block of 16 kHz PCM, base64.
+  mic: (b64, rms) => {
+    if (!audio || !audio.externalMic) return;
+    const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    audio.feedExternal(new Int16Array(bytes.buffer), Number(rms) || 0);
+  },
 };
 function startAppDemo() {
   appStarted = false; appBegun = false;
