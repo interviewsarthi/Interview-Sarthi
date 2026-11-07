@@ -480,13 +480,13 @@ export class GeminiLive {
     if (p.canWrapUp) {
       if (this._closeNoted) return;
       this._closeNoted = true;
-      if (this.sendText(NOTES.clockClose(p), { turnComplete: false })) this._event("clock_note", { seconds: p.remainingSeconds, closing: true });
+      if (this.sendText(this.notes.clockClose(p), { turnComplete: false })) this._event("clock_note", { seconds: p.remainingSeconds, closing: true });
       return;
     }
     const active = this.activeSeconds;
     if (active - this._lastClockNoteAt < CLOCK_NOTE_SECONDS) return;
     this._lastClockNoteAt = active;
-    if (this.sendText(NOTES.clock(p), { turnComplete: false })) this._event("clock_note", { seconds: p.remainingSeconds });
+    if (this.sendText(this.notes.clock(p), { turnComplete: false })) this._event("clock_note", { seconds: p.remainingSeconds });
   }
 
   /* The interviewer just invited closing questions or said goodbye with plenty of time left: tell it to go on. */
@@ -496,7 +496,7 @@ export class GeminiLive {
     if (!p || p.canWrapUp || !(p.remainingSeconds > EARLY_CLOSE_MIN_SECONDS)) return;
     if (t - this._lastNudgeAt < NUDGE_GAP_SECONDS) return;
     this._lastNudgeAt = t;
-    if (this.sendText(NOTES.notYet(p), { turnComplete: false })) this._event("close_nudge", { seconds: p.remainingSeconds });
+    if (this.sendText(this.notes.notYet(p), { turnComplete: false })) this._event("close_nudge", { seconds: p.remainingSeconds });
   }
 
   // --------------------------------------------------------------- receive

@@ -12,7 +12,7 @@
  */
 
 import { AudioIO } from "./audio.js?v=20261008-bluetooth";
-import { GeminiLive } from "./live.js?v=20261022-hour";
+import { GeminiLive } from "./live.js?v=20261107-appdemo";
 import { buildInterviewerInstructions, interviewerPersona } from "./interviewer.js?v=20261022-hour";
 import { createHearingCheck, createLongInterview, isLongInterview, speechTermsFrom } from "./hour.js?v=20261022-hour";
 import { readDocFile, tidy, guessName } from "./cv.js";
@@ -36,6 +36,8 @@ import { HISTORY_EVENTS, flushOutbox, getInterview, knownPeriods, knownSummaries
 import { fillFrom, readProfile, saveFromPrep, saveKey } from "./mysarthi.js?v=20261102-offload";
 import { carryFocus, reportChanges, summarize, trackKey } from "./progress.js";
 import { coachingBrief } from "./coaching.js?v=20261001-faststart";
+// The Interview Sarthi Windows app's first-start demo (Live Sarthi 1.0.46, 7 Nov 2026): appdemo.js says why.
+import { APP_DEMO_NOTES, READY_REASK_MS, REASK_NOTE, START_BUTTON_MS, START_NOTE, appDemo, appDemoInstructions, tellApp } from "./appdemo.js?v=20261107-appdemo";
 import { refreshAnalyses } from "./insights.js?v=20261012-models38";
 import { REDRILL_SECONDS, buildRedrillInstructions, compareAnswers, redrillItem, redrillNotes, redrillProgress, redrillSource } from "./redrill.js?v=20261022-hour";
 
@@ -60,8 +62,11 @@ const liveTest = (() => {
   try { if (asked) sessionStorage.setItem("ps_live_test", "1"); return asked || sessionStorage.getItem("ps_live_test") === "1"; }
   catch (_) { return asked; }
 })();
+// Inside the Windows app's demo (appdemo.js): the person's own key and CV came from the app; GA4 hears appdemo_*.
+const inApp = appDemo();
 const track = (name, params) => {
-  try { if (window.gtag) window.gtag("event", liveTest ? name.replace(/^mock_/, "livetest_") : name, params || {}); } catch (_) { /* analytics off */ }
+  const renamed = inApp ? name.replace(/^mock_/, "appdemo_") : liveTest ? name.replace(/^mock_/, "livetest_") : name;
+  try { if (window.gtag) window.gtag("event", renamed, params || {}); } catch (_) { /* analytics off */ }
 };
 const nowS = () => performance.now() / 1000;
 const TICK_SECONDS = 30;
@@ -188,6 +193,7 @@ function renderEntitlement() {
   if (!e) { el.textContent = !booted ? "\u2026" : passCtx.demoOn ? (demoUsed.get() ? "Get a pass" : "Free demo \u00b7 7 min") : (store.get("ps_from") === "applysarthi" ? "30 min free" : "20 min free"); el.className = "chip"; return; }
   if (e.kind === "demo") { el.textContent = "Free demo · 7 min"; el.className = "chip ok"; return; }
   if (e.kind === "livetest") { el.textContent = "Live Sarthi test"; el.className = "chip ok"; return; }
+  if (e.kind === "appdemo") { el.textContent = "Live Sarthi demo"; el.className = "chip ok"; return; }
   if (e.kind === "pass") { el.textContent = `Pass · ${fmtLong(e.secondsLeft)} left`; el.className = "chip ok"; }
   else if (!e.account && e.kind === "none" && passCtx.demoOn && !demoUsed.get()) { el.textContent = "Free demo \u00b7 7 min"; el.className = "chip"; }
   else if (e.account && e.invite?.banked_days > 0) { el.textContent = `${e.invite.banked_days} free days`; el.className = "chip ok"; }
@@ -685,7 +691,11 @@ function preLive() {
   setCaption("Your interviewer", `${p.They} speaks first. Answer out loud, like a real call.`);
   $("tip-speaker").textContent = `Use wired earphones if you can. From a loud speaker ${p.they} can hear ${p.themself}. Bluetooth earbuds work best with the laptop's microphone.`;
   $("tip-interrupt").textContent = `You can interrupt, and so can ${p.they}.`;
-  if (S.ent.kind === "livetest") {
+  if (S.ent.kind === "appdemo") {
+    $("start").disabled = false;
+    $("clock").textContent = fmt(S.minutes * 60);
+    notice("live-notice", "");
+  } else if (S.ent.kind === "livetest") {
     $("start").disabled = false;
     const cap = Math.min(S.minutes * 60, DEMO_SECONDS);
     $("clock").textContent = fmt(cap);
@@ -851,14 +861,14 @@ async function startInterview() {
     log("mic_track_muted", { muted });
     if (muted && phase !== "idle") showMicFix("Your system reports the microphone as muted. Unmute it, then answer out loud.");
   };
-  const isDemo = S.ent.kind === "demo", isTest = S.ent.kind === "livetest";
+  const isDemo = S.ent.kind === "demo", isTest = S.ent.kind === "livetest", isApp = S.ent.kind === "appdemo";
   if (isDemo || isTest) diagnosticEvent('demo_requested', { stage: isTest ? 'livetest' : 'demo' });
   const [micError, grant, fresh] = await Promise.all([
     audio.start().then(() => null, (err) => err),
     // Asked for only now, at Start: a visitor who never presses it never uses one up.
     isTest ? requestLiveTest() : isDemo ? requestDemo() : null,
     // A pass can expire between loading the page and pressing Start. A demo or a test has no key to look up.
-    isDemo || isTest || redrill || !S.hash ? S.ent : entitlement(S.hash),
+    isDemo || isTest || isApp || redrill || !S.hash ? S.ent : entitlement(S.hash),
   ]);
   if (cancelled()) return;
   if (micError) {
@@ -898,7 +908,7 @@ async function startInterview() {
   diagnosticEvent('preparation_ready', { stage: 'live', duration_ms: Math.round(performance.now() - started) });
   startController = null;
   assessmentPlan = null;
-  planPending = redrill || isTest ? null : preparePlan();
+  planPending = redrill || isTest || isApp ? null : preparePlan();
   startCall();
 }
 
@@ -999,8 +1009,8 @@ function startCall() {
     voice: S.voice,
     instructions: () => redrill
       ? buildRedrillInstructions({ candidateName: S.name, language: redrill.source.language || S.language, voice: S.voice, source: redrill.source, cv: S.cv })
-      : buildInterviewerInstructions(hour ? { ...brief, part: hour.part() } : brief),
-    notes: redrill ? redrillNotes() : undefined,
+      : buildInterviewerInstructions(hour ? { ...brief, part: hour.part() } : brief) + (inApp ? appDemoInstructions(S.name, S.language) : ""),
+    notes: redrill ? redrillNotes() : inApp ? APP_DEMO_NOTES : undefined,
     getInterviewProgress: (args) => hour ? hour.progress(currentProgress(), args) : currentProgress(),
     partContext: hour ? hour.partContext : undefined,
     onAudio: (pcm) => !exitCardOpen && !ending && audio && audio.play(pcm),
@@ -1038,6 +1048,7 @@ function startCall() {
     },
   });
   live.start();
+  if (inApp) startAppDemo();
   hearing = redrill ? null : createHearingCheck(live, (name, data) => log(name, data));
   if (hour) hour.attach(live);
   track(redrill ? "mock_redrill_start" : "mock_start", { minutes: Math.round(plannedSeconds / 60), language: S.language, entitlement: S.ent.kind, focus: !!focusCarried });
@@ -1063,6 +1074,7 @@ async function onSecond() {
   $("clock").classList.toggle("low", remaining <= 60);
   if (S.ent.kind === "demo") $("left").textContent = `Free demo · ${fmt(remaining)} left`;
   else if (S.ent.kind === "livetest") $("left").textContent = `Live Sarthi test · ${fmt(remaining)} left`;
+  else if (S.ent.kind === "appdemo") $("left").textContent = `Practice · ${fmt(remaining)} left`;
   else if (S.ent.kind === "trial") $("left").textContent = `Free · ${fmtLong(Math.max(0, trialLeftAtStart - elapsed))} left`;
   else if (S.ent.kind === "pass") $("left").textContent = `Pass · ${fmtLong(Math.max(0, passLeft))} left`;
   // Free time is nearly gone: this is the moment someone decides to buy.
@@ -1122,7 +1134,7 @@ $("end").onclick = () => {
     $("demo-exit-title").focus({ preventScroll: true });
     return;
   }
-  if (confirm(S.ent && S.ent.kind === "livetest" ? "End the test now?" : "End the interview now and get your report?")) endInterview("user");
+  if (confirm(S.ent && S.ent.kind === "livetest" ? "End the test now?" : S.ent && S.ent.kind === "appdemo" ? "End the practice now?" : "End the interview now and get your report?")) endInterview("user");
 };
 
 async function endInterview(reason) {
@@ -1169,6 +1181,21 @@ async function endInterview(reason) {
     renderEntitlement();
   }
   if (reason === "failed" && turns.length === 0) track("mock_fail_connect", { demo: !!demo });
+  if (S.ent.kind === "appdemo") {
+    // The app's demo ends in the app (its pass screen), never on a Prep report or offer.
+    stopAppDemo();
+    if (reason === "failed" && turns.length === 0) {
+      tellApp("failed", { reason: "connect", message: String($("live-notice").textContent || "").slice(0, 200) });
+      ending = false; preLive(); notice("live-notice", "The interviewer could not connect. Press Start the interview to try again.", "bad");
+      return;
+    }
+    tellApp("ended", { reason, seconds: elapsed,
+      answers: turns.filter((u) => u.who === "candidate" && u.text?.trim()).length,
+      interviewer_turns: turns.filter((u) => u.who === "interviewer").length });
+    wheel.stop();
+    setCaption("Finished", "The practice is over. Continue in the Live Sarthi app.");
+    return;
+  }
   if (S.ent.kind === "livetest") {
     // A test ends on Live Sarthi's next step, never a Prep report. Whether the candidate answered does not matter:
     // Live Sarthi listens to the interviewer through the PC's sound.
@@ -1225,6 +1252,59 @@ function showLiveTestDone(elapsed) {
 }
 $("lt-buy").onclick = () => track("mock_offer_click", { where: "livetest" });
 $("lt-again").onclick = () => { ending = false; preLive(); };
+
+/* The Windows app's demo (appdemo.js). It starts on its own: the app allows sound without a click. */
+let appStartBtn = null, appReaskTimer = null, appButtonTimer = null, appStarted = false;
+function beginAppDemo() {
+  document.documentElement.classList.add("ps-livetest");      // nothing of Prep's to sell in the header
+  Object.assign(S, { key: inApp.key, hash: "", cv: inApp.cv, jd: "", name: inApp.name, language: inApp.language,
+    voice: inApp.voice, minutes: inApp.minutes, practiceFocus: "general_cv", targetRole: "", targetLevel: "" });   // a general interview from the CV: no role or JD asked for
+  S.ent = { kind: "appdemo", secondsLeft: inApp.minutes * 60, hasTrial: false };
+  renderEntitlement();
+  preLive();
+  tellApp("ready", { minutes: inApp.minutes });
+  void startInterview();
+}
+window.sarthiApp = {
+  start: () => pressAppStart("app"),                  // the app's own Start button, if it shows one
+  end: () => { if (phase === "call") void endInterview("app"); },
+};
+function startAppDemo() {
+  appStarted = false;
+  tellApp("started", {});
+  if (!appStartBtn) {
+    appStartBtn = document.createElement("button");
+    appStartBtn.className = "pill small";
+    appStartBtn.id = "app-start";
+    appStartBtn.textContent = "Start the interview";
+    appStartBtn.onclick = () => pressAppStart("button");
+    $("youbar").insertBefore(appStartBtn, $("end"));
+  }
+  appStartBtn.hidden = false;
+  clearTimeout(appButtonTimer);
+  appButtonTimer = setTimeout(() => { if (appStartBtn) appStartBtn.hidden = true; }, START_BUTTON_MS);
+  scheduleReask();
+}
+function scheduleReask() {
+  clearTimeout(appReaskTimer);
+  appReaskTimer = setTimeout(() => {
+    const said = live && live.transcript.turns.some((u) => u.who === "candidate" && u.text?.trim());
+    if (live && !appStarted && !said) { live.sendText(REASK_NOTE); log("appdemo_reask", {}); }
+  }, READY_REASK_MS);
+}
+function pressAppStart(how) {
+  if (!live || appStarted) return;
+  appStarted = true;
+  clearTimeout(appReaskTimer);
+  if (appStartBtn) appStartBtn.hidden = true;
+  live.sendText(START_NOTE);
+  log("appdemo_start_pressed", { how });
+  tellApp("start_pressed", { how });
+}
+function stopAppDemo() {
+  clearTimeout(appReaskTimer); clearTimeout(appButtonTimer);
+  if (appStartBtn) appStartBtn.hidden = true;
+}
 
 // ------------------------------------------------------------- 4. Report
 
@@ -1701,6 +1781,7 @@ window.addEventListener("prep:account", () => {
 });
 let bootDone = false;
 booting.then(() => { bootDone = true; }, () => {});
+if (inApp) booting.catch(() => {}).then(beginAppDemo);
 // Saves that could not reach the server last time, and any weekly or end-of-pass review now due.
 booting.then(() => {
   flushOutbox().catch(() => {});
