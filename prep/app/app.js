@@ -865,7 +865,7 @@ async function startInterview() {
   const isDemo = S.ent.kind === "demo", isTest = S.ent.kind === "livetest", isApp = S.ent.kind === "appdemo";
   if (isDemo || isTest) diagnosticEvent('demo_requested', { stage: isTest ? 'livetest' : 'demo' });
   const [micError, grant, fresh] = await Promise.all([
-    audio.start().then(() => null, (err) => err),
+    slowMicNote(audio.start()).then(() => null, (err) => err),
     // Asked for only now, at Start: a visitor who never presses it never uses one up.
     isTest ? requestLiveTest() : isDemo ? requestDemo() : null,
     // A pass can expire between loading the page and pressing Start. A demo or a test has no key to look up.
@@ -1253,6 +1253,14 @@ function showLiveTestDone(elapsed) {
 }
 $("lt-buy").onclick = () => track("mock_offer_click", { where: "livetest" });
 $("lt-again").onclick = () => { ending = false; preLive(); };
+
+/* In the Windows app the microphone can take 2-20 s to open (the Windows test, 7 Nov 2026, the PC's audio driver): after
+ * 6 s the call screen says what is happening instead of a silent "Connecting". Only inside the app. */
+function slowMicNote(opening) {
+  if (!inApp) return opening;
+  const t = setTimeout(() => notice("live-notice", "Opening your microphone… this can take a few seconds. If it does not start, close other apps that use the microphone."), 6000);
+  return opening.finally(() => { clearTimeout(t); notice("live-notice", ""); });
+}
 
 /* The Windows app's demo (appdemo.js). It starts on its own: the app allows sound without a click. */
 let appStartBtn = null, appReaskTimer = null, appButtonTimer = null, appStarted = false, appBegun = false;
