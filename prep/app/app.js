@@ -11,7 +11,7 @@
  * interviewer she or he: see interviewerPersona.
  */
 
-import { AudioIO } from "./audio.js?v=20261008-bluetooth";
+import { AudioIO } from "./audio.js?v=20261107-buffer";
 import { GeminiLive } from "./live.js?v=20261107-appdemo";
 import { buildInterviewerInstructions, interviewerPersona } from "./interviewer.js?v=20261022-hour";
 import { createHearingCheck, createLongInterview, isLongInterview, speechTermsFrom } from "./hour.js?v=20261022-hour";
@@ -64,6 +64,8 @@ const liveTest = (() => {
 })();
 // Inside the Windows app's demo (appdemo.js): the person's own key and CV came from the app; GA4 hears appdemo_*.
 const inApp = appDemo();
+// Any page the Windows app opens (the demo, or Practise): from=interview-sarthi-app.
+const appView = new URLSearchParams(location.search).get("from") === "interview-sarthi-app";
 const track = (name, params) => {
   const renamed = inApp ? name.replace(/^mock_/, "appdemo_") : liveTest ? name.replace(/^mock_/, "livetest_") : name;
   try { if (window.gtag) window.gtag("event", renamed, params || {}); } catch (_) { /* analytics off */ }
@@ -858,6 +860,7 @@ async function startInterview() {
   wheel.setState("reconnecting");
 
   audio = new AudioIO();
+  if (inApp || appView) audio.prebufferMs = 250;     // inside the Windows app: a short buffer against stutter (audio.js)
   audio.onMicMuted = (muted) => {
     log("mic_track_muted", { muted });
     if (muted && phase !== "idle") showMicFix("Your system reports the microphone as muted. Unmute it, then answer out loud.");

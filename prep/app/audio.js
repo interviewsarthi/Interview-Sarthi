@@ -66,8 +66,19 @@ registerProcessor("sarthi-capture", CaptureProcessor);
 
 const PLAYBACK_WORKLET = `
 class PlaybackProcessor extends AudioWorkletProcessor {
-  constructor() {
+  constructor(options) {
     super();
+    // Inside the Windows app (prep/app/appdemo.js), on a slow laptop: start each stretch of speech only once
+    // prebuffer input samples are queued (or after waitMax output samples), and report "stopped" only after grace
+    // output samples of silence, so a late chunk is a short wait instead of a stutter that also reads as "she
+    // stopped". 0 everywhere else: the browser plays exactly as before.
+    const o = (options && options.processorOptions) || {};
+    this.prebuffer = o.prebuffer || 0;
+    this.waitMax = o.waitMax || 0;
+    this.grace = o.grace || 0;
+    this.filling = this.prebuffer > 0;
+    this.waited = 0;
+    this.silent = 0;
     this.step = ${PLAYBACK_RATE} / sampleRate;   // input samples per output sample
     this.queue = [];      // Int16Array chunks
     this.pos = 0;         // fractional read position inside queue[0]
@@ -91,9 +102,23 @@ class PlaybackProcessor extends AudioWorkletProcessor {
     const f = this.pos - Math.floor(this.pos);
     return (a + (b - a) * f) / 32768;
   }
+  queued() {
+    let total = -Math.floor(this.pos);
+    for (const c of this.queue) total += c.length;
+    return total;
+  }
   process(_inputs, outputs) {
     const out = outputs[0][0];
     if (!out) return true;
+    if (this.filling) {
+      if (this.queue.length) this.waited += out.length;
+      if (this.queue.length && (this.queued() >= this.prebuffer || this.waited >= this.waitMax)) {
+        this.filling = false; this.waited = 0;
+      } else {
+        out.fill(0);
+        return true;
+      }
+    }
     for (let n = 0; n < out.length; n++) {
       if (!this.queue.length) { out[n] = 0; continue; }
       const chunk = this.queue[0];
@@ -115,7 +140,13 @@ class PlaybackProcessor extends AudioWorkletProcessor {
       this.port.postMessage({ level: Math.sqrt(this.sq / this.count) });
       this.sq = 0; this.count = 0;
     }
-    if (!this.queue.length) this.setPlaying(false);
+    if (!this.queue.length) {
+      this.silent += out.length;
+      if (this.silent >= this.grace) {
+        this.setPlaying(false);
+        if (this.prebuffer > 0) this.filling = true;   // the next stretch of speech is buffered again
+      }
+    } else this.silent = 0;
     return true;
   }
 }
@@ -177,7 +208,10 @@ export class AudioIO {
     sink.gain.value = 0;
     this.capture.connect(sink).connect(this.ctx.destination);
 
-    this.playback = new AudioWorkletNode(this.ctx, "sarthi-playback", { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [1] });
+    const ms = this.prebufferMs || 0;
+    this.playback = new AudioWorkletNode(this.ctx, "sarthi-playback", { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [1],
+      processorOptions: ms ? { prebuffer: Math.round(PLAYBACK_RATE * ms / 1000), waitMax: Math.round(this.ctx.sampleRate * 0.6),
+                               grace: Math.round(this.ctx.sampleRate * 0.35) } : {} });
     this.playback.port.onmessage = (e) => {
       if (typeof e.data.playing === "boolean") {
         this.speaking = e.data.playing;
