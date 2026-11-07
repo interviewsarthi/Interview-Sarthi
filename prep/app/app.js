@@ -11,7 +11,7 @@
  * interviewer she or he: see interviewerPersona.
  */
 
-import { AudioIO } from "./audio.js?v=20261107-buffer";
+import { AudioIO } from "./audio.js?v=20261107-light";
 import { GeminiLive } from "./live.js?v=20261107-appdemo";
 import { buildInterviewerInstructions, interviewerPersona } from "./interviewer.js?v=20261022-hour";
 import { createHearingCheck, createLongInterview, isLongInterview, speechTermsFrom } from "./hour.js?v=20261022-hour";
@@ -25,7 +25,7 @@ import { generateInterviewPlan } from "./plan-request.js?v=20261012-models38";
 import { interviewContext } from "./interview-plan.js";
 import { keyHash, entitlement, entitlementBySession, tick, rememberInvite, rememberSource, requestDemo, requestLiveTest, demoTransport, demoUsed, demoReplace, deviceInvite, session as accountSession, LICENSE_API } from "./billing.js?v=20261102-offload";
 import { initPasses, isIntl, noticeLiveGift, openPasses, priceOf, refreshPasses, renderInvite } from "./pass.js?v=20261102-offload";
-import { Wheel } from "../wheel.js";
+import { Wheel } from "../wheel.js?v=20261107-light";
 import { MIC_HELP, MIC_DEAD_RMS } from "./miccheck.js";
 import { beginDiagnostics, diagnosticEvent, errorClass, flushDiagnostics } from './diagnostics.js';
 // Help: report a problem, and the rating under a report (owner, 21 Oct 2026). Logic here; screens in support-view.js.
@@ -114,6 +114,7 @@ let googleDrop = false;        // the last drop or silence was Google's (1011, r
 let lastMic = null;            // the last call's microphone, for a Help report after the call: { label, hands_free, sink }
 let lastEnd = "";              // why the last interview ended (time, user, failed...), for the same
 const wheel = new Wheel($("wheel"));
+if (appView) wheel.maxFps = 15;          // inside the Windows app: the same wheel, a quarter of the drawing (CPU)
 const waitWheel = new Wheel($("wheel-wait"));
 
 // ------------------------------------------------------------------ helpers
@@ -860,7 +861,12 @@ async function startInterview() {
   wheel.setState("reconnecting");
 
   audio = new AudioIO();
-  if (inApp || appView) audio.prebufferMs = 250;     // inside the Windows app: a short buffer against stutter (audio.js)
+  if (inApp || appView) {
+    // Inside the Windows app (the Windows test on a Celeron laptop, 7 Nov 2026): a short buffer against stutter, and
+    // the mic without noise suppression and auto gain (~6 % of that CPU); echo cancellation stays, for laptop speakers.
+    audio.prebufferMs = 300;
+    audio.lightMic = true;
+  }
   audio.onMicMuted = (muted) => {
     log("mic_track_muted", { muted });
     if (muted && phase !== "idle") showMicFix("Your system reports the microphone as muted. Unmute it, then answer out loud.");

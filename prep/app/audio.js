@@ -116,6 +116,10 @@ class PlaybackProcessor extends AudioWorkletProcessor {
         this.filling = false; this.waited = 0;
       } else {
         out.fill(0);
+        if (!this.queue.length) {
+          this.silent += out.length;
+          if (this.silent >= this.grace) this.setPlaying(false);
+        }
         return true;
       }
     }
@@ -142,10 +146,8 @@ class PlaybackProcessor extends AudioWorkletProcessor {
     }
     if (!this.queue.length) {
       this.silent += out.length;
-      if (this.silent >= this.grace) {
-        this.setPlaying(false);
-        if (this.prebuffer > 0) this.filling = true;   // the next stretch of speech is buffered again
-      }
+      if (this.prebuffer > 0) this.filling = true;     // ran dry mid-turn: buffer again before going on
+      if (this.silent >= this.grace) this.setPlaying(false);
     } else this.silent = 0;
     return true;
   }
@@ -263,7 +265,7 @@ export class AudioIO {
    * capture worklet. Safe to call again mid-call to switch microphones: the
    * new one is opened first, so a refusal leaves the old one running. */
   async useMic(deviceId) {
-    const audio = { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true };
+    const audio = { channelCount: 1, echoCancellation: true, noiseSuppression: !this.lightMic, autoGainControl: !this.lightMic };
     if (deviceId) audio.deviceId = { exact: deviceId };
     const stream = await navigator.mediaDevices.getUserMedia({ audio, video: false });
     if (this.source) { try { this.source.disconnect(); } catch (_) { /* already gone */ } }

@@ -38,6 +38,8 @@ export class Wheel {
     this._t = 0;
     this._raf = null;
     this._still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    this.maxFps = 0;     // 0 = every frame; the Windows app sets 15 (a slow laptop's CPU, the Windows test 7 Nov 2026)
+    this._drawn = 0;
   }
 
   setState(state) {
@@ -53,10 +55,12 @@ export class Wheel {
     if (this._raf) return;
     this._t = performance.now();
     const frame = (t) => {
-      const dt = Math.min(0.05, (t - this._t) / 1000);
+      this._raf = requestAnimationFrame(frame);
+      if (this.maxFps && t - this._drawn < 1000 / this.maxFps - 1) return;
+      this._drawn = t;
+      const dt = Math.min(this.maxFps ? 0.2 : 0.05, (t - this._t) / 1000);
       this._t = t;
       this._step(dt, t);
-      this._raf = requestAnimationFrame(frame);
     };
     this._raf = requestAnimationFrame(frame);
   }
