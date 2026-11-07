@@ -753,6 +753,7 @@ $("demo-full-wait").onclick = () => {
 /* The live engine retains the full transcript for the report. The call shows
  * current captions only; support can explicitly enable the diagnostic view. */
 function onTranscript(u, done) {
+  if (inApp && done) appDemoTurn(u);
   if (done && u.who === "interviewer" && live && !ending) {
     if (hearing) hearing(u);
     if (hour) hour.onInterviewerTurn(u).catch((e) => log("hour_error", { error: String(e && e.message || e).slice(0, 120) }));
@@ -1254,7 +1255,20 @@ $("lt-buy").onclick = () => track("mock_offer_click", { where: "livetest" });
 $("lt-again").onclick = () => { ending = false; preLive(); };
 
 /* The Windows app's demo (appdemo.js). It starts on its own: the app allows sound without a click. */
-let appStartBtn = null, appReaskTimer = null, appButtonTimer = null, appStarted = false;
+let appStartBtn = null, appReaskTimer = null, appButtonTimer = null, appStarted = false, appBegun = false;
+/* The interview proper begins (the app shows Live's cards from now; during the brief it holds them -- the Windows
+ * test, 7 Nov 2026: Live answered the brief's "start a call ... share your full screen" line): the candidate's first
+ * reply ("yes", "wait"), the interviewer's "Let's start the interview", or the Start button. */
+const BEGIN_RE = /let'?s start the interview|interview shuru|first question/i;
+function appDemoTurn(u) {
+  if (appBegun || !String(u.text || "").trim()) return;
+  if (u.who === "candidate" || (u.who === "interviewer" && BEGIN_RE.test(u.text))) appBegin(u.who);
+}
+function appBegin(by) {
+  if (appBegun) return;
+  appBegun = true;
+  tellApp("interview_begins", { by });
+}
 function beginAppDemo() {
   document.documentElement.classList.add("ps-livetest");      // nothing of Prep's to sell in the header
   Object.assign(S, { key: inApp.key, hash: "", cv: inApp.cv, jd: "", name: inApp.name, language: inApp.language,
@@ -1270,7 +1284,7 @@ window.sarthiApp = {
   end: () => { if (phase === "call") void endInterview("app"); },
 };
 function startAppDemo() {
-  appStarted = false;
+  appStarted = false; appBegun = false;
   tellApp("started", {});
   if (!appStartBtn) {
     appStartBtn = document.createElement("button");
@@ -1300,6 +1314,7 @@ function pressAppStart(how) {
   live.sendText(START_NOTE);
   log("appdemo_start_pressed", { how });
   tellApp("start_pressed", { how });
+  appBegin("button");
 }
 function stopAppDemo() {
   clearTimeout(appReaskTimer); clearTimeout(appButtonTimer);
