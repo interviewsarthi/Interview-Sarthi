@@ -866,7 +866,7 @@ async function startInterview() {
   if (inApp || appView) {
     // Inside the Windows app (the Windows test on a Celeron laptop, 7 Nov 2026): a short buffer against stutter, and
     // the mic without noise suppression and auto gain (~6 % of that CPU); echo cancellation stays, for laptop speakers.
-    audio.prebufferMs = 300;
+    audio.prebufferMs = 200;
     audio.lightMic = true;
   }
   if (sharedMic) {
