@@ -136,6 +136,16 @@
       gaConfig.campaign_source = aiCampaign;
       gaConfig.campaign_medium = "ai-assistant";  // the medium GA4 itself gives referrer-tagged AI visits
     }
+    /* The Interview Sarthi Windows app opens Prep inside itself (Practise, and the first-start demo) with
+     * utm_source=interview-sarthi-app&utm_medium=app: those sessions count apart from browser visits. Only our own
+     * app's tag and a short plain campaign word are passed on. */
+    var appCampaign = incomingParams.get("utm_campaign") || "";
+    if (!gaConfig.campaign_source && !privateReturn && incomingParams.get("utm_source") === "interview-sarthi-app" &&
+        incomingParams.get("utm_medium") === "app") {
+      gaConfig.campaign_source = "interview-sarthi-app";
+      gaConfig.campaign_medium = "app";
+      gaConfig.campaign_name = /^[a-z0-9_-]{1,40}$/.test(appCampaign) ? appCampaign : "app";
+    }
     gtag("config", GA4_ID, gaConfig);
   }
 
