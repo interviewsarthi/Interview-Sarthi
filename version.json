@@ -31,6 +31,39 @@
           "detail": "No paid plan. Browsing jobs needs no account. The first tailored CV is free; after that it uses your free Google AI key, the same kind Live Sarthi uses."
         }
       ]
+    },
+    "live": {
+      "in": [
+        {
+          "title": "2-Day Pass",
+          "price": "₹99",
+          "detail": "Unlimited use for 2 days on 1 device. For an interview tomorrow. The 2 days start when you enter the key.",
+          "note": "Diwali price until 10 Nov. ₹149 from 11 Nov.",
+          "url": "https://license.interviewsarthi.com/buy?plan=2d"
+        },
+        {
+          "title": "1-Month Pass",
+          "price": "₹299",
+          "badge": "Best value",
+          "detail": "Unlimited use for 30 days on 2 devices, like a laptop and a home PC. For interviews at many companies.",
+          "url": "https://license.interviewsarthi.com/buy?plan=30d"
+        }
+      ],
+      "intl": [
+        {
+          "title": "2-Day Pass",
+          "price": "$9.99",
+          "detail": "Unlimited use for 2 days on 1 device. For an interview tomorrow. The 2 days start when you enter the key.",
+          "url": "https://license.interviewsarthi.com/buy?plan=2d"
+        },
+        {
+          "title": "1-Month Pass",
+          "price": "$29.99",
+          "badge": "Best value",
+          "detail": "Unlimited use for 30 days on 2 devices, like a laptop and a home PC. For interviews at many companies.",
+          "url": "https://license.interviewsarthi.com/buy?plan=30d"
+        }
+      ]
     }
   }
 }
