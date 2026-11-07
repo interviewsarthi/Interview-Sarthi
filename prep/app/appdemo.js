@@ -37,8 +37,12 @@ export function appDemo(win = globalThis, search = (globalThis.location && locat
 }
 
 /** Tell the app something: one console line it watches for. */
-export function tellApp(event, data = {}, log = console.log) {
-  try { log("SARTHI_APP " + JSON.stringify({ event, ...data })); } catch (_) { /* console gone */ }
+export function tellApp(event, data = {}, log = console.log, win = globalThis) {
+  const line = JSON.stringify({ event, ...data });
+  // Inside Microsoft Edge WebView2 (the Windows app's Prep window, 1.0.46): its own message channel to the app.
+  try { if (win && win.chrome && win.chrome.webview && win.chrome.webview.postMessage) win.chrome.webview.postMessage(line); }
+  catch (_) { /* not WebView2 */ }
+  try { log("SARTHI_APP " + line); } catch (_) { /* console gone */ }
 }
 
 const firstName = (name) => (String(name || "").trim().split(/\s+/)[0] || "");

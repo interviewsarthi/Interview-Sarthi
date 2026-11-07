@@ -37,7 +37,7 @@ import { fillFrom, readProfile, saveFromPrep, saveKey } from "./mysarthi.js?v=20
 import { carryFocus, reportChanges, summarize, trackKey } from "./progress.js";
 import { coachingBrief } from "./coaching.js?v=20261001-faststart";
 // The Interview Sarthi Windows app's first-start demo (Live Sarthi 1.0.46, 7 Nov 2026): appdemo.js says why.
-import { APP_DEMO_NOTES, READY_REASK_MS, REASK_NOTE, START_BUTTON_MS, START_NOTE, appDemo, appDemoInstructions, tellApp } from "./appdemo.js?v=20261107-appdemo";
+import { APP_DEMO_NOTES, READY_REASK_MS, REASK_NOTE, START_BUTTON_MS, START_NOTE, appDemo, appDemoInstructions, tellApp } from "./appdemo.js?v=20261107-webview2";
 import { refreshAnalyses } from "./insights.js?v=20261012-models38";
 import { REDRILL_SECONDS, buildRedrillInstructions, compareAnswers, redrillItem, redrillNotes, redrillProgress, redrillSource } from "./redrill.js?v=20261022-hour";
 
