@@ -137,6 +137,7 @@ export class GeminiLive {
 
     this.transcript = new Transcript();
     this.usage = {};
+    this._usageMessages = 0;
     this.ws = null;
     this.connected = false;
     this.stopped = false;
@@ -204,7 +205,11 @@ export class GeminiLive {
     const ws = this.ws; this.ws = null;
     if (ws) { try { ws.close(); } catch (_) { /* gone */ } }
     this.transcript.closeAll();
-    this._event("session_usage_totals", { usage: { ...this.usage } });
+    // Flat numbers too: the diagnostics keep numbers only, so the nested `usage` never reached us (owner, 7 Nov 2026:
+    // "we get the tokens in detail from all users"). count = the usage messages Google sent in this session.
+    this._event("session_usage_totals", { usage: { ...this.usage }, input_tokens: Number(this.usage.promptTokenCount || 0),
+      output_tokens: Number(this.usage.responseTokenCount || 0), total_tokens: Number(this.usage.totalTokenCount || 0),
+      count: this._usageMessages });
     this._status("closed");
   }
 
@@ -571,6 +576,7 @@ export class GeminiLive {
     }
     if (message.usageMetadata) {
       const u = message.usageMetadata;
+      this._usageMessages += 1;
       for (const k of ["promptTokenCount", "responseTokenCount", "totalTokenCount"]) {
         this.usage[k] = (this.usage[k] || 0) + Number(u[k] || 0);
       }
