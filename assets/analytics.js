@@ -214,7 +214,7 @@
    * here, at the price they were sold for, so a key bought before then still
    * reports its value when it reaches thanks.html. No page links to them. */
   var PASSES = {
-    "2d": { name: "2-Day Pass", value: 99 },
+    "2d": { name: "2-Day Pass", value: 149 },
     "30d": { name: "1-Month Pass", value: 299 },
     "7d": { name: "7-Day Pass", value: 399 },
     "90d": { name: "3-Month Pass", value: 1999 }

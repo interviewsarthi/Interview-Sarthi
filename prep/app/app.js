@@ -1217,7 +1217,7 @@ async function endInterview(reason) {
 
 /* The end of a Live Sarthi test: did it work, and how to have it in the real interview. Live's cheapest pass, as
  * license-server src/core.js PLANS "2d" sells it (rupees through Cashfree, dollars through Dodo). */
-const LIVE_2D = { inr: "Rs 99", usd: "$9.99" };
+const LIVE_2D = { inr: "Rs 149", usd: "$9.99" };
 function showLiveTestDone(elapsed) {
   $("lt-price").textContent = `Passes from ${isIntl() ? LIVE_2D.usd : LIVE_2D.inr} for 2 days.`;
   show("s-livetest");

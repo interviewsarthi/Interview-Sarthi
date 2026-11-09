@@ -62,6 +62,11 @@
     $("unavailable-card").hidden = !!u.eligible || afterPayment;
     if (u.eligible) {
       $("comeback").hidden = u.kind !== "comeback";
+      // The amount comes from the server's quote for this key.
+      const amount = Number(u.amount) > 0 ? Number(u.amount) : 150;
+      $("comeback").textContent = Number(u.paid) > 0 ? `Your ₹${Number(u.paid)} still counts.` : "What you paid still counts.";
+      $("upgrade-title").textContent = `Make this pass a month: ₹${amount} more`;
+      $("upgrade-pay").textContent = `Pay ₹${amount} with UPI`;
       $("upgrade-end").textContent = u.starts_on_activation ? "30 days from when you activate" : "Your pass will end on " + when(u.ends_after);
       $("upgrade-prep").hidden = !(u.prep_gift_days > 0);
       $("upgrade-prep").textContent = u.prep_gift_days > 0 ? `Prep Sarthi (₹99) included free for ${u.prep_gift_days} days` : "";
@@ -120,12 +125,12 @@
     } finally { paying = false; $("upgrade-pay").disabled = false; }
   }
 
-  function reportPaid(order, kind) {
+  function reportPaid(order, kind, amount) {
     if (paidReported.has(order)) return;
     const once = "ls_upgrade_paid_" + order;
     if (read(once)) return;
     paidReported.add(order); save(once, "1");
-    track("upgrade_paid", { kind, value: 200, currency: "INR" });
+    track("upgrade_paid", { kind, value: Number(amount) > 0 ? Number(amount) : 150, currency: "INR" });
   }
 
   async function success(result, checkingOrder) {
@@ -134,7 +139,7 @@
     $("success").hidden = false;
     $("success-end").textContent = result.started ? "Active until " + when(result.ends_at) : "Your 30 days start when you activate" + (result.activate_by ? ". Activate by " + when(result.activate_by) + "." : ".");
     $("success-devices").textContent = `${result.devices_max} computers`;
-    reportPaid(checkingOrder, result.kind);
+    reportPaid(checkingOrder, result.kind, result.amount || current?.upgrade?.amount);
     const data = await lookup(true);
     const gift = result.prep_gift || data?.prep_gift;
     $("success-prep").hidden = !gift;

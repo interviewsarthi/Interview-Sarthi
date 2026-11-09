@@ -18,7 +18,7 @@ The public static website, product information, interview guides, website analyt
 - Transcription and resume-grounded suggestions for mock calls and permitted live use.
 - English, Hindi and Hinglish support; bring your own Google Gemini key.
 - 30 minutes free per computer, with all features and no card.
-- One-time passes: ₹99 / 2 days on 1 device, ₹299 / 30 days on 2 devices ($9.99 and $29.99 outside India). No automatic renewal. Google API quotas and billing are separate.
+- One-time passes: ₹149 / 2 days on 1 device, ₹299 / 30 days on 2 devices ($9.99 and $29.99 outside India). No automatic renewal. Google API quotas and billing are separate.
 
 Use assistance only where permitted by the employer, interviewer and assessment provider.
 

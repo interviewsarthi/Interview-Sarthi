@@ -421,7 +421,7 @@ function keyCard(k) {
 
 function upgradeBox(u) {
   return el("div", { class: "upgrade" },
-    u.kind === "comeback" ? el("p", { class: "eyebrow", text: "Your ₹99 still counts." }) : null,
+    u.kind === "comeback" ? el("p", { class: "eyebrow", text: Number(u.paid) > 0 ? `Your ₹${Number(u.paid)} still counts.` : "What you paid still counts." }) : null,
     el("h3", { text: `Make this pass a month: ₹${u.amount} more` }),
     el("p", { text: u.starts_on_activation ? `${u.to_label}: 30 days from when you activate, ${u.devices_after} computers.`
       : `${u.to_label} until ${when(u.ends_after)}, ${u.devices_after} computers.` }),
