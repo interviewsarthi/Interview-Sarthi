@@ -1,5 +1,6 @@
 {
   "latest": "1.0.45",
+  "app_latest": "1.0.48",
   "note": "Better answers to long questions and follow-ups, and better sound on laptop speakers. Get a free report if you share an interview as text.",
   "url": "https://interviewsarthi.com/#download",
   "products": {
@@ -64,6 +65,24 @@
           "url": "https://license.interviewsarthi.com/buy?plan=30d&region=intl"
         }
       ]
+    },
+    "meeting": {
+      "status": "live",
+      "tag": "NEW",
+      "title": "Meeting Sarthi",
+      "lead": "Help on your work calls.",
+      "who": "For work calls: client calls, stand-ups and project reviews.",
+      "features": [
+        "When a client or your manager asks something on a call, Meeting Sarthi shows what to say, from your own notes and files.",
+        "After the call: a short recap, the client's open questions as to-dos, and a follow-up message you can send.",
+        "Before the call: what they may ask and what to say, from your notes and documents.",
+        "Live captions of the call, and log updates by voice, like 'ticket 151 moves to Meena, due Friday'."
+      ],
+      "note": "On the Microsoft Store now. Captions and recaps are free.",
+      "button": {
+        "text": "Get it from the Microsoft Store",
+        "store_id": "9NCZPS7XMDR1"
+      }
     }
   }
 }
