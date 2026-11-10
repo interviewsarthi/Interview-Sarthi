@@ -22,16 +22,127 @@
         "detail": "Have Live Sarthi's 1-Month Pass? Your Prep month is free: open the checkout, sign in with Google and paste your Live pass key.",
         "button": "Claim my free month",
         "until": "2026-11-30"
+      },
+      "page": {
+        "order": 2,
+        "show": true,
+        "name": "Prep Sarthi",
+        "icon": "https://interviewsarthi.com/assets/icon-512.png",
+        "promise": "Practise your interview with an AI interviewer",
+        "tiles": [
+          {
+            "icon": "target",
+            "title": "Questions for your job",
+            "text": "Made from the job and your CV"
+          },
+          {
+            "icon": "mic",
+            "title": "Speak like a real interview",
+            "text": "You answer by voice"
+          },
+          {
+            "icon": "report",
+            "title": "A report after each interview",
+            "text": "What went well, what to fix, a better answer"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "Try a free interview",
+            "link": "https://interviewsarthi.com/prep/app/?utm_source=applysarthi&utm_medium=app_page"
+          },
+          {
+            "text": "Buy 30 days",
+            "link": "https://interviewsarthi.com/prep/app/?buy=m&utm_source=applysarthi&utm_medium=app_page"
+          }
+        ],
+        "free": "First interview free",
+        "details": [
+          {
+            "b": "Practise",
+            "t": "as many times as you like"
+          },
+          {
+            "b": "When",
+            "t": "a company calls you, or any time"
+          }
+        ],
+        "learn": "https://interviewsarthi.com/prep/?utm_source=applysarthi&utm_medium=app_page"
       }
     },
     "apply": {
       "prices": [
         {
-          "title": "Always free",
+          "title": "Website: always free",
           "price": "Free",
-          "detail": "No paid plan. Browsing jobs needs no account. The first tailored CV is free; after that it uses your free Google AI key, the same kind Live Sarthi uses."
+          "detail": "Jobs that fit your CV, and forms filled in your own browser. Browsing jobs needs no account."
+        },
+        {
+          "title": "Apply Sarthi Windows app",
+          "price": "Free to start",
+          "detail": "Applies for you by itself: 20 applications in your first week, then 15 every week, free. Plans from Rs 249 for 30 days (Basic 300, Pro 1,000, Max 2,000 a month)."
         }
-      ]
+      ],
+      "page": {
+        "order": 0,
+        "show": true,
+        "name": "Apply Sarthi",
+        "promise": "Applies to jobs for you, while you rest",
+        "tiles": [
+          {
+            "icon": "target",
+            "title": "Jobs that fit your CV",
+            "text": "From Naukri, LinkedIn, Indeed and company pages"
+          },
+          {
+            "icon": "bolt",
+            "title": "Fills and sends by itself",
+            "text": "Within safe limits on every site"
+          },
+          {
+            "icon": "list",
+            "title": "Anything only you can answer",
+            "text": "Waits for you under For you to finish"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "Open Apply Sarthi",
+            "link": "https://apply.interviewsarthi.com/?utm_source=applysarthi&utm_medium=app_page"
+          }
+        ],
+        "free": "20 free applications to start",
+        "prices": [
+          {
+            "price": "Free",
+            "title": "20, then 15 a week"
+          },
+          {
+            "price": "₹249",
+            "title": "Basic, 300 a month"
+          },
+          {
+            "price": "₹499",
+            "title": "Pro, 1,000 a month",
+            "best": true
+          },
+          {
+            "price": "₹799",
+            "title": "Max, 2,000 a month"
+          }
+        ],
+        "details": [
+          {
+            "b": "Paid once",
+            "t": "for 30 days, no auto-debit"
+          },
+          {
+            "b": "Pro and Max",
+            "t": "include a Prep Sarthi month"
+          }
+        ],
+        "learn": "https://apply.interviewsarthi.com/?utm_source=applysarthi&utm_medium=app_page"
+      }
     },
     "live": {
       "in": [
@@ -63,7 +174,63 @@
           "detail": "Unlimited interviews for a month (30 days) on 2 devices, like a laptop and a home PC.",
           "url": "https://license.interviewsarthi.com/buy?plan=30d&region=intl"
         }
-      ]
+      ],
+      "page": {
+        "order": 1,
+        "show": true,
+        "name": "Live Sarthi",
+        "icon": "https://interviewsarthi.com/assets/icon-512.png",
+        "promise": "Answers on your screen during your real interview",
+        "tiles": [
+          {
+            "icon": "eye",
+            "title": "Invisible in screen share",
+            "text": "Hidden on Teams, Google Meet, Zoom and other apps"
+          },
+          {
+            "icon": "bolt",
+            "title": "Detailed answers in about 1.5 seconds",
+            "text": "From your own CV and experience"
+          },
+          {
+            "icon": "inf",
+            "title": "Unlimited interviews",
+            "text": "With the 2-Day or 1-Month Pass"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "Get it free from Microsoft Store",
+            "store_id": "9NMKQPSQ1KS8"
+          },
+          {
+            "text": "Buy a pass",
+            "link": "https://license.interviewsarthi.com/buy?plan=30d"
+          }
+        ],
+        "free": "30 minutes free",
+        "prices": [
+          {
+            "price": "Free",
+            "title": "30 minutes"
+          }
+        ],
+        "details": [
+          {
+            "b": "Works with",
+            "t": "Teams, Zoom, Google Meet"
+          },
+          {
+            "b": "Languages",
+            "t": "English, Hindi, Hinglish"
+          },
+          {
+            "b": "Window",
+            "t": "small, move it anywhere"
+          }
+        ],
+        "learn": "https://interviewsarthi.com/live/?utm_source=applysarthi&utm_medium=app_page"
+      }
     },
     "meeting": {
       "status": "live",
@@ -81,6 +248,54 @@
       "button": {
         "text": "Get it from the Microsoft Store",
         "store_id": "9NCZPS7XMDR1"
+      },
+      "page": {
+        "order": 3,
+        "show": true,
+        "name": "Meeting Sarthi",
+        "tag": "NEW",
+        "promise": "Help on your work calls, once you've got the job",
+        "tiles": [
+          {
+            "icon": "chat",
+            "title": "What to say on calls",
+            "text": "From your own notes and files"
+          },
+          {
+            "icon": "list",
+            "title": "Recap after every call",
+            "text": "To-dos and a follow-up message"
+          },
+          {
+            "icon": "cc",
+            "title": "Live captions",
+            "text": "Of the whole call"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "Get it free from Microsoft Store",
+            "store_id": "9NCZPS7XMDR1"
+          }
+        ],
+        "free": "Captions and recaps are free",
+        "prices": [
+          {
+            "price": "Free",
+            "title": "captions and recaps"
+          }
+        ],
+        "details": [
+          {
+            "b": "For",
+            "t": "calls with clients, your manager or your team"
+          },
+          {
+            "b": "Before the call",
+            "t": "what they may ask and what to say"
+          }
+        ],
+        "learn": "https://interviewsarthi.com/meeting/?utm_source=applysarthi&utm_medium=app_page"
       }
     }
   }
