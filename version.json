@@ -28,7 +28,7 @@
         "show": true,
         "name": "Prep Sarthi",
         "icon": "https://interviewsarthi.com/assets/icon-512.png",
-        "promise": "Practise your interview with an AI interviewer",
+        "promise": "A real voice interview, about your own CV",
         "tiles": [
           {
             "icon": "target",
@@ -73,31 +73,31 @@
     "apply": {
       "prices": [
         {
-          "title": "Website: always free",
+          "title": "Free every week",
           "price": "Free",
-          "detail": "Jobs that fit your CV, and forms filled in your own browser. Browsing jobs needs no account."
+          "detail": "It applies for you by itself: 20 applications in your first week, then 15 every week."
         },
         {
-          "title": "Apply Sarthi Windows app",
-          "price": "Free to start",
-          "detail": "Applies for you by itself: 20 applications in your first week, then 15 every week, free. Plans from Rs 249 for 30 days (Basic 300, Pro 1,000, Max 2,000 a month)."
+          "title": "Plans, paid once for 30 days",
+          "price": "from Rs 249",
+          "detail": "Basic 300, Pro 1,000, Max 2,000 applications a month. Pro and Max include a Prep Sarthi month. No auto-debit."
         }
       ],
       "page": {
         "order": 0,
         "show": true,
         "name": "Apply Sarthi",
-        "promise": "Applies to jobs for you, while you rest",
+        "promise": "Applies to jobs for you, automatically",
         "tiles": [
           {
             "icon": "target",
-            "title": "Jobs that fit your CV",
-            "text": "From Naukri, LinkedIn, Indeed and company pages"
+            "title": "Jobs from different portals",
+            "text": "Found for your CV, in one place"
           },
           {
             "icon": "bolt",
             "title": "Fills and sends by itself",
-            "text": "Within safe limits on every site"
+            "text": "You don't fill a single form"
           },
           {
             "icon": "list",
@@ -107,11 +107,11 @@
         ],
         "buttons": [
           {
-            "text": "Open Apply Sarthi",
-            "link": "https://apply.interviewsarthi.com/?utm_source=applysarthi&utm_medium=app_page"
+            "text": "Get the Windows app",
+            "link": "https://interviewsarthi.com/apply/?utm_source=applysarthi&utm_medium=app_page"
           }
         ],
-        "free": "20 free applications to start",
+        "free": "Free every week: 20, then 15 applications",
         "prices": [
           {
             "price": "Free",
@@ -141,7 +141,7 @@
             "t": "include a Prep Sarthi month"
           }
         ],
-        "learn": "https://apply.interviewsarthi.com/?utm_source=applysarthi&utm_medium=app_page"
+        "learn": "https://interviewsarthi.com/apply/?utm_source=applysarthi&utm_medium=app_page"
       }
     },
     "live": {
@@ -180,12 +180,12 @@
         "show": true,
         "name": "Live Sarthi",
         "icon": "https://interviewsarthi.com/assets/icon-512.png",
-        "promise": "Answers on your screen during your real interview",
+        "promise": "Answers from your own resume, during your real interview",
         "tiles": [
           {
             "icon": "eye",
-            "title": "Invisible in screen share",
-            "text": "Hidden on Teams, Google Meet, Zoom and other apps"
+            "title": "Hidden from supported screen sharing",
+            "text": "On Teams, Google Meet, Zoom and other apps"
           },
           {
             "icon": "bolt",
@@ -236,15 +236,15 @@
       "status": "live",
       "tag": "NEW",
       "title": "Meeting Sarthi",
-      "lead": "Help on your work calls.",
-      "who": "For work calls: client calls, stand-ups and project reviews.",
+      "lead": "Help in your client meetings, from your own project.",
+      "who": "For client meetings, stand-ups and project reviews.",
       "features": [
-        "When a client or your manager asks something on a call, Meeting Sarthi shows what to say, from your own notes and files.",
-        "After the call: a short recap, the client's open questions as to-dos, and a follow-up message you can send.",
-        "Before the call: what they may ask and what to say, from your notes and documents.",
-        "Live captions of the call, and log updates by voice, like 'ticket 151 moves to Meena, due Friday'."
+        "When the client asks something in a meeting, Meeting Sarthi shows what to say, from your own project.",
+        "Live captions of the meeting, so you can read what was said even when the accent is hard to follow.",
+        "After the meeting: a short recap, the client's open questions as to-dos, and a follow-up message you can send.",
+        "Before the meeting: what they may ask and what to say, from your project."
       ],
-      "note": "On the Microsoft Store now. Captions and recaps are free.",
+      "note": "On the Microsoft Store now. Captions and recaps are free; live answers Rs 299 for 30 days ($29.99 outside India).",
       "button": {
         "text": "Get it from the Microsoft Store",
         "store_id": "9NCZPS7XMDR1"
@@ -254,22 +254,22 @@
         "show": true,
         "name": "Meeting Sarthi",
         "tag": "NEW",
-        "promise": "Help on your work calls, once you've got the job",
+        "promise": "Help in your client meetings, from your own project",
         "tiles": [
           {
             "icon": "chat",
-            "title": "What to say on calls",
-            "text": "From your own notes and files"
-          },
-          {
-            "icon": "list",
-            "title": "Recap after every call",
-            "text": "To-dos and a follow-up message"
+            "title": "What to say",
+            "text": "A short reply from your own project"
           },
           {
             "icon": "cc",
             "title": "Live captions",
-            "text": "Of the whole call"
+            "text": "Read what was said, even with a hard accent"
+          },
+          {
+            "icon": "list",
+            "title": "Recap after every meeting",
+            "text": "To-dos and a follow-up message"
           }
         ],
         "buttons": [
@@ -283,16 +283,20 @@
           {
             "price": "Free",
             "title": "captions and recaps"
+          },
+          {
+            "price": "₹299",
+            "title": "30 days of live answers"
           }
         ],
         "details": [
           {
             "b": "For",
-            "t": "calls with clients, your manager or your team"
+            "t": "meetings with clients, your manager or your team"
           },
           {
-            "b": "Before the call",
-            "t": "what they may ask and what to say"
+            "b": "Screen sharing",
+            "t": "stays out of supported screen sharing"
           }
         ],
         "learn": "https://interviewsarthi.com/meeting/?utm_source=applysarthi&utm_medium=app_page"
