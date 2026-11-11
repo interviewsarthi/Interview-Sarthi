@@ -17,11 +17,19 @@
   }
   const products = {
     apply: {
-      name: 'Apply Sarthi', eyebrow: 'APPLY SARTHI · JOB SEARCH', title: 'Fewer job tabs.\nMore relevant jobs.',
-      description: 'Browse jobs collected from different portals and company career pages. Upload your CV to see which fit your experience, then use Chrome autofill to apply faster.',
-      points: ['Filter by website, location and remote work', 'Tailor your CV and cover letter for a role', 'Track applications; review before submitting'],
+      name: 'Apply Sarthi', eyebrow: 'APPLY SARTHI · FIND & APPLY', title: 'Finds the jobs.\nApplies for you.',
+      description: 'A Windows app. Add your CV once, sign in to your job sites and press Start applying. It finds jobs that fit your CV, fills each application and sends it.',
+      points: ['Gets jobs from different portals and applies automatically for you', 'Runs by itself, every day', 'Free every week: 15 applications; plans from ₹249'],
       url: '/apply/', views: [
-        {label:'Jobs from multiple sites',src:'/assets/apply-app-current.png',alt:'Current public Apply Sarthi job list with job-site and location filters',caption:'Current public Apply interface. Job listings and counts are a captured snapshot.'}
+        {label:'The app dashboard',src:'/assets/apply-app-dashboard.png',alt:'The Apply Sarthi app dashboard with a Start applying button and a checklist',caption:'The Apply Sarthi app on Windows, shown with a made-up account.'}
+      ]
+    },
+    meeting: {
+      name: 'Meeting Sarthi', eyebrow: 'MEETING SARTHI · CLIENT MEETINGS', title: 'What the client asked.\nWhat to say.',
+      description: 'Live captions show what the client said, even when the accent is hard to follow. A short reply from your own project shows you what to say.',
+      points: ['Stays out of supported screen sharing', 'Never joins the meeting; nobody is invited', 'Captions free; live answers ₹299 for 30 days'],
+      url: '/meeting/', views: [
+        {label:'During a meeting',src:'/assets/meeting-app.png',alt:'Meeting Sarthi showing a client question and a short reply from the user\'s project',caption:'Meeting Sarthi on Windows. Example project and notes.'}
       ]
     },
     prep: {
