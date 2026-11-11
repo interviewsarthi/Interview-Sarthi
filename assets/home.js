@@ -27,7 +27,7 @@
     meeting: {
       name: 'Meeting Sarthi', eyebrow: 'MEETING SARTHI · CLIENT MEETINGS', title: 'What the client asked.\nWhat to say.',
       description: 'Live captions show what the client said, even when the accent is hard to follow. A short reply from your own project shows you what to say.',
-      points: ['Stays out of supported screen sharing', 'Never joins the meeting; nobody is invited', 'Captions free; live answers ₹299 for 30 days'],
+      points: ['Stays out of supported screen sharing', 'Never joins the meeting; nobody is invited', 'Captions and recaps free; 30 free minutes of live answers'],
       url: '/meeting/', views: [
         {label:'During a meeting',src:'/assets/meeting-app.png',alt:'Meeting Sarthi showing a client question and a short reply from the user\'s project',caption:'Meeting Sarthi on Windows. Example project and notes.'}
       ]
