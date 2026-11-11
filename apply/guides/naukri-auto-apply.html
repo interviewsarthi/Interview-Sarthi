@@ -13,14 +13,14 @@
 <meta property="og:url" content="https://interviewsarthi.com/apply/guides/naukri-auto-apply.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Interview Sarthi">
-<meta property="og:image" content="https://interviewsarthi.com/assets/og-apply.jpg">
-<meta property="og:image:alt" content="ApplySarthi: we auto-apply to every job that fits you. Naukri, LinkedIn, Indeed and 754 company career pages in one place, matched to your CV.">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="https://interviewsarthi.com/assets/apply-app-dashboard.png">
+<meta property="og:image:alt" content="The Apply Sarthi app on Windows: the dashboard with a Start applying button.">
+<meta property="og:image:width" content="1366">
+<meta property="og:image:height" content="768">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Auto-apply on Naukri: what works and what Naukri blocks">
 <meta name="twitter:description" content="Why server-side auto-apply tools cannot reach Naukri at all, what a browser-based tool can do instead, the daily numbers worth keeping to, and how Naukri’s own recommendations differ from applying.">
-<meta name="twitter:image" content="https://interviewsarthi.com/assets/og-apply.jpg">
+<meta name="twitter:image" content="https://interviewsarthi.com/assets/apply-app-dashboard.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -59,10 +59,10 @@
       "@id": "https://interviewsarthi.com/apply/guides/naukri-auto-apply.html#article",
       "headline": "Auto-apply on Naukri: what works and what it blocks",
       "description": "Why server-side auto-apply tools cannot reach Naukri at all, what a browser-based tool can do instead, the daily numbers worth keeping to, and how Naukri’s own recommendations differ from applying.",
-      "image": "https://interviewsarthi.com/assets/apply-app-current.png",
+      "image": "https://interviewsarthi.com/assets/apply-app-dashboard.png",
       "inLanguage": "en-IN",
       "datePublished": "2026-09-18",
-      "dateModified": "2026-09-24",
+      "dateModified": "2026-11-11",
       "author": {
         "@type": "Organization",
         "@id": "https://interviewsarthi.com/#organization",
@@ -92,15 +92,15 @@
           "name": "Can you auto-apply on Naukri?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "You can automate filling the application form, in your own browser, using a Naukri session you signed in to yourself. You cannot run bulk submission from a server: Naukri blocks plain HTTP requests and headless browsers, so vendor-hosted tools cannot reach it at all. Any product promising server-side bulk applying on Naukri is describing something that does not work."
+            "text": "Yes, from a real browser window on your own computer, using a Naukri session you signed in to yourself; that is how the Apply Sarthi Windows app applies there, at a safe daily pace. You cannot run bulk submission from a server: Naukri blocks plain HTTP requests and headless browsers, so vendor-hosted tools cannot reach it at all. Any product promising server-side bulk applying on Naukri is describing something that does not work."
           }
         },
         {
           "@type": "Question",
-          "name": "Will Naukri ban my account for using an extension?",
+          "name": "Will Naukri restrict my account for using an auto-apply tool?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Naukri limits account activity rather than banning outright for form-filling help, and a browser extension that fills the form in front of you is much closer to you typing than to a bot. The behaviour that attracts restrictions is high-volume automated submission. Keep your daily numbers modest on any site where you hold an account."
+            "text": "Naukri limits account activity, and the behaviour that attracts restrictions is high-volume automated submission. A tool that works in a real browser window on your own computer, signed in as you, at a modest daily pace, is much closer to you applying yourself. Keep your daily numbers modest on any site where you hold an account; Apply Sarthi keeps a safe daily pace on Naukri for that reason."
           }
         },
         {
@@ -141,9 +141,10 @@
 <p class="crumb" aria-label="Breadcrumb"><a href="../../">Home</a> › <a href="https://interviewsarthi.com/apply/">ApplySarthi</a> › <a href="https://interviewsarthi.com/apply/guides/">Applying guides</a> › Auto-apply on Naukri</p>
 <h1>Auto-apply on Naukri: what works and what it blocks</h1>
 <p class="lead">Naukri is the largest source of jobs in India and the one most auto-apply products quietly skip. Here is the technical reason, and what is actually possible.</p>
-<p class="meta">Reviewed 18 September 2026 · Written by the team that builds ApplySarthi</p>
+<p class="meta">Updated 11 November 2026 · Written by the team that builds Apply Sarthi</p>
 
 
+<div class="box"><p><b>Apply Sarthi is now a Windows app.</b> It finds jobs that fit your CV on Naukri, LinkedIn, Indeed, Shine, Foundit and company career pages, fills each application and sends it for you. Free every week: 20 applications in the first week, then 15.</p><p><a class="cta" href="../../apply/#get-the-app">Get the Windows app</a></p></div>
 <h2>Why most tools cannot reach Naukri</h2>
 <p>Naukri blocks two things that nearly every automation product depends on: <b>plain HTTP requests</b> and
 <b>headless browsers</b>. A tool that runs on a vendor&rsquo;s server and fetches pages the ordinary way
@@ -161,8 +162,9 @@ way.</p></div>
 <ul>
 <li><b>Reading open jobs.</b> Entirely workable through a real browser session. ApplySarthi currently holds
 6,293 open Naukri postings, collected this way.</li>
-<li><b>Filling the application form.</b> Workable, in your own browser, using the Naukri session you are
-already signed in to. Your password never has to leave your computer.</li>
+<li><b>Filling and sending the application.</b> Workable, from a real browser window on your own computer,
+using a Naukri session you signed in to yourself. Your password never has to leave your computer. This is
+how the Apply Sarthi app applies on Naukri.</li>
 <li><b>Bulk submission from a server.</b> Not workable, and not something to buy from anyone claiming
 otherwise.</li>
 </ul>
@@ -184,13 +186,17 @@ pages, which have no account attached and no limit to trip. Of the 60,975 open j
 tracks, company ATS boards hold the largest share precisely because they can be collected without an
 account at all.</p>
 <table><thead><tr><th>Where</th><th>Account needed?</th><th>Sensible daily volume</th></tr></thead><tbody><tr><td>Company career pages (Greenhouse, Lever, Ashby, Workday&hellip;)</td><td>No</td><td>As many as genuinely fit</td></tr><tr><td>Naukri, Shine, Indeed</td><td>Yes</td><td>Modest; these are accounts you need</td></tr><tr><td>LinkedIn</td><td>Yes</td><td>Smallest of all; the strictest limits of the group</td></tr></tbody></table>
+<p>Apply Sarthi follows this split by itself: it keeps the daily number smaller on Naukri and LinkedIn than
+on company career pages.</p>
 
 <h2>Applying on Naukri without retyping everything</h2>
 <ol>
-<li>Sign in to Naukri yourself, in your own Chrome, the ordinary way. Once.</li>
+<li>Sign in to Naukri yourself, the ordinary way, once. In Apply Sarthi you do this inside the app&rsquo;s
+own browser window.</li>
 <li>Keep your Naukri profile current anyway &mdash; recruiters search it directly, independently of your
 applications.</li>
-<li>Use a tool that fills the form on the page in front of you, so you can read it before it goes.</li>
+<li>Use a tool that shows you what it answered. Apply Sarthi lists the answers it gave on every
+application, and its &ldquo;Fill only&rdquo; setting leaves the submit button to you.</li>
 <li>Tailor the CV per role. A Naukri application carries whichever CV you attach, and the attached file is
 what a recruiter opens.</li>
 <li>Check the first three applications by hand before trusting the fourth.</li>
@@ -200,15 +206,15 @@ what a recruiter opens.</li>
 
 
 <h2 id="faq">Questions people ask</h2>
-<div class="qa"><p class="q">Can you auto-apply on Naukri?</p><p class="a">You can automate filling the application form, in your own browser, using a Naukri session you signed in to yourself. You cannot run bulk submission from a server: Naukri blocks plain HTTP requests and headless browsers, so vendor-hosted tools cannot reach it at all. Any product promising server-side bulk applying on Naukri is describing something that does not work.</p></div>
-<div class="qa"><p class="q">Will Naukri ban my account for using an extension?</p><p class="a">Naukri limits account activity rather than banning outright for form-filling help, and a browser extension that fills the form in front of you is much closer to you typing than to a bot. The behaviour that attracts restrictions is high-volume automated submission. Keep your daily numbers modest on any site where you hold an account.</p></div>
+<div class="qa"><p class="q">Can you auto-apply on Naukri?</p><p class="a">Yes, from a real browser window on your own computer, using a Naukri session you signed in to yourself; that is how the Apply Sarthi Windows app applies there, at a safe daily pace. You cannot run bulk submission from a server: Naukri blocks plain HTTP requests and headless browsers, so vendor-hosted tools cannot reach it at all. Any product promising server-side bulk applying on Naukri is describing something that does not work.</p></div>
+<div class="qa"><p class="q">Will Naukri restrict my account for using an auto-apply tool?</p><p class="a">Naukri limits account activity, and the behaviour that attracts restrictions is high-volume automated submission. A tool that works in a real browser window on your own computer, signed in as you, at a modest daily pace, is much closer to you applying yourself. Keep your daily numbers modest on any site where you hold an account; Apply Sarthi keeps a safe daily pace on Naukri for that reason.</p></div>
 <div class="qa"><p class="q">Why do auto-apply tools not list Naukri?</p><p class="a">Because reaching it requires driving a real browser window with a visible display, which cannot be run cheaply at scale on a server. Products built around a high daily submission rate depend on server-side automation, so Naukri and Foundit are excluded by their architecture, not by choice. Most simply do not mention it.</p></div>
 <div class="qa"><p class="q">Is Naukri or LinkedIn better for applying in India?</p><p class="a">Both, for different reasons. In the current ApplySarthi snapshot Naukri held 6,293 open postings and LinkedIn 8,110, but the overlap is small and the employer mix differs, with Naukri stronger in Indian services firms and LinkedIn stronger in multinationals and startups. Company career pages outweigh either individually.</p></div>
 
 <div class="promo">
   <h3>Naukri, Foundit and Shine included</h3>
-  <p>ApplySarthi reaches the Indian boards most tools skip, alongside 754 company career pages. The website is always free.</p>
-  <p><a class="cta" href="https://apply.interviewsarthi.com/">Open ApplySarthi</a> <a class="cta ghost" href="../../apply/">What it does</a></p>
+  <p>Apply Sarthi is a Windows app that applies on Naukri, Foundit and Shine, alongside LinkedIn, Indeed and company career pages. Free every week: 20 applications in the first week, then 15.</p>
+  <p><a class="cta" href="../../apply/#get-the-app">Get the Windows app</a> <a class="cta ghost" href="../../apply/">What it does</a></p>
   <p class="alsotry">An interview call coming? Practise it first with <a href="../../prep/">a mock interview from your own CV</a>, free to try, then keep <a href="../../live/">Live Sarthi</a> open on the real call.</p>
 </div>
 
