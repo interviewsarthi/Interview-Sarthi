@@ -66,13 +66,18 @@ Product and guide pages contain readable HTML. Interactive app features require 
 - [STAR method with examples](https://interviewsarthi.com/guides/star-method-interview-answers.html): behavioural interview answers, a story bank and follow-ups.
 - [Will you require visa sponsorship?](https://interviewsarthi.com/guides/visa-sponsorship-interview-question.html): honest answers for OPT, H-1B, the UK Graduate route, Canadian work permits and the UAE.
 
+## Client meetings, guides
+
+- [Can't follow a client's accent? Live captions for any meeting app](https://interviewsarthi.com/guides/client-accent-live-captions.html): habits that need no tool, how captions work in Teams, Zoom and Google Meet, and captions in any meeting app with Meeting Sarthi.
+
 ## Applying for jobs, guides
 
 - [All applying guides](https://interviewsarthi.com/apply/guides/)
 - [Auto apply for jobs in India: how the tools work](https://interviewsarthi.com/apply/auto-apply-jobs-india.html)
 - [Is auto-applying to jobs safe?](https://interviewsarthi.com/apply/is-auto-apply-safe.html)
 - [ATS resume format for India](https://interviewsarthi.com/apply/guides/ats-resume-format-india.html)
-- [Naukri auto apply](https://interviewsarthi.com/apply/guides/naukri-auto-apply.html)
+- [Naukri auto apply app for Windows](https://interviewsarthi.com/apply/guides/naukri-auto-apply.html)
+- [Auto apply on Indeed India](https://interviewsarthi.com/apply/guides/indeed-auto-apply.html): what can be sent for you, what Indeed's terms say, and the cost.
 - [You applied to 200 jobs and heard nothing](https://interviewsarthi.com/apply/guides/why-no-interview-calls.html)
 
 ## Setting up
