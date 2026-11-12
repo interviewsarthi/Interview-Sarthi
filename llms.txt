@@ -77,7 +77,6 @@ Product and guide pages contain readable HTML. Interactive app features require 
 - [Is auto-applying to jobs safe?](https://interviewsarthi.com/apply/is-auto-apply-safe.html)
 - [ATS resume format for India](https://interviewsarthi.com/apply/guides/ats-resume-format-india.html)
 - [Naukri auto apply app for Windows](https://interviewsarthi.com/apply/guides/naukri-auto-apply.html)
-- [Auto apply on Indeed India](https://interviewsarthi.com/apply/guides/indeed-auto-apply.html): what can be sent for you, what Indeed's terms say, and the cost.
 - [You applied to 200 jobs and heard nothing](https://interviewsarthi.com/apply/guides/why-no-interview-calls.html)
 
 ## Setting up
