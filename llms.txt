@@ -71,7 +71,7 @@ Product and guide pages contain readable HTML. Interactive app features require 
 - [Can't follow a client's accent? Live captions for any meeting app](https://interviewsarthi.com/guides/client-accent-live-captions.html): habits that need no tool, how captions work in Teams, Zoom and Google Meet, and captions in any meeting app with Meeting Sarthi.
 - [What to say when a client asks something you don't know](https://interviewsarthi.com/guides/client-question-you-dont-know.html): honest lines for the moment, how to follow up, and why never to guess a date or a number.
 - [Client meeting recap email: template and example](https://interviewsarthi.com/guides/client-meeting-recap-email.html): what to include, a copy-ready template, a filled-in example and common mistakes.
-- [AI meeting assistant that doesn't join the call: what to check](https://interviewsarthi.com/guides/ai-meeting-assistant-without-bot.html): assistants that join as an attendee versus apps on your own PC, and what to check before choosing.
+- [AI meeting assistant that doesn't join your meeting: what to check](https://interviewsarthi.com/guides/ai-meeting-assistant-without-bot.html): assistants that join as an attendee versus apps on your own PC, and what to check before choosing.
 
 ## Applying for jobs, guides
 
