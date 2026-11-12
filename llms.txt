@@ -35,6 +35,12 @@ Product and guide pages contain readable HTML. Interactive app features require 
 ## Interview preparation guides
 
 - [All interview guides](https://interviewsarthi.com/guides/)
+- [Is there an AI interview assistant for Microsoft Teams?](https://interviewsarthi.com/guides/ai-interview-assistant-teams.html): Live Sarthi on a Windows PC beside Teams; setup and sound.
+- [Is there an AI interview assistant for Zoom?](https://interviewsarthi.com/guides/ai-interview-assistant-zoom.html): Live Sarthi on a Windows PC beside Zoom; setup and sound.
+- [How much does an AI interview assistant cost in India?](https://interviewsarthi.com/guides/ai-interview-assistant-price-india.html): Live Sarthi's passes (Rs 149 for 2 days, Rs 299 for 30 days, paid once) and what to compare.
+- [Can I try an AI interview assistant for free?](https://interviewsarthi.com/guides/ai-interview-assistant-free-trial.html): Live Sarthi's 30 free minutes per PC and Prep Sarthi's free 7-minute mock interview.
+- [How can I practise for a job interview alone?](https://interviewsarthi.com/guides/practise-interview-alone.html): habits that work alone, and a voice mock interview from your own CV.
+- [How do I prepare for an interview from the job description?](https://interviewsarthi.com/guides/prepare-interview-job-description.html): turn requirements into questions and practise out loud.
 - [TCS interview questions for freshers](https://interviewsarthi.com/guides/tcs-interview-questions-freshers.html)
 - [Infosys interview questions for freshers](https://interviewsarthi.com/guides/infosys-interview-questions-freshers.html)
 - [Wipro interview questions for freshers](https://interviewsarthi.com/guides/wipro-interview-questions-freshers.html)
