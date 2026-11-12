@@ -116,6 +116,9 @@
     try {
       const order = await request("/upgrade", { key });
       orderId = order.order_id; save(ORDER_STORE, orderId); save(KEY_STORE, key);
+      // Some checkouts are a hosted page with its own address (checkout_url): going there is the checkout,
+      // and the return brings ?order_id= back to this page, which then asks for the result as usual.
+      if (order.checkout_url) { window.location.href = order.checkout_url; return; }
       await loadCashfree();
       const result = await window.Cashfree({ mode: order.mode }).checkout({ paymentSessionId: order.payment_session_id, redirectTarget: "_self" });
       if (result?.error) throw new Error(result.error.message || "Checkout did not open. Please try again.");
