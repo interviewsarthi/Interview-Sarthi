@@ -2,7 +2,7 @@ import { diagnosticEvent, measuredRequest } from './diagnostics.js';
 // Since 1 Oct 2026 the plan is made in the background while the interview runs, and only the report uses it: the
 // visitor no longer waits for it. flash-lite first: measured through the demo relay on 27 Sep 2026 it took 5.7-7.1 s
 // on every try, against 7.9-16 s for 3.6-flash (up to a minute when Google answers "high demand", and ~20 free
-// requests a day). Both produce plans that pass validatePlan. Gemini only: there is no other writer (owner, 1 Oct).
+// requests a day). Both produce plans that pass validatePlan. Gemini only: there is no other writer.
 // 12 Oct 2026: gemini-3.5-flash-lite first (plan 4.7 s vs 16.8 s for 3.1 flash-lite on the same CV and JD); 3.6-flash
 // dropped: 0 of 4 reports that day ("high demand", then its 20-a-day free cap).
 export const PLAN_MODELS = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"];

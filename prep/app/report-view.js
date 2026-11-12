@@ -1,5 +1,4 @@
-/* Prep Sarthi: the report as a dashboard (owner, 1 Oct 2026: "understandable in one glance", charts where they
- * help, nothing hidden). The free demo shows the whole report too; the pass offer sits beside it.
+/* Prep Sarthi: the report as a dashboard. The free demo shows the whole report too; the pass offer sits beside it.
  *
  * reportHtml(record) is pure: a saved report record in, HTML out. The top row answers "how did I do" (the score,
  * its band, six numbers); skills, the next thing to work on and the question scores come next; every detail

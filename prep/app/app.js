@@ -28,7 +28,7 @@ import { initPasses, isIntl, noticeLiveGift, openPasses, priceOf, refreshPasses,
 import { Wheel } from "../wheel.js";
 import { MIC_HELP, MIC_DEAD_RMS } from "./miccheck.js";
 import { beginDiagnostics, diagnosticEvent, errorClass, flushDiagnostics } from './diagnostics.js';
-// Help: report a problem, and the rating under a report (owner, 21 Oct 2026). Logic here; screens in support-view.js.
+// Help: report a problem, and the rating under a report. Logic here; screens in support-view.js.
 import { createSupport, recentAttempts } from "./support.js?v=20261021-prephelp";
 // Progress across the month (plan approved 29 Sep 2026). These modules hold the logic; the screens that show
 // it are drawn elsewhere and reach this page through window.prepApp and the prep:* events below.
@@ -122,7 +122,7 @@ function show(id) {
 }
 function notice(id, text, cls = "") {
   const el = $(id); el.textContent = text || ""; el.className = "notice " + cls;
-  // A problem on screen can be reported right where it shows (owner, 21 Oct 2026); support-view.js styles the button.
+  // A problem on screen can be reported right where it shows; support-view.js styles the button.
   if (cls === "bad" && text && NOTICE_HOOKS[id]) el.append(" ", supportHook(NOTICE_HOOKS[id], id));
 }
 const NOTICE_HOOKS = { "live-notice": "auto", "key-notice": "prep_key" };
@@ -482,9 +482,9 @@ $("to-key").onclick = async () => {
   const waited = !bootDone;
   if (waited) await booting.catch(() => {});   // a page that failed to set up still lets the visitor try
   // A first-time visitor gets the free demo on our key: no key, no sign-in, straight to the interview.
-  // A key comes up only after a pass is bought (the owner's call, 25 Sep 2026). Someone who already
+  // A key comes up only after a pass is bought. Someone who already
   // has a key keeps the old path untouched.
-  // One click from here into the call (owner, 1 Oct 2026): the free demo, and anyone whose own key and time are
+  // One click from here into the call: the free demo, and anyone whose own key and time are
   // already known, start at once. The interview screen's Start button remains for Practise again and retries.
   // A Live Sarthi test goes first: it never touches the Prep demo, and it needs no key (3 Oct 2026).
   if (testing()) { S.ent = { kind: "livetest", secondsLeft: DEMO_SECONDS, hasTrial: false }; renderEntitlement(); preLive(); if (!waited) startInterview(); return; }
@@ -711,7 +711,7 @@ function preLive() {
 }
 
 
-/* Both of our keys are running all the interviews they can (6 each, measured). The owner's call: offer the
+/* Both of our keys are running all the interviews they can (6 each, measured). Offer the
    visitor their own key right now, or a minute's wait. Either way the demo is not used up. */
 let demoWaitTimer = null;
 function showDemoFull() {
@@ -812,7 +812,7 @@ function wireAudio() {
 
 $("start").onclick = () => startInterview();
 
-/* Start, in one step (owner, 1 Oct 2026): the microphone, the demo's token and a fresh entitlement side by side,
+/* Start, in one step: the microphone, the demo's token and a fresh entitlement side by side,
  * then straight into the call, and the interviewer speaks as soon as it is connected. Nothing waits for an
  * interview plan: that is made in the background for the report only (preparePlan), and a microphone that delivers
  * nothing is caught during the call (onSecond) instead of by a mic check first. On 30 Sep 2026 the old sequence,
@@ -1022,8 +1022,8 @@ function startCall() {
     },
     onNotice: (m) => { notice("live-notice", m); log("notice", { m }); },
     onEvent: (name, data) => {
-      // Why a call reconnects, for everyone (the diagnostics log is on only with ?diagnostics=1): the owner's
-      // own test on 27 Sep 2026 reconnected mid-call and nothing outside the browser could say why.
+      // Why a call reconnects, for everyone (the diagnostics log is on only with ?diagnostics=1): a test call on
+      // 27 Sep 2026 reconnected mid-call and nothing outside the browser could say why.
       if (name === "reconnect") { googleDrop = /^(reply_timeout|setup_timeout|resume_rejected)$/.test(String(data && data.reason)); track("mock_reconnect", { reason: data && data.reason, demo: !!demo }); }
       else if (name === "socket_closed" && data && data.wasConnected) {
         googleDrop = data.code === 1011 || /internal error|unavailable|overloaded|high demand/i.test(String(data.reason || ""));
@@ -1240,7 +1240,7 @@ async function whileWriting(write) {
 /* Google answers "high demand" (503) or hangs (504) in bursts of a few minutes (30 Sep and 5 Oct 2026: both report
  * models at once). The report is then tried again by itself, with the wait and the reason on screen, so nobody takes
  * Google's bad minute for a broken app. The unwritten report stays on this device (ps_pending_report) and is finished
- * the next time the app opens, in a minute or tomorrow. Owner's ask, 5 Oct 2026. */
+ * the next time the app opens, in a minute or tomorrow. */
 const REPORT_RETRY_SECONDS = (window.__PREP_TEST && window.__PREP_TEST.retrySeconds) || [20, 30, 45, 60, 60, 60, 60, 60, 60, 60];
 const PENDING_REPORT_HOURS = 24;      // older than this the answers are stale, and the pending report is dropped
 const DEMO_REPORT_MINUTES = 55;       // the licence server stops answering a demo's report an hour after its start
@@ -1354,7 +1354,7 @@ async function writeReport(turns, elapsed, usage, pending = null) {
   const record = { id: "iv-" + crypto.randomUUID(), at: new Date().toISOString(), elapsed, language: job.language, model: result.model,
     rubric: RUBRIC_VERSION, demo: !!job.demo, report: result.report, metrics, transcript: turns, usage,
     ...(focusCarried ? { focus_carried: focusCarried } : {}) };
-  // Owner, 1 Oct 2026: the free demo's report is shown in full, like every other (it was locked from 26 Sep).
+  // The free demo's report is shown in full, like every other (it was locked from 26 Sep).
   // "+8 since last time": against this person's earlier interviews in the current pass (progress.js).
   try { record.changes = reportChanges(summarize(record), knownSummaries(), currentPeriod()); } catch (_) { /* no badges */ }
   window.__lastReport = record;

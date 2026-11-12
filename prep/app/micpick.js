@@ -5,7 +5,7 @@
  * the call profile with the microphone. The moment a page opens the Hands-Free
  * microphone, Windows switches the headset to call mode and mutes the Stereo
  * device, so a page that keeps playing to the default output goes silent. That
- * is what the owner heard on 6 Oct 2026 with JBL earbuds: the mic switched to
+ * is what a test on 6 Oct 2026 heard with JBL earbuds: the mic switched to
  * the Hands-Free entry at 105 s and the interviewer was never heard again.
  *
  * Two answers, both pure functions so they are tested without a browser:

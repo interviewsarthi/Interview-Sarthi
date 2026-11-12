@@ -11,7 +11,7 @@ import { COMPETENCIES, ASSESSMENT_BRIEF, normalizeAssessment } from "./assessmen
 import { PLAN_CATEGORIES, evidenceTurns, normalizeRequirements } from "./interview-plan.js";
 import { FOCUS_STATUSES, normalizeFocus } from "./progress.js";
 
-/* flash-lite first since 1 Oct 2026 (owner's call, Gemini only): on 30 Sep gemini-3.6-flash answered "high demand"
+/* flash-lite first since 1 Oct 2026: on 30 Sep gemini-3.6-flash answered "high demand"
  * on 6 of 7 report requests, and each one cost the waiting candidate 5-15 s before flash-lite wrote the report
  * anyway. The desktop app has always led with flash-lite. */
 /* 12 Oct 2026: gemini-3.5-flash-lite first. Four 20-minute transcripts: 8-14 s and no failures, with the measured pace

@@ -91,7 +91,7 @@ python scripts/build_apply_pages.py      # rewrite the HTML, which is committed 
 states must exist there with a note on where it was read from.
 
 The product homepage `apply/index.html` is maintained directly, with `assets/apply-home.css` and
-`assets/apply-home.js`. Its social share image is `assets/og-apply-home.jpg`, rendered at 1200×630
+`assets/apply-home.js`. Its social share image is `assets/apply-app-dashboard.png`, rendered at 1200×630
 from `assets/og-apply-home.source.html`. Guide share images are separate. Run
 `python tests/apply_browser_smoke.py` with Python Playwright and Chromium for responsive and
 interaction checks; `BROWSER_EXECUTABLE` optionally selects a locally installed Chromium binary.

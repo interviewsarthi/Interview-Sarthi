@@ -1,4 +1,4 @@
-/* Prep Sarthi's Help and the "Was this useful?" rating (owner's MCQs, 21 Oct 2026).
+/* Prep Sarthi's Help and the "Was this useful?" rating.
  *
  * Until then the only way to report a problem in Prep was an email address at the bottom of the page. This module is
  * the logic; the screens (the Help panel, the rating row under a report, the reply dot) are drawn by support-view.js
@@ -9,7 +9,7 @@
  * A report carries: the problem and the words typed; an email (none typed and signed in: the server uses the Google
  * account's); what this page knows (browser, pass kind, the last interview, the microphone, the message on screen);
  * the ids of the last interviews' timelines (diagnostics.js) with their tokens, so the server can read them; and,
- * unless "Include what was said in this interview" is unticked (it is ticked by default, the owner's choice), that
+ * unless "Include what was said in this interview" is unticked (it is ticked by default), that
  * interview's transcript. Never the CV, the job description or the Gemini key.
  *
  * Events on `target` (window):

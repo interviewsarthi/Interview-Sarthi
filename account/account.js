@@ -1,4 +1,4 @@
-/* My Sarthi: everything one person has with Interview Sarthi, after a Google sign-in (owner, 9 Oct 2026).
+/* My Sarthi: everything one person has with Interview Sarthi, after a Google sign-in.
  *
  * The server side is the licence worker's /account routes (AI-Helps_SAAS license-server/src/account.js and the
  * modules it routes to). Sign-in is Prep Sarthi's own: the same Google button, the same 30-day session in the same
@@ -29,7 +29,7 @@ const full = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", day: "
 const short = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", year: "numeric" });
 const when = (iso) => (iso ? full.format(new Date(iso)) : "");
 const day = (iso) => (iso ? short.format(new Date(iso)) : "");
-// The owner's approved wording, 10 Oct 2026 (licence worker consent version "2026-10-10-past"). Not a word changes
+// Approved wording (licence worker consent version "2026-10-10-past"). Not a word changes
 // without changing that version too.
 const KEEP_TEXT = "Your Live interviews from a connected PC are kept here. When you switch this on, each connected PC sends the " +
   "interviews from the past year already on it, once, and after that each interview when it ends. Kept: what the app heard from " +
@@ -66,7 +66,7 @@ function say(message, bad = false) {
   if (message) $("notice").scrollIntoView({ block: "nearest" });
 }
 
-/* Reads only: sending them twice changes nothing. Owner's connection, 10 Oct 2026: about 1 in 3 requests got stuck
+/* Reads only: sending them twice changes nothing. On one tested connection, about 1 in 3 requests got stuck
  * on the way to the server while the next went straight through, so a read that gets no answer is sent once more. */
 const RETRY_READS = new Set(["/account", "/account/live/get", "/account/live/list", "/account/profile", "/mock/config"]);
 
@@ -150,7 +150,7 @@ $("test-login").addEventListener("submit", (e) => {
 // ------------------------------------------------------------------ the page
 
 async function load() {
-  // The first load says so while it waits (owner, 10 Oct 2026: a 20-second answer left the page blank). A reload
+  // The first load says so while it waits. A reload
   // after an action keeps the account on screen instead.
   const first = !data;
   let slow = null;
@@ -206,7 +206,7 @@ function render() {
   showPane(pane || paneFromHash());
 }
 
-// ------------------------------------------------------------------ one section at a time (owner, 10 Oct 2026)
+// ------------------------------------------------------------------ one section at a time
 
 const PANES = ["home", "live", "interviews", "profile", "prep", "purchases", "help", "invite", "apply", "account"];
 let pane = "";
@@ -546,7 +546,7 @@ function renderPcs() {
 // ------------------------------------------------------------------ connecting a PC (a typed code)
 
 /* The card opens from the app's link (?connect) or the "Connect a PC" button. The code is typed, never carried in a link:
- * a code someone else made cannot connect their PC to this account by a click (owner, 10 Oct 2026). */
+ * a code someone else made cannot connect their PC to this account by a click. */
 function openConnect() {
   wantConnect = false; tab.set("ms_connect", "");
   $("connect-card").hidden = false;

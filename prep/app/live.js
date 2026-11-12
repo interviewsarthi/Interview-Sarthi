@@ -205,8 +205,8 @@ export class GeminiLive {
     const ws = this.ws; this.ws = null;
     if (ws) { try { ws.close(); } catch (_) { /* gone */ } }
     this.transcript.closeAll();
-    // Flat numbers too: the diagnostics keep numbers only, so the nested `usage` never reached us (owner, 7 Nov 2026:
-    // "we get the tokens in detail from all users"). count = the usage messages Google sent in this session.
+    // Flat numbers too: the diagnostics keep numbers only, so the nested `usage` never reached us.
+    // count = the usage messages Google sent in this session.
     this._event("session_usage_totals", { usage: { ...this.usage }, input_tokens: Number(this.usage.promptTokenCount || 0),
       output_tokens: Number(this.usage.responseTokenCount || 0), total_tokens: Number(this.usage.totalTokenCount || 0),
       count: this._usageMessages });
@@ -675,7 +675,7 @@ export class GeminiLive {
   }
 
   /* A planned part switch: a fresh session on the main model with the part's brief, the last turns (partContext) and a
-   * context-only note; no "reconnecting" status or notice (owner, 15 Oct: no connection messages mid-interview). */
+   * context-only note; no "reconnecting" status or notice. */
   refreshForPart(note) {
     if (this.stopped || !this.connected) return false;
     this._segmentNote = note;

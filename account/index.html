@@ -14,7 +14,7 @@
       var q = new URLSearchParams(location.search);
       try { if (q.has("connect")) sessionStorage.setItem("ms_connect", "1"); } catch (_) {}
       window.__msConnect = q.has("connect");
-      // Drop the query, keep the section (#profile): Codex found /account/?review=1#profile opening Home.
+      // Drop the query, keep the section (#profile): /account/?review=1#profile used to open Home.
       if (location.search) { try { history.replaceState(null, "", location.pathname + location.hash); } catch (_) {} }
     })();
   </script>

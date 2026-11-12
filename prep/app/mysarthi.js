@@ -1,4 +1,4 @@
-/* Prep Sarthi and My Sarthi (interviewsarthi.com/account/, owner 9 Oct 2026).
+/* Prep Sarthi and My Sarthi (interviewsarthi.com/account/).
  *
  * Signed in, Prep fills its EMPTY boxes from the profile the person saved in My Sarthi (CV, job description, name,
  * and the Gemini key into the key step's box), and "Save to My Sarthi" keeps Prep's CV and job description there for

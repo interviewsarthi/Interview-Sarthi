@@ -1,6 +1,6 @@
 /* "Where did you first hear about us?" -- one optional question shown once a payment is confirmed:
  * on thanks.html (Live Sarthi) and on Prep Sarthi's paid screen. The answer is stored on the licence
- * server against the paid order (license-server/src/survey.js), so the owner can tell whether people see a
+ * server against the paid order, so we can tell whether people see a
  * reel, find no link, and search the name instead: that is why Google and ChatGPT get a second question.
  *
  *   window.sarthiHeardFrom({ mount, api, order, key, product: "Interview Sarthi", track })

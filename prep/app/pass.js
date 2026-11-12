@@ -126,7 +126,7 @@ export async function initPasses(context) {
     if ($("entitle").textContent.startsWith("Free demo") && $("s-cv").classList.contains("on")) { $("cv").focus(); return; }
     openPasses();
   };
-  // The header's Sign in / name button (owner, 3 Oct 2026): sign-in stays
+  // The header's Sign in / name button: sign-in stays
   // optional, but the way in should not hide inside the pass screen.
   if (ctx.passesOn) $("acct").style.display = "inline-flex";
   const acctMenu = (open) => { const want = open === undefined ? $("acct-menu").hidden : open; $("acct-menu").hidden = !want; $("acct-btn").setAttribute("aria-expanded", String(want)); };
@@ -501,7 +501,7 @@ async function startDays() {
 
 export async function openInvite() {
   ctx.show("s-invite");
-  // Nobody is sent to the key screen for this: the key comes up only after a pass is bought (owner, 25 Sep 2026).
+  // Nobody is sent to the key screen for this: the key comes up only after a pass is bought.
   if (!currentInvite()) {
     try { ctx.state.deviceInvite = (await deviceInvite()).invite; }
     catch (err) {
@@ -528,7 +528,7 @@ export function renderInvite(host, score) {
   const inv = currentInvite();
   if (!inv) { host.innerHTML = ""; return; }   // never show a link without a code
   const link = inviteLink(inv.code);
-  // "Give a week, get a week" (owner, 27 Sep 2026): made for the one-month pass.
+  // "Give a week, get a week": made for the one-month pass.
   const rules = inv.rules || { inviter_days: 7, friend_days: 7 };
   const brag = Number(score) >= SCORE_WORTH_SHARING;
   host.innerHTML = `

@@ -51,7 +51,7 @@ h1, .list b, .details span, .connect .pc, #account-line, #profile-summary, #gemi
 #live > h2::before { background: var(--live); }
 #prep > h2::before { background: var(--prep); }
 #apply > h2::before { background: var(--apply); }
-/* One section at a time (owner, 10 Oct 2026): retain Claude's pane/selected-link behavior.
+/* One section at a time: keep the pane/selected-link behaviour.
    Phone tabs remain sticky and scroll horizontally; laptops get the sidebar from 900 px. */
 .dash, .panes { min-width: 0; }
 .panes .block { margin-top: 0; }

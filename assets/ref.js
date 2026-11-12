@@ -1,4 +1,4 @@
-/* Live Sarthi refer-a-friend, on the website (owner, 27 Sep 2026).
+/* Live Sarthi refer-a-friend, on the website.
  *
  * A friend's link is interviewsarthi.com/live/?ref=K7M2QXA. This remembers the code in the browser, so
  * it survives the Microsoft Store install and the app's own Buy button (which opens this site), and adds

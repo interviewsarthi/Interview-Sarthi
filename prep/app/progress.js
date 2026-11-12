@@ -4,7 +4,7 @@
  * browser's own list) and the page draws what these return. Every number here is computed from the saved
  * reports; the only AI-written text about the month comes from insights.js.
  *
- * Trust rules (owner-approved plan, 29 Sep 2026):
+ * Trust rules:
  * - A trend needs at least two comparable interviews; with fewer the answer says so instead of drawing one.
  * - An interview too short, or with too little of its plan scored, is shown but never moves a trend.
  * - Skills are compared through the eight skill groups every plan requirement already belongs to, so

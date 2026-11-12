@@ -254,7 +254,7 @@
   }
 
   /* The job match in the top card, beside the health score. Health is about the file and does not move when
-   * the job does; without this row, choosing a role looked like it changed nothing (owner, 2 Oct 2026). */
+   * the job does; without this row, choosing a role looked like it changed nothing. */
   var FIT = { strong: "Strong fit", partial: "Partial fit", weak: "Weak fit" };
   function fitHtml(m, target) {
     var see = ' <button type="button" class="ats-linkbtn" data-tab="1">See the job match</button>';
@@ -289,8 +289,7 @@
     return bestN >= 3 && bestN > second ? best : null;
   }
 
-  /* What to do next, by what the visitor gave us and how the CV did (owner, 2 Oct 2026: "see every logic, what
-   * should happen where"; the leading checkers were studied the same day). One main button per situation,
+  /* What to do next, by what the visitor gave us and how the CV did. One main button per situation,
    * each label naming where it goes, and "sign in" said before the click, never after:
    *   unreadable file              -> how to export a readable PDF        | paste the text instead
    *   no job, no role              -> check it against a job (same page)  | jobs that fit this CV (ApplySarthi)
