@@ -45,5 +45,5 @@ Allow: /
 
 Sitemap: https://interviewsarthi.com/sitemap.xml
 
-# A short summary of the three products, with links, for assistants that read it:
+# A short summary of the four apps, with links, for assistants that read it:
 # https://interviewsarthi.com/llms.txt
