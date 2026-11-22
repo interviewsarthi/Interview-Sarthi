@@ -80,7 +80,7 @@
         {
           "title": "30-Day Pass, paid once",
           "price": "Rs 99",
-          "detail": "Up to 150 applications in 30 days. No auto-debit."
+          "detail": "Unlimited applications, safe daily limit on each job site. No auto-debit."
         }
       ],
       "page": {
@@ -119,7 +119,7 @@
           },
           {
             "price": "₹99",
-            "title": "30 days, up to 150",
+            "title": "30 days, unlimited*",
             "best": true
           }
         ],
@@ -129,8 +129,8 @@
             "t": "for 30 days, no auto-debit"
           },
           {
-            "b": "Only sent",
-            "t": "applications count"
+            "b": "*Safe daily limit",
+            "t": "on each job site"
           }
         ],
         "learn": "https://interviewsarthi.com/apply/?utm_source=applysarthi&utm_medium=app_page"
