@@ -173,6 +173,7 @@
       <h1 id="hero-title" style="font-size:clamp(30px,3.1vw,44px);letter-spacing:-1.4px">Apply Sarthi finds all the jobs from different portals in one place and <em>automatically applies to them for you.</em></h1>
       <p><b>Set it up once. After that, it does the applying.</b> A Windows app that works on Naukri, LinkedIn, Indeed, Shine, Foundit and company career pages.</p>
       <div class="actions"><a class="button" href="#get-the-app" data-store-button>Get the Windows app <span aria-hidden="true">→</span></a></div>
+      <p style="margin:12px 0 0;font-size:15px;font-weight:700"><a href="#walkthrough" style="color:var(--accent)">▶ Watch how it works (5 min)</a></p>
       <p class="micro"><span aria-hidden="true">✓</span> Free every week: 20 applications in your first week, then 15 every week &nbsp; · &nbsp; ₹99 for a 30-Day Pass &nbsp; · &nbsp; No auto-debit</p>
     </div>
     <figure class="product-visual" aria-label="The Apply Sarthi app">
@@ -185,6 +186,86 @@
     </figure>
   </section>
   <div class="source-strip"><div class="container source-inner"><p class="source-intro">All the portals, one place.<br>It finds and applies on</p><div class="source-names" aria-label="Job listing sources"><span>Naukri</span><span>LinkedIn</span><span>Indeed</span><span>Shine</span><span>Foundit</span><span>+ company career pages</span></div></div></div>
+  <section class="container section" id="walkthrough" aria-labelledby="walkthrough-title">
+    <style>
+      #walkthrough{scroll-margin-top:70px}
+      #walkthrough .wt-head{text-align:center;max-width:760px;margin:0 auto 22px}
+      #walkthrough .wt-head p{color:var(--muted);margin-top:8px}
+      #walkthrough .wt-box{max-width:960px;margin:0 auto}
+      #walkthrough video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:14px;background:#e6f2ef}
+      #walkthrough .wt-q{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 14px}
+      #walkthrough .wt-q button{scroll-margin-top:90px;font:inherit;font-size:14px;font-weight:700;padding:10px 14px;border:1px solid var(--accent);border-radius:999px;background:#fff;color:var(--accent);cursor:pointer}
+      #walkthrough .wt-get{text-align:center;margin:18px 0 0}
+      #walkthrough .wt-ch{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:16px}
+      #walkthrough .wt-ch button{font:inherit;font-size:13px;line-height:1.3;text-align:left;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:inherit;cursor:pointer}
+      #walkthrough .wt-ch span{display:inline-block;min-width:36px;font-weight:700;color:var(--accent)}
+      @media(max-width:700px){#walkthrough .wt-ch{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    </style>
+    <div class="wt-head"><h2 id="walkthrough-title">See Apply Sarthi from install to applying.</h2><p>Setup, a run on example data and how to check every answer it sent, in 5 minutes. Pick a step to jump to it.</p></div>
+    <div class="wt-box">
+      <div class="wt-q">
+      <button type="button" id="video-download" data-t="21">How to install</button>
+      <button type="button" id="video-gemini-key" data-t="65">Get the free Google key</button>
+      <button type="button" id="video-gemini-paste" data-t="86">Where the key goes</button>
+      <button type="button" id="video-run" data-t="177">Watch it apply</button>
+      <button type="button" id="video-check" data-t="226">Check what it sent</button>
+      <button type="button" id="video-pass" data-t="261">Free plan and pass</button>
+      </div>
+      <video id="wtVideo" controls playsinline preload="none" width="1280" height="720" data-poster="/assets/apply-sarthi-walkthrough-poster.webp" aria-label="Apply Sarthi setup and walkthrough video on example data, narrated, with captions">
+        <source src="/assets/apply-sarthi-walkthrough-720p.mp4" type="video/mp4">
+      </video>
+      <p class="wt-get"><a class="button" href="#get-the-app" data-store-button>Get the Windows app <span aria-hidden="true">→</span></a></p>
+      <div class="wt-ch" aria-label="Video steps">
+      <button type="button" data-t="0"><span>0:00</span>What Apply Sarthi does</button>
+      <button type="button" data-t="21"><span>0:21</span>Download from the website</button>
+      <button type="button" data-t="37"><span>0:37</span>Sign in</button>
+      <button type="button" data-t="52"><span>0:52</span>Step 1: your CV</button>
+      <button type="button" data-t="65"><span>1:05</span>Step 2: get your free Google key</button>
+      <button type="button" data-t="86"><span>1:26</span>Step 2: paste the key</button>
+      <button type="button" data-t="107"><span>1:47</span>Step 3: your answers</button>
+      <button type="button" data-t="128"><span>2:08</span>Step 4: the jobs you want</button>
+      <button type="button" data-t="142"><span>2:22</span>Step 5: job sites</button>
+      <button type="button" data-t="161"><span>2:41</span>Step 6: who presses Submit</button>
+      <button type="button" data-t="177"><span>2:57</span>Start applying</button>
+      <button type="button" data-t="189"><span>3:09</span>While it applies</button>
+      <button type="button" data-t="208"><span>3:28</span>What waits for you</button>
+      <button type="button" data-t="226"><span>3:46</span>Check what it sent</button>
+      <button type="button" data-t="244"><span>4:04</span>Matches, documents and HR emails</button>
+      <button type="button" data-t="261"><span>4:21</span>Free plan and the pass</button>
+      <button type="button" data-t="280"><span>4:40</span>Your data and help</button>
+      <button type="button" data-t="295"><span>4:55</span>Try it yourself</button>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var v = document.getElementById("wtVideo");
+        function poster() { v.poster = v.getAttribute("data-poster"); }
+        if ("IntersectionObserver" in window) {
+          var io = new IntersectionObserver(function (e) { if (e.some(function (x) { return x.isIntersecting; })) { poster(); io.disconnect(); } }, { rootMargin: "300px" });
+          io.observe(v);
+        } else poster();
+        document.querySelectorAll("#walkthrough [data-t]").forEach(function (b) {
+          b.addEventListener("click", function () {
+            var t = Number(b.getAttribute("data-t"));
+            function go() { v.currentTime = t; }
+            if (v.readyState) go(); else v.addEventListener("loadedmetadata", go, { once: true });
+            v.play().catch(function () {});
+            v.scrollIntoView({ block: "center", behavior: "smooth" });
+          });
+        });
+        // A link straight to a step (#video-gemini-key): ready at that step, plays when the visitor presses Play.
+        function fromHash() {
+          var id = location.hash.slice(1), b = id.indexOf("video-") === 0 && document.getElementById(id);
+          if (!b || !b.hasAttribute("data-t")) return;
+          var t = Number(b.getAttribute("data-t"));
+          function seek() { v.currentTime = t; }
+          if (v.readyState) seek(); else { v.addEventListener("loadedmetadata", seek, { once: true }); v.preload = "metadata"; v.load(); }
+        }
+        window.addEventListener("hashchange", fromHash);
+        fromHash();
+      })();
+    </script>
+  </section>
   <section class="auto-band" id="features" aria-labelledby="auto-title"><div class="container"><p class="eyebrow">Fully automatic</p><h2 id="auto-title">It applies for you. <em>You don't fill a single form.</em></h2><p class="auto-lead">Set it up once, in about five minutes. After that Apply Sarthi finds the jobs, fills every application and sends it, by itself, every day.</p><ul class="auto-points"><li><b>Finds</b><span>new jobs that fit your CV, every day</span></li><li><b>Fills</b><span>every form with your details and answers</span></li><li><b>Sends</b><span>the application for you</span></li></ul><p class="auto-note">A question only you can answer, or an "are you human" check, waits for you. Everything else is done.</p><p class="usp-price"><b>Free every week</b>: 15 applications, 20 in your first week · <b>₹99</b> for 30 days, unlimited applications within safe daily limits per job site</p><a class="button" href="#get-the-app" data-store-button>Get the Windows app <span aria-hidden="true">→</span></a></div></section>
   <section class="workflow section" id="how-it-works" aria-labelledby="workflow-title"><div class="container workflow-layout">
     <div class="workflow-intro"><p class="eyebrow">Set up once, in about five minutes</p><h2 id="workflow-title">One CV.<br>Then it works<br>every day.</h2><p>Three steps on the first day. After that, open the app and press Start, or let it start by itself every morning.</p><a class="text-link" href="#get-the-app" data-store-button>Get the Windows app <span aria-hidden="true">→</span></a></div>
