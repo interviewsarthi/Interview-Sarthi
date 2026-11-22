@@ -2169,6 +2169,87 @@
     </div>
   </header>
 
+  <section class="alt" id="walkthrough">
+    <style>
+      #walkthrough{scroll-margin-top:70px}
+      #walkthrough video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:14px;background:#f1edfd}
+      #walkthrough .wt-ch{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}
+      #walkthrough .wt-ch button{font:inherit;font-size:13px;line-height:1.3;text-align:left;padding:8px 10px;border:1px solid #dfe5ee;border-radius:10px;background:#fff;color:inherit;cursor:pointer}
+      #walkthrough .wt-q{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 14px}
+      #walkthrough .wt-q button{font:inherit;font-size:14px;font-weight:700;padding:10px 14px;border:1px solid var(--accent);border-radius:999px;background:#fff;color:var(--accent);cursor:pointer}
+      #walkthrough .wt-get{display:block;text-align:center;margin-top:18px}
+      #walkthrough .wt-ch span{display:inline-block;min-width:36px;font-weight:700;color:var(--accent)}
+      @media(max-width:700px){#walkthrough .wt-ch{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    </style>
+    <div class="wrap">
+      <div style="text-align:center;max-width:760px;margin:0 auto 22px">
+        <h2 style="margin-bottom:8px">See Live Sarthi from install to interview.</h2>
+        <p class="sub" style="margin:0 auto">Setup, every option and a sample interview, in 9 minutes. Pick a step to jump to it.</p>
+      </div>
+      <div style="max-width:960px;margin:0 auto">
+        <div class="wt-q">
+        <button type="button" data-t="22">How to download</button>
+        <button type="button" data-t="56">Get the free Gemini key</button>
+        <button type="button" data-t="150">Where the Gemini key goes</button>
+        <button type="button" data-t="486">Where the pass key goes</button>
+        </div>
+        <video id="wtVideo" controls playsinline preload="none" width="1280" height="720" data-poster="/assets/live-sarthi-walkthrough-poster.webp" aria-label="Live Sarthi setup and demo video, narrated, with captions">
+          <source src="/assets/live-sarthi-walkthrough-720p.mp4" type="video/mp4">
+        </video>
+        <p class="wt-get"><a class="cta" href="https://apps.microsoft.com/detail/9NMKQPSQ1KS8">Download free: try 30 minutes on Windows</a></p>
+        <div class="wt-ch" aria-label="Video steps">
+        <button type="button" data-t="0"><span>0:00</span>What Live Sarthi does</button>
+        <button type="button" data-t="22"><span>0:21</span>Download from the website</button>
+        <button type="button" data-t="56"><span>0:55</span>Your free Gemini key: start</button>
+        <button type="button" data-t="78"><span>1:18</span>Sign in to Google</button>
+        <button type="button" data-t="97"><span>1:36</span>Create the key</button>
+        <button type="button" data-t="132"><span>2:11</span>Copy the key</button>
+        <button type="button" data-t="150"><span>2:29</span>Where to enter the Gemini key</button>
+        <button type="button" data-t="171"><span>2:50</span>If you get stuck on the key</button>
+        <button type="button" data-t="193"><span>3:13</span>Your resume</button>
+        <button type="button" data-t="206"><span>3:25</span>The practice interview</button>
+        <button type="button" data-t="229"><span>3:49</span>Reading an answer</button>
+        <button type="button" data-t="245"><span>4:04</span>The Home screen</button>
+        <button type="button" data-t="257"><span>4:17</span>Answer style</button>
+        <button type="button" data-t="272"><span>4:31</span>Job description and your examples</button>
+        <button type="button" data-t="287"><span>4:47</span>Backup keys</button>
+        <button type="button" data-t="298"><span>4:57</span>Sound check</button>
+        <button type="button" data-t="317"><span>5:16</span>In your interview</button>
+        <button type="button" data-t="346"><span>5:45</span>The answer panel</button>
+        <button type="button" data-t="361"><span>6:00</span>Read screen</button>
+        <button type="button" data-t="377"><span>6:16</span>Panel controls</button>
+        <button type="button" data-t="399"><span>6:39</span>Screen sharing</button>
+        <button type="button" data-t="417"><span>6:56</span>After the interview</button>
+        <button type="button" data-t="434"><span>7:13</span>Buy a pass</button>
+        <button type="button" data-t="462"><span>7:41</span>Where to find your pass key</button>
+        <button type="button" data-t="486"><span>8:05</span>Where to enter the pass key</button>
+        <button type="button" data-t="504"><span>8:24</span>Two more places for the pass key</button>
+        <button type="button" data-t="526"><span>8:45</span>Help</button>
+        <button type="button" data-t="536"><span>8:56</span>Get started</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var v = document.getElementById("wtVideo");
+        function poster() { v.poster = v.getAttribute("data-poster"); }
+        if ("IntersectionObserver" in window) {
+          var io = new IntersectionObserver(function (e) { if (e.some(function (x) { return x.isIntersecting; })) { poster(); io.disconnect(); } }, { rootMargin: "300px" });
+          io.observe(v);
+        } else poster();
+        document.querySelectorAll("#walkthrough [data-t]").forEach(function (b) {
+          b.addEventListener("click", function () {
+            var t = Number(b.getAttribute("data-t"));
+            function go() { v.currentTime = t; }
+            if (v.readyState) go(); else v.addEventListener("loadedmetadata", go, { once: true });
+            v.play().catch(function () {});
+            v.scrollIntoView({ block: "center", behavior: "smooth" });
+          });
+        });
+      })();
+    </script>
+  </section>
+
   <style>.usp-band{background:linear-gradient(135deg,#2a1a57,#5b3fb0);color:#fff;padding:54px 20px;text-align:center}.usp-band .usp-eyebrow{margin:0;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#ffffffb8}.usp-band h2{color:#fff;font-size:clamp(26px,3.8vw,44px);letter-spacing:-1.1px;line-height:1.14;margin:10px auto 14px;max-width:860px}.usp-band h2 em{font-style:normal;color:#d9c8ff}.usp-band .usp-lead{max-width:660px;margin:0 auto 24px;color:#ffffffe0;font-size:17px;line-height:1.6}.usp-points{list-style:none;margin:0 auto 20px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:860px}.usp-points li{background:#ffffff14;border:1px solid #ffffff2b;border-radius:12px;padding:16px 14px}.usp-points b{display:block;font-size:21px;letter-spacing:-.4px;color:#fff}.usp-points span{display:block;margin-top:4px;font-size:13.5px;color:#ffffffd9}.usp-band .usp-note{max-width:620px;margin:0 auto 20px;font-size:12.5px;color:#ffffffa8}.usp-band .usp-btn{display:inline-block;background:#fff;color:#14233f;font-weight:700;font-size:15px;padding:13px 22px;border-radius:10px;text-decoration:none}@media(max-width:640px){.usp-points{grid-template-columns:1fr}.usp-band{padding:40px 16px}}</style><section class="usp-band usp-live" aria-label="Why Live Sarthi"><p class="usp-eyebrow">Why Live Sarthi</p><h2>Answers from your own resume, <em>on a panel your screen share doesn't show.*</em></h2><p class="usp-lead">It hears the interviewer's question and shows an answer built from your own CV, in about a second.</p><ul class="usp-points"><li><b>Your resume</b><span>answers come from your own CV and projects</span></li><li><b>Hidden*</b><span>from supported screen sharing on Windows</span></li><li><b>Unlimited</b><span>interviews during your pass, no per-minute credits</span></li></ul><p class="usp-note">*Hidden from supported screen capture on Windows 10 (2004+) and Windows 11. Test your meeting setup first.</p><style>.usp-price{margin:0 auto 20px;font-size:16px;color:#ffffffe6}.usp-price b{font-size:26px;letter-spacing:-.6px;color:#fff}</style><p class="usp-price"><b data-intl="$9.99">₹149</b> for 2 days · <b data-intl="$29.99">₹299</b> for 30 days · 30 minutes free first</p><a class="usp-btn" href="#pricing">See the passes →</a></section>
 <section class="alt" id="pricing">
     <div class="wrap">
