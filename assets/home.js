@@ -19,7 +19,7 @@
     apply: {
       name: 'Apply Sarthi', eyebrow: 'APPLY SARTHI · FIND & APPLY', title: 'Finds the jobs.\nApplies for you.',
       description: 'A Windows app. Add your CV once, sign in to your job sites and press Start applying. It finds jobs that fit your CV, fills each application and sends it.',
-      points: ['Gets jobs from different portals and applies automatically for you', 'Runs by itself, every day', 'Free every week: 15 applications; plans from ₹249'],
+      points: ['Gets jobs from different portals and applies automatically for you', 'Runs by itself, every day', 'Free every week: 15 applications; ₹99 for 30 days, up to 150'],
       url: '/apply/', views: [
         {label:'The app dashboard',src:'/assets/apply-app-dashboard.png',alt:'The Apply Sarthi app dashboard with a Start applying button and a checklist',caption:'The Apply Sarthi app on Windows, shown with a made-up account.'}
       ]

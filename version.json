@@ -78,9 +78,9 @@
           "detail": "It applies for you by itself: 20 applications in your first week, then 15 every week."
         },
         {
-          "title": "Plans, paid once for 30 days",
-          "price": "from Rs 249",
-          "detail": "Basic 300, Pro 1,000, Max 2,000 applications a month. Pro and Max include a Prep Sarthi month. No auto-debit."
+          "title": "30-Day Pass, paid once",
+          "price": "Rs 99",
+          "detail": "Up to 150 applications in 30 days. No auto-debit."
         }
       ],
       "page": {
@@ -118,17 +118,9 @@
             "title": "20, then 15 a week"
           },
           {
-            "price": "₹249",
-            "title": "Basic, 300 a month"
-          },
-          {
-            "price": "₹499",
-            "title": "Pro, 1,000 a month",
+            "price": "₹99",
+            "title": "30 days, up to 150",
             "best": true
-          },
-          {
-            "price": "₹799",
-            "title": "Max, 2,000 a month"
           }
         ],
         "details": [
@@ -137,8 +129,8 @@
             "t": "for 30 days, no auto-debit"
           },
           {
-            "b": "Pro and Max",
-            "t": "include a Prep Sarthi month"
+            "b": "Only sent",
+            "t": "applications count"
           }
         ],
         "learn": "https://interviewsarthi.com/apply/?utm_source=applysarthi&utm_medium=app_page"
