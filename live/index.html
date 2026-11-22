@@ -1987,7 +1987,7 @@
             <code id="keyval"></code>
             <ol>
               <li>Download and install Interview Sarthi below.</li>
-              <li>Open it, paste this key on the license screen, click <b>Activate</b>.</li>
+              <li>Open it and paste this key: on the first screen under <b>Already have a pass? Enter it</b>, or, if it is already set up, in the <b>Bought a pass?</b> box on Home. Click <b>Activate</b>.</li>
             </ol>
           </div>
           <div class="ctas">
@@ -2026,7 +2026,7 @@
             <p class="hmpa" id="hmAns" aria-hidden="true"></p>
             <a class="hmlink" href="#proof" tabindex="-1" aria-hidden="true"></a>
           </div>
-          <p class="shotcap">Your screen while they talk. The panel stays beside your call and is hidden from supported screen sharing. <a href="#proof">See the capture example →</a></p>
+          <p class="shotcap">Your screen while they talk. The panel stays beside your call and is hidden from supported screen sharing. <a href="#proof">See both views →</a></p>
         </div>
       </div>
 
@@ -2176,7 +2176,7 @@
       #walkthrough .wt-ch{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}
       #walkthrough .wt-ch button{font:inherit;font-size:13px;line-height:1.3;text-align:left;padding:8px 10px;border:1px solid #dfe5ee;border-radius:10px;background:#fff;color:inherit;cursor:pointer}
       #walkthrough .wt-q{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 14px}
-      #walkthrough .wt-q button{font:inherit;font-size:14px;font-weight:700;padding:10px 14px;border:1px solid var(--accent);border-radius:999px;background:#fff;color:var(--accent);cursor:pointer}
+      #walkthrough .wt-q button{scroll-margin-top:90px;font:inherit;font-size:14px;font-weight:700;padding:10px 14px;border:1px solid var(--accent);border-radius:999px;background:#fff;color:var(--accent);cursor:pointer}
       #walkthrough .wt-get{display:block;text-align:center;margin-top:18px}
       #walkthrough .wt-ch span{display:inline-block;min-width:36px;font-weight:700;color:var(--accent)}
       @media(max-width:700px){#walkthrough .wt-ch{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -2188,10 +2188,10 @@
       </div>
       <div style="max-width:960px;margin:0 auto">
         <div class="wt-q">
-        <button type="button" data-t="22">How to download</button>
-        <button type="button" data-t="56">Get the free Gemini key</button>
-        <button type="button" data-t="150">Where the Gemini key goes</button>
-        <button type="button" data-t="486">Where the pass key goes</button>
+        <button type="button" id="video-download" data-t="22">How to download</button>
+        <button type="button" id="video-gemini-key" data-t="56">Get the free Gemini key</button>
+        <button type="button" id="video-gemini-paste" data-t="150">Where the Gemini key goes</button>
+        <button type="button" id="video-pass-key" data-t="486">Where the pass key goes</button>
         </div>
         <video id="wtVideo" controls playsinline preload="none" width="1280" height="720" data-poster="/assets/live-sarthi-walkthrough-poster.webp" aria-label="Live Sarthi setup and demo video, narrated, with captions">
           <source src="/assets/live-sarthi-walkthrough-720p.mp4" type="video/mp4">
@@ -2246,6 +2246,16 @@
             v.scrollIntoView({ block: "center", behavior: "smooth" });
           });
         });
+        // A link straight to a step (#video-gemini-key): ready at that step, plays when the visitor presses Play.
+        function fromHash() {
+          var id = location.hash.slice(1), b = id.indexOf("video-") === 0 && document.getElementById(id);
+          if (!b || !b.hasAttribute("data-t")) return;
+          var t = Number(b.getAttribute("data-t"));
+          function seek() { v.currentTime = t; }
+          if (v.readyState) seek(); else { v.addEventListener("loadedmetadata", seek, { once: true }); v.preload = "metadata"; v.load(); }
+        }
+        window.addEventListener("hashchange", fromHash);
+        fromHash();
       })();
     </script>
   </section>
@@ -2453,7 +2463,7 @@
           <img src="/assets/illustration-both-screens.jpg" width="1600" height="800" loading="lazy"
             alt="Two laptops at the same moment of a Google Meet interview: the candidate's screen shows the Interview Sarthi panel with a suggested answer; the interviewer's screen shows only the call.">
           <figcaption><b>The same moment, both sides.</b> Left, your screen with the panel. Right, what the
-            interviewer's share carries. Illustration; the real captures are below.</figcaption>
+            interviewer's share carries. Illustration.</figcaption>
         </figure>
       </div>
 
@@ -2464,8 +2474,8 @@
     <div class="wrap">
       <div class="rv" style="text-align:center;max-width:760px;margin:0 auto 22px">
         <h2 style="margin-bottom:8px">The same moment, from both sides.</h2>
-        <p class="sub" style="margin:0">One frame of a real session. Switch between what you see and what the
-          interviewer's stream actually carries.</p>
+        <p class="sub" style="margin:0">An illustration of the two views. Switch between what you see and what the
+          interviewer's stream carries. Test your own setup before the interview.</p>
       </div>
       <div class="tg rv">
         <div class="tgbar" role="tablist" aria-label="Whose screen">
@@ -2479,8 +2489,8 @@
             <img id="tgImg" src="/assets/shot-you-see.png" width="1672" height="941"
               alt="A Google Meet interview with the Interview Sarthi panel over it: the panel shows the live transcript of two questions from the interviewers and a drafted spoken answer marked high confidence.">
           </picture>
-          <figcaption id="tgCap"><b>Your screen.</b> The panel followed both questions as they were asked, and had a
-            spoken-style answer ready before you opened your mouth.</figcaption>
+          <figcaption id="tgCap"><b>Your screen.</b> The panel followed both questions as they were asked, and shows a
+            spoken-style answer. Illustration.</figcaption>
         </figure>
       </div>
     </div>
@@ -2499,8 +2509,7 @@
           aria-label="Interview Sarthi promo: the panel in English, Hindi and Hinglish, the live transcript, no meeting bot, the overlay invisible in screen share, and 30 minutes free.">
           <source src="/assets/promo-24s.mp4" type="video/mp4">
         </video>
-        <figcaption><b>Rendered promo.</b> The people and rooms are illustrations. Real captures of both screens are
-          above. Sound is on the speaker button.</figcaption>
+        <figcaption><b>Rendered promo.</b> The people and rooms are illustrations. Sound is on the speaker button.</figcaption>
       </figure>
     </div>
   </section>
@@ -2587,7 +2596,7 @@
         <img src="/assets/illustration-meet-overlay.jpg" width="1600" height="900" loading="lazy"
           alt="A Google Meet interview round with the Interview Sarthi panel over it: the interviewer's questions in a conversation list, and a suggested answer marked Say this with a copy button.">
         <figcaption><b>Mid-round, on your screen.</b> The interviewer's words arrive in the conversation list; the
-          suggested answer sits under "Say this" with a copy button. Illustration; the real captures are above.</figcaption>
+          suggested answer sits under "Say this" with a copy button. Illustration.</figcaption>
       </figure>
     </div>
   </section>
@@ -2888,13 +2897,13 @@
           src: "/assets/shot-you-see.png",
           webp: "/assets/shot-you-see.webp",
           alt: "A Google Meet interview with the Interview Sarthi panel over it: the live transcript of two questions from the interviewers, and a drafted spoken answer marked high confidence.",
-          cap: "<b>Your screen.</b> The panel followed both questions as they were asked, and had a spoken-style answer ready before you opened your mouth."
+          cap: "<b>Your screen.</b> The panel followed both questions as they were asked, and shows a spoken-style answer. Illustration."
         },
         them: {
           src: "/assets/shot-they-see.png",
           webp: "/assets/shot-they-see.webp",
           alt: "The same Google Meet call as the interviewer receives it: three faces in the grid and no overlay anywhere in the frame.",
-          cap: "<b>What the interviewer sees.</b> Same call, same second. The panel is simply not in the stream."
+          cap: "<b>What the interviewer sees.</b> The same call without the panel, as in a supported screen share. Illustration."
         }
       };
       // preload so the swap is instant rather than a flash of empty frame

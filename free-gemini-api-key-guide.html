@@ -49,22 +49,27 @@
     {
       "@type": "HowToStep",
       "name": "Open Google AI Studio",
-      "text": "Go to aistudio.google.com and sign in with an eligible Google account."
+      "text": "In Live Sarthi press Get my free key, or go to aistudio.google.com/apikey. Sign in with a personal Gmail. The first time, read and accept Google’s terms. You must be 18 or older."
     },
     {
       "@type": "HowToStep",
-      "name": "Open the API key page",
-      "text": "Click 'Get API key' in the left sidebar (or visit aistudio.google.com/apikey directly)."
+      "name": "Open the API Keys page",
+      "text": "If you land somewhere else, click Get API key in the left menu. If a key is already listed there, you can copy that one."
     },
     {
       "@type": "HowToStep",
       "name": "Create the key",
-      "text": "Select a project you control, or import an existing project, and create a key using the current AI Studio workflow."
+      "text": "Click Create API key. Select your project, or choose Create project and give it any name. Then click Create key. The free tier needs no card, where Google offers it."
     },
     {
       "@type": "HowToStep",
-      "name": "Copy and store it",
-      "text": "Copy the key immediately and paste it where you need it. Treat it like a password."
+      "name": "Copy the key",
+      "text": "Click the copy icon next to the key. That copies the whole key, although only a few letters are shown. Treat it like a password."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Paste it in Live Sarthi",
+      "text": "On Your free AI key, press Paste and wait for “Gemini key works.”, then press Next. Later: AI key in the left menu, paste, then Test. Your pass key is a different key."
     }
   ]
 }</script>
@@ -109,14 +114,17 @@
 
   <p class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> › Set up a Gemini API key for Interview Sarthi</p>
 <h1>Set up a Gemini API key for Interview Sarthi</h1>
-  <p class="lead">Create a key in Google AI Studio, check the project and model limits, then test it in Interview Sarthi before a mock call. Eligibility and free-tier availability depend on Google.</p><p>Source guidance reviewed 15 September 2026: <a href="https://ai.google.dev/gemini-api/docs/api-key">API key documentation</a> and <a href="https://ai.google.dev/gemini-api/docs/rate-limits">rate limits</a>.</p>
+  <p class="lead">Create a key in Google AI Studio, check the project and model limits, then test it in Interview Sarthi before a mock call. Eligibility and free-tier availability depend on Google.</p><p>Source guidance reviewed 22 November 2026: <a href="https://aistudio.google.com/docs/api-key">API key documentation</a> and <a href="https://ai.google.dev/gemini-api/docs/rate-limits">rate limits</a>.</p>
+
+  <div class="box"><p style="margin:0"><b>Prefer to watch?</b> The setup video shows every click: <a href="/live/#video-gemini-key">get the key</a> · <a href="/live/#video-gemini-paste">where it goes in the app</a>.</p></div>
 
   <h2>The steps</h2>
   <ol class="steps">
-    <li><div><b>Open Google AI Studio</b><span>Go to <a href="https://aistudio.google.com" target="_blank" rel="noopener">aistudio.google.com</a> and sign in with an eligible Google account, a personal one is fine.</span></div></li>
-    <li><div><b>Click "Get API key"</b><span>It's in the left sidebar. Direct link: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.</span></div></li>
-    <li><div><b>Click "Create API key"</b><span>Choose a project you control or import your existing project as directed by AI Studio. Create a key using the current Google workflow.</span></div></li>
-    <li><div><b>Copy it and paste it where it's needed</b><span>In Interview Sarthi: setup → Google Gemini key → paste → <b>Test</b> → green tick. In your own code: an environment variable, never committed to git.</span></div></li>
+    <li><div><b>Open Google AI Studio</b><span>In Live Sarthi press <b>Get my free key</b>, or go to <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>. Sign in with a personal Gmail. The first time, read and accept Google’s terms. You must be 18 or older.</span></div></li>
+    <li><div><b>Open the API Keys page</b><span>If you land somewhere else, click <b>Get API key</b> in the left menu. If a key is already listed there, you can copy that one.</span></div></li>
+    <li><div><b>Create the key</b><span>Click <b>Create API key</b>. Select your project, or choose <b>Create project</b> and give it any name. Then click <b>Create key</b>. The free tier needs no card, where Google offers it.</span></div></li>
+    <li><div><b>Copy the key</b><span>Click the copy icon next to the key. That copies the whole key, although only a few letters are shown. Treat it like a password.</span></div></li>
+    <li><div><b>Paste it in Live Sarthi</b><span>On Your free AI key, press <b>Paste</b> and wait for “Gemini key works.”, then press <b>Next</b>. Later: AI key in the left menu, paste, then <b>Test</b>. Your pass key is a different key.</span></div></li>
   </ol>
 
   <h2>What the free tier actually includes</h2>
@@ -129,7 +137,7 @@
   <p>Anyone holding your key can spend your quota. Don't paste it in screenshots, don't commit it to GitHub (bots scan public repos within minutes), don't share it in chat groups. If a key leaks, go back to <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">the key page</a>, delete it, and create a new one, takes thirty seconds and old copies die instantly.</p>
 
   <h2>Current key requirements</h2><p>Google documents a transition to authorization keys. Use the key type currently supported by Google, and test compatibility in the app. A valid key can still fail because of permissions, model availability or project configuration; report the error text without sharing the key.</p><h2>Common problems</h2>
-  <p><b>"Create API key" is greyed out or errors.</b> Usually a workspace/school account with API access disabled by the admin, switch to a personal Gmail.</p>
+  <p><b>"Create API key" is greyed out or errors.</b> Select a project, or create one, first. If it still fails, it is usually a work or college account with API access switched off by its admin: use a personal Gmail.</p>
   <p><b>The key works, then fails.</b> Inspect the error and the project limits. A quota error may require waiting, reducing requests or reviewing an appropriate billing tier. Other errors can indicate model availability, permissions or connectivity. Do not create extra accounts to bypass quota limits.</p>
 
   <p><b>Key rejected where you pasted it.</b> Check for a trailing space or missing first characters. Copy the complete key and check current key-type requirements in the Google documentation.</p>
