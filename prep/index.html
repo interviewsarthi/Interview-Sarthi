@@ -171,7 +171,7 @@
 <div class="topbar"><div class="wrap">
 <header class="nav product-header--prep">
 <div class="product-identity"><a class="wm" href="./"><svg aria-hidden="true" class="mark" viewbox="0 0 64 64"><g transform="translate(32 32)"><circle fill="none" r="25" stroke="currentColor" stroke-width="4.6"></circle><g stroke="currentColor" stroke-linecap="round" stroke-width="3.2"><path d="M0-21.2V21.2M-21.2 0H21.2M-15-15l30 30M-15 15l30-30"></path></g><circle fill="currentColor" r="6"></circle></g></svg>Prep <i>Sarthi</i></a><a class="product-family" href="/" aria-label="Part of Interview Sarthi. Discover all three apps." title="Discover all three apps"><span>Part of</span><strong>Interview Sarthi <span aria-hidden="true">↗</span></strong></a></div>
-<nav class="links"><a class="opt" href="../apply/">Apply Sarthi</a><a class="opt" href="../live/">Live Sarthi</a><a class="opt" href="../meeting/">Meeting Sarthi</a><a class="opt" href="../guides/">Guides</a><a href="#pricing">Pricing</a><a class="opt" href="/account/" style="align-items:center;min-height:36px;padding:6px 10px;border:1px solid #cfdbf4;border-radius:8px;background:#f0f5ff;color:#2355b9;font-size:12px;font-weight:650;text-decoration:none;white-space:nowrap">My Sarthi</a><a class="pill small" href="app/" style="color:var(--btn-ink)">Start free</a></nav>
+<nav class="links"><a class="opt" href="../apply/">Apply Sarthi</a><a class="opt" href="../live/">Live Sarthi</a><a class="opt" href="../meeting/">Meeting Sarthi</a><a class="opt" href="../guides/">Guides</a><a href="#pricing">Pricing</a><a class="opt" href="/account/" style="align-items:center;min-height:36px;padding:6px 10px;border:1px solid #cfdbf4;border-radius:8px;background:#f0f5ff;color:#2355b9;font-size:12px;font-weight:650;text-decoration:none;white-space:nowrap">Log in</a><a class="pill small" href="app/" style="color:var(--btn-ink)">Start free</a></nav>
 </header>
 </div></div>
 <div class="wrap">
@@ -182,7 +182,7 @@
 <p class="lead">Speak with an AI interviewer that asks about your own projects and target job, asks more when an answer is thin, and scores every answer in a report.</p>
 <div class="ctas"><a class="pill" href="app/">Try your free 7-minute mock interview →</a><a class="pill ghost" href="#report">See a sample report</a></div>
 <p class="trust">Works on your phone, in any language. After the free demo, unlimited mocks for <a href="#pricing"><span data-usd="$9.99 for 30 days">Rs 99 for 30 days</span></a>.</p>
-<p class="trust returning"><a href="/account/">Already bought a pass? Sign in with Google</a></p>
+<p class="trust returning"><a href="/account/">Already bought a pass? Log in with Google</a></p>
 </div>
 <div aria-label="What the interview screen looks like" class="call">
 <div class="top"><span class="live on">Live</span><span id="demo-clock">07:42</span></div>
@@ -395,7 +395,7 @@
 })();
 </script>
 <script>
-/* Someone already signed in has nothing to "start free": the same buttons open their Prep Sarthi. */
+/* Someone already logged in has nothing to "start free": the same buttons open their Prep Sarthi. */
 try {
   if (localStorage.getItem("ps_session")) {
     document.querySelectorAll('a.pill[href="app/"]').forEach(function (a) { a.textContent = "Open Prep Sarthi →"; });

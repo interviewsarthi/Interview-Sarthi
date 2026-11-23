@@ -57,7 +57,7 @@
     $("computers").textContent = `${p.devices_used} of ${p.devices_max} computers`;
     $("email-hint").textContent = p.email_hint ? "Bought with " + p.email_hint : "";
     $("pass-prep").hidden = !data.prep_gift;
-    if (data.prep_gift) $("pass-prep").textContent = `Prep Sarthi (₹99) included free for ${data.prep_gift.days} days.${data.prep_gift.claimed ? " Your free days have been added to your Prep account." : " Sign in to Prep with the same Gmail, or paste this Live key on its Passes screen."}`;
+    if (data.prep_gift) $("pass-prep").textContent = `Prep Sarthi (₹99) included free for ${data.prep_gift.days} days.${data.prep_gift.claimed ? " Your free days have been added to your Prep account." : " Log in to Prep with the same Gmail, or paste this Live key on its Passes screen."}`;
     $("upgrade-card").hidden = !u.eligible || afterPayment;
     $("unavailable-card").hidden = !!u.eligible || afterPayment;
     if (u.eligible) {
@@ -146,7 +146,7 @@
     const data = await lookup(true);
     const gift = result.prep_gift || data?.prep_gift;
     $("success-prep").hidden = !gift;
-    if (gift) $("success-prep-text").textContent = "Prep Sarthi (₹99) is included: open Prep Sarthi and sign in with " + (data?.pass?.email_hint || "the same Gmail used to buy Live") + ".";
+    if (gift) $("success-prep-text").textContent = "Prep Sarthi (₹99) is included: open Prep Sarthi and log in with " + (data?.pass?.email_hint || "the same Gmail used to buy Live") + ".";
     $("success-title").focus();
   }
 

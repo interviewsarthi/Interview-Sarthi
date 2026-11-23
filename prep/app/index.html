@@ -51,7 +51,7 @@
     html.ps-confirm #pass-body{display:none}
     /* a Live Sarthi test (app.js liveTest): nothing of Prep's to sell in the header */
     html.ps-livetest #open-progress,html.ps-livetest #open-invite,html.ps-livetest #entitle,html.ps-livetest #acct{display:none !important}
-    /* top-right account: the person's name once signed in, a way in until then (sign-in stays optional) */
+    /* top-right account: the person's name once logged in, a way in until then (login stays optional) */
     .acct{position:relative;display:inline-flex}
     #acct-btn{font:650 12.5px var(--font);padding:6px 12px;border-radius:999px;border:1px solid #c9d5e1;background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap}
     #acct-btn:hover{background:var(--prep-soft);color:var(--prep)}
@@ -121,7 +121,7 @@
 <header class="appbar"><div class="appbar-in">
   <a class="brand" href="/" aria-label="Interview Sarthi home"><img src="/assets/mark.svg" alt="InterviewSarthi" width="26" height="26"><span>Interview<strong>Sarthi</strong></span></a>
   <a class="brand-prod" href="/prep/">Prep Sarthi</a>
-  <span class="navright"><button class="navlink" id="open-progress" data-pg="open">My progress</button><button type="button" class="navlink" id="open-help" aria-haspopup="dialog" aria-controls="support-dialog">Help<span id="support-unread" class="sh-unread" aria-hidden="true" hidden></span></button><button class="navlink" id="open-invite">Invite</button><button id="entitle" class="chip" title="Passes">…</button><span class="acct" id="acct" style="display:none"><button id="acct-btn" aria-haspopup="true" aria-expanded="false">Sign in</button><div class="acct-menu" id="acct-menu" hidden><p id="acct-name"></p><small id="acct-mail"></small><button class="linkink" id="acct-home" type="button">My Prep</button><a class="linkink mysarthi-link" href="/account/">My Sarthi: passes, interviews, profile</a><button class="linkink" id="acct-out">Sign out</button></div></span></span>
+  <span class="navright"><button class="navlink" id="open-progress" data-pg="open">My progress</button><button type="button" class="navlink" id="open-help" aria-haspopup="dialog" aria-controls="support-dialog">Help<span id="support-unread" class="sh-unread" aria-hidden="true" hidden></span></button><button class="navlink" id="open-invite">Invite</button><button id="entitle" class="chip" title="Passes">…</button><span class="acct" id="acct" style="display:none"><button id="acct-btn" aria-haspopup="true" aria-expanded="false">Log in</button><div class="acct-menu" id="acct-menu" hidden><p id="acct-name"></p><small id="acct-mail"></small><button class="linkink" id="acct-home" type="button">My Prep</button><a class="linkink mysarthi-link" href="/account/">Your account: passes, interviews, profile</a><button class="linkink" id="acct-out">Log out</button></div></span></span>
 </div></header>
 <div class="narrow">
   <aside class="live-gift-notice notice ok" id="live-gift-notice" hidden role="status" aria-live="polite">
@@ -142,7 +142,7 @@
         <li id="home-key"></li>
       </ul>
     </div>
-    <p class="home-links"><button class="linkink" id="home-progress" type="button">My progress</button> · <button class="linkink" id="home-pass-open" type="button">My pass</button> · <a class="linkink" href="/account/">My Sarthi account</a></p>
+    <p class="home-links"><button class="linkink" id="home-progress" type="button">My progress</button> · <button class="linkink" id="home-pass-open" type="button">My pass</button> · <a class="linkink" href="/account/">Your account</a></p>
   </section>
 
   <section class="screen on" id="s-cv">
@@ -166,7 +166,7 @@
       </div>
       <textarea id="jd" style="min-height:84px" placeholder="Paste the job description, or add a PDF, and the interviewer will target that role."></textarea>
       <div class="notice" id="jd-notice"></div>
-      <p class="mysarthi-save"><button type="button" class="linkink" id="save-mysarthi" hidden>Save my CV and job description to My Sarthi</button></p>
+      <p class="mysarthi-save"><button type="button" class="linkink" id="save-mysarthi" hidden>Save my CV and job description to my account</button></p>
       <div id="no-jd-options">
         <label class="f" for="practice-focus">Without a job description</label>
         <select id="practice-focus"><option value="role">Practise for a role</option><option value="general_cv">General CV practice</option></select>
@@ -203,10 +203,10 @@
   <section class="screen" id="s-key">
     <span class="label">Your AI key</span>
     <h1>One key, <em>yours.</em></h1>
-    <p class="lede" id="key-lede">The interviewer runs on Google's Gemini, on your own free key. It stays in this browser and is sent only to Google, unless you save it to My Sarthi yourself. If you use Live Sarthi or ApplySarthi, it is the same key.</p>
+    <p class="lede" id="key-lede">The interviewer runs on Google's Gemini, on your own free key. It stays in this browser and is sent only to Google, unless you save it to your account yourself. If you use Live Sarthi or ApplySarthi, it is the same key.</p>
     <div class="card" style="margin-top:22px">
       <ol class="how" style="margin-top:0">
-        <li style="border-top:0">Open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>, signed in to any Google account.</li>
+        <li style="border-top:0">Open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>, logged in to any Google account.</li>
         <li>Tap <b style="color:var(--ink)">Create API key</b>, then copy it.</li>
         <li>Paste it below. Stuck? <a href="/free-gemini-api-key-guide.html" target="_blank">The guide with pictures</a>.</li>
       </ol>
@@ -314,8 +314,8 @@
       <!-- your account, once a pass is live -->
       <div class="card account" id="account-card" style="display:none">
         <div class="acct-top">
-          <div><span class="label">Signed in</span><p id="pass-who" style="margin:4px 0 0"></p></div>
-          <button class="linkink" id="signout">Sign out</button>
+          <div><span class="label">Logged in</span><p id="pass-who" style="margin:4px 0 0"></p></div>
+          <button class="linkink" id="signout">Log out</button>
         </div>
         <div class="passbig"><b id="pass-days"></b><span id="pass-until"></span></div>
         <div class="actions">
@@ -334,14 +334,14 @@
 
       <!-- step 1: choose a pass -->
       <div id="buy-block">
-        <p class="notice ok" id="live-month-included" hidden>Bought a Live Sarthi 1-Month Pass? Prep Sarthi is included: sign in with the same Gmail.</p>
+        <p class="notice ok" id="live-month-included" hidden>Bought a Live Sarthi 1-Month Pass? Prep Sarthi is included: log in with the same Gmail.</p>
         <div class="plans">
           <button class="plan on" data-plan="m"><span class="label">One month</span><b>30 days</b><span class="price">Loading price…</span><small>Unlimited mocks for every interview this month. One payment, never renews.</small></button>
         </div>
         <div class="actions"><button class="pill wide" id="buy-cta">Buy the 30-day pass →</button></div>
         <p class="notice ok" id="invited-note" style="display:none;margin:12px 0 0">Invited by a friend: your first pass lasts 37 days instead of 30.</p>
         <p class="muted" style="font-size:13.5px;margin:14px 0 0"><span id="pay-methods">UPI, card or netbanking through Cashfree.</span> One payment, no auto-renew. <a href="/refunds.html" target="_blank">Refunds</a>.</p>
-        <p class="muted" id="have-pass-row" style="font-size:14.5px;margin:14px 0 0">Already bought a pass? <button class="linkink" id="have-pass">Sign in to use it here</button></p>
+        <p class="muted" id="have-pass-row" style="font-size:14.5px;margin:14px 0 0">Already bought a pass? <button class="linkink" id="have-pass">Log in to use it here</button></p>
       </div>
 
       <!-- step 2: who you are, then pay -->
@@ -369,11 +369,11 @@
           <p class="muted what-note">Good to know: Prep Sarthi is for practice <b>before</b> your interview. For help <b>during</b> a live interview, use <a href="/live/">Live Sarthi</a>.</p>
         </div>
         <div id="pass-signin" style="margin-top:18px">
-          <p class="muted" id="signin-why" style="margin:0 0 14px">Sign in with Google first, so your pass follows you to any phone or laptop.</p>
+          <p class="muted" id="signin-why" style="margin:0 0 14px">Log in with Google first, so your pass follows you to any phone or laptop.</p>
           <div id="gbutton"></div>
           <div id="testlogin" style="display:none;margin-top:12px">
-            <span class="label">Sandbox sign-in (local preview only)</span>
-            <div class="row" style="margin-top:8px"><input type="text" id="testlogin-email" placeholder="tester@example.com"><button class="pill ghost" id="testlogin-go">Test sign-in</button></div>
+            <span class="label">Sandbox login (local preview only)</span>
+            <div class="row" style="margin-top:8px"><input type="text" id="testlogin-email" placeholder="tester@example.com"><button class="pill ghost" id="testlogin-go">Test login</button></div>
           </div>
         </div>
         <div id="pass-pay" style="display:none;margin-top:18px">

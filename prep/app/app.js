@@ -165,13 +165,13 @@ function renderStartNote() {
     : "Use wired earphones if you can; your interviewer speaks first.";
 }
 /* The header's account button: the person's first name once they are signed
-   in, "Sign in" until then. pass.js owns the clicks; this only paints. */
+   in, "Log in" until then. pass.js owns the clicks; this only paints. */
 function renderAccount() {
   const a = S.ent && S.ent.account, btn = $("acct-btn");
   const raw = a ? ((a.name || "").trim().split(/\s+/)[0] || a.email.split("@")[0]) : "";
   const first = raw && raw.charAt(0).toUpperCase() + raw.slice(1);
-  btn.textContent = a ? (first.length > 14 ? first.slice(0, 13) + "…" : first) : "Sign in";
-  btn.title = a ? a.email : "Sign in with Google";
+  btn.textContent = a ? (first.length > 14 ? first.slice(0, 13) + "…" : first) : "Log in";
+  btn.title = a ? a.email : "Log in with Google";
   btn.classList.toggle("in", !!a);
   $("acct-name").textContent = a ? (a.name || first) : "";
   $("acct-mail").textContent = a ? a.email : "";
@@ -183,7 +183,7 @@ function renderEntitlement() {
   renderAccount();
   const e = S.ent, el = $("entitle");
   // Nothing known yet: a dash while the server is being asked, and the honest
-  // default for a first-time visitor once it is clear nobody is signed in.
+  // default for a first-time visitor once it is clear nobody is logged in.
   // A first-time visitor is offered the 7-minute demo (25 Sep 2026); the free minutes need a saved key.
   if (!e) { el.textContent = !booted ? "\u2026" : passCtx.demoOn ? (demoUsed.get() ? "Get a pass" : "Free demo \u00b7 7 min") : (store.get("ps_from") === "applysarthi" ? "30 min free" : "20 min free"); el.className = "chip"; return; }
   if (e.kind === "demo") { el.textContent = "Free demo · 7 min"; el.className = "chip ok"; return; }
@@ -192,7 +192,7 @@ function renderEntitlement() {
   else if (!e.account && e.kind === "none" && passCtx.demoOn && !demoUsed.get()) { el.textContent = "Free demo \u00b7 7 min"; el.className = "chip"; }
   else if (e.account && e.invite?.banked_days > 0) { el.textContent = `${e.invite.banked_days} free days`; el.className = "chip ok"; }
   else if (e.kind === "trial") { el.textContent = `Free · ${fmtLong(e.secondsLeft)} left`; el.className = "chip"; }
-  // Signed in, but no Gemini key in this browser yet: no free-minute count to show.
+  // Logged in, but no Gemini key in this browser yet: no free-minute count to show.
   else if (e.hasTrial === false) { el.textContent = "Get a pass"; el.className = "chip"; }
   else { el.textContent = passCtx.passesOn ? "Get a pass" : "Free minutes used"; el.className = "chip warn"; }
 }
@@ -222,7 +222,7 @@ const passCtx = {
     if (ent && ent.kind === "pass") { hideOffer("report-offer"); deferredReportOffer = null; }
     paintReportPass();
     if (ent && ent.account) flushOutbox().catch(() => {});
-    fillFromMySarthi();                          // signed in: fill; signed out: hide the Save link
+    fillFromMySarthi();                          // logged in: fill; logged out: hide the Save link
     // The server says this once, on the call that created the trial: tell the person where the minutes came from.
     if (ent && ent.welcome) showApplyWelcome(`ApplySarthi bonus added: ${ent.welcome.minutes} extra free minutes, so you have ${Math.round(ent.secondsLeft / 60)} in total.`);
   },
@@ -348,7 +348,7 @@ function goHomeIfBuyer() {
   if (!S.ent || S.ent.kind !== "pass" || liveTest || location.hash || window.__ps) return;
   if ($("s-cv").classList.contains("on") && !$("jd").value.trim()) showHome();
 }
-/* Above the form, for anyone not signed in: a buyer on a new device must not fall into the free demo. */
+/* Above the form, for anyone not logged in: a buyer on a new device must not fall into the free demo. */
 function renderBuyerStrip() {
   const strip = $("buyer-strip");
   const signedIn = !!(S.ent && S.ent.account);
@@ -356,7 +356,7 @@ function renderBuyerStrip() {
   if (strip.hidden) return;
   const used = demoUsed.get();
   $("buyer-strip-text").textContent = used ? "You've used your free demo." : "Already bought a pass?";
-  $("buyer-strip-go").textContent = used ? "See the 30-day pass, or sign in" : "Sign in with Google";
+  $("buyer-strip-go").textContent = used ? "See the 30-day pass, or log in" : "Log in with Google";
   // A free demo's report stays in this browser; reloading the page must not lose the way back to it.
   $("buyer-strip-report").hidden = !(used && store.get("ps_last_report"));
   $("buyer-strip-report").onclick = () => {
@@ -375,13 +375,13 @@ function renderBuyerStrip() {
   };
 }
 
-/* My Sarthi (interviewsarthi.com/account/): signed in, the EMPTY boxes fill from the profile saved there, once per
- * sign-in. The Gemini key goes into the key step's box only; it is kept on this device when that step is passed, as
- * a typed key is. Nothing happens when My Sarthi is not open or the person is signed out (mysarthi.js is silent). */
+/* The account page (interviewsarthi.com/account/): logged in, the EMPTY boxes fill from the profile saved there, once per
+ * login. The Gemini key goes into the key step's box only; it is kept on this device when that step is passed, as
+ * a typed key is. Nothing happens when the account page is not open or the person is logged out (mysarthi.js is silent). */
 async function fillFromMySarthi() {
   const token = accountSession.get();
   if (!token) { $("save-mysarthi").hidden = true; return; }
-  // Once per sign-in (the token changes with each), remembered across page loads in this browser.
+  // Once per login (the token changes with each), remembered across page loads in this browser.
   if (store.get("ps_mysarthi_filled") === token) { $("save-mysarthi").hidden = false; return; }
   const profile = await readProfile();
   if (!profile) return;
@@ -400,7 +400,7 @@ async function fillFromMySarthi() {
   if (got.jd && !$("jd").value.trim()) { $("jd").value = got.jd; store.set("ps_jd", got.jd); updateNoJdOptions(); done.push("job description"); }
   if (got.name && !$("name").value.trim()) { $("name").value = got.name; store.set("ps_name", got.name); done.push("name"); }
   if (got.key && !$("key").value.trim()) { $("key").value = got.key; done.push("Gemini key"); }
-  if (done.length) notice("cv-notice", `Filled from My Sarthi: ${done.join(", ")}.`, "ok");
+  if (done.length) notice("cv-notice", `Filled from your account: ${done.join(", ")}.`, "ok");
 }
 
 $("save-mysarthi").onclick = async () => {
@@ -411,9 +411,9 @@ $("save-mysarthi").onclick = async () => {
     if (!r.ok) { notice("cv-notice", r.error, "bad"); return; }
     const key = $("key").value.trim() || store.get("ps_gemini_key");
     let withKey = false, keyFailed = false;
-    if (key && !r.geminiSaved && confirm("Also keep your Gemini key in My Sarthi, encrypted, for Live Sarthi?")) { withKey = await saveKey(key); keyFailed = !withKey; }
-    notice("cv-notice", `Saved to My Sarthi${withKey ? ", with your Gemini key" : ""}. Live Sarthi can fill its setup from it.`
-      + (keyFailed ? " The Gemini key could not be saved; try again on the My Sarthi page." : ""), keyFailed ? "" : "ok");
+    if (key && !r.geminiSaved && confirm("Also keep your Gemini key in your account, encrypted, for Live Sarthi?")) { withKey = await saveKey(key); keyFailed = !withKey; }
+    notice("cv-notice", `Saved to your account${withKey ? ", with your Gemini key" : ""}. Live Sarthi can fill its setup from it.`
+      + (keyFailed ? " The Gemini key could not be saved; try again on your account page." : ""), keyFailed ? "" : "ok");
   } finally { $("save-mysarthi").disabled = false; }
 };
 
@@ -481,7 +481,7 @@ $("to-key").onclick = async () => {
   // gesture, and iOS Safari keeps audio off without one: that visitor gets the Start button instead of a call.
   const waited = !bootDone;
   if (waited) await booting.catch(() => {});   // a page that failed to set up still lets the visitor try
-  // A first-time visitor gets the free demo on our key: no key, no sign-in, straight to the interview.
+  // A first-time visitor gets the free demo on our key: no key, no login, straight to the interview.
   // A key comes up only after a pass is bought. Someone who already
   // has a key keeps the old path untouched.
   // One click from here into the call: the free demo, and anyone whose own key and time are
@@ -500,8 +500,8 @@ $("to-key").onclick = async () => {
 function showKeyStep() {
   const paid = S.ent && S.ent.kind === "pass";
   $("key-lede").textContent = paid
-    ? "Your pass is active. One last step, about a minute: the interviewer runs on Google's Gemini, on your own free key. It stays in this browser and is sent only to Google, unless you save it to My Sarthi yourself."
-    : "The interviewer runs on Google's Gemini, on your own free key. It stays in this browser and is sent only to Google, unless you save it to My Sarthi yourself. If you use Live Sarthi or ApplySarthi, it is the same key.";
+    ? "Your pass is active. One last step, about a minute: the interviewer runs on Google's Gemini, on your own free key. It stays in this browser and is sent only to Google, unless you save it to your account yourself."
+    : "The interviewer runs on Google's Gemini, on your own free key. It stays in this browser and is sent only to Google, unless you save it to your account yourself. If you use Live Sarthi or ApplySarthi, it is the same key.";
   show("s-key");
   if (!$("key").value) $("key").focus();
 }
@@ -1377,7 +1377,7 @@ async function writeReport(turns, elapsed, usage, pending = null) {
       offerReport("That was your free demo.", result.report, "demo_report");
     } else hideOffer("report-offer");
     track("mock_report", { score: result.report.overall_score, questions: (result.report.questions || []).length, model: result.model });
-    // Just seen their score: the moment to pass the app on. The link is this browser's, no key or sign-in needed.
+    // Just seen their score: the moment to pass the app on. The link is this browser's, no key or login needed.
     deviceInvite().then((r) => { S.deviceInvite = r.invite; renderInvite($("invite-report"), result.report.overall_score); }).catch(() => {});
     return;
   }
@@ -1697,7 +1697,7 @@ const booting = restore().then(() => { if (!takeAtsHandoff()) return loadJobFrom
   .then(() => initPasses(passCtx)).then(renderEntitlement).then(() => { renderSettingsSum(); renderBuyerStrip(); goHomeIfBuyer(); });
 window.addEventListener("prep:account", () => {
   renderBuyerStrip();
-  if ($("s-home").classList.contains("on") && !(S.ent && S.ent.kind === "pass")) show("s-cv");   // signed out, or the pass ended
+  if ($("s-home").classList.contains("on") && !(S.ent && S.ent.kind === "pass")) show("s-cv");   // logged out, or the pass ended
 });
 let bootDone = false;
 booting.then(() => { bootDone = true; }, () => {});

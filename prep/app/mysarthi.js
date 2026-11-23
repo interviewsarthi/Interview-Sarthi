@@ -1,10 +1,10 @@
-/* Prep Sarthi and My Sarthi (interviewsarthi.com/account/).
+/* Prep Sarthi and the account page (interviewsarthi.com/account/).
  *
- * Signed in, Prep fills its EMPTY boxes from the profile the person saved in My Sarthi (CV, job description, name,
- * and the Gemini key into the key step's box), and "Save to My Sarthi" keeps Prep's CV and job description there for
- * Live Sarthi; the Gemini key only after a confirm. My Sarthi lives on the same licence server and the same session.
+ * Logged in, Prep fills its EMPTY boxes from the profile the person saved in their account (CV, job description, name,
+ * and the Gemini key into the key step's box), and "Save to my account" keeps Prep's CV and job description there for
+ * Live Sarthi; the Gemini key only after a confirm. The account lives on the same licence server and the same session.
  *
- * Silent by design: if My Sarthi is not open yet (the server answers 404), the person is signed out, or the network
+ * Silent by design: if the account page is not open yet (the server answers 404), the person is logged out, or the network
  * fails, every call answers null and Prep carries on exactly as before. */
 import { LICENSE_API, session } from "./billing.js?v=20261102-offload";   // the same URL app.js loads, so one copy
 
@@ -19,7 +19,7 @@ async function post(path, body = {}) {
   } catch { return null; }
 }
 
-/* The saved profile, or null when there is none to read (signed out, My Sarthi not open, offline). */
+/* The saved profile, or null when there is none to read (logged out, account page not open, offline). */
 export async function readProfile() {
   const p = await post("/account/profile");
   return p && !p.error ? p : null;
@@ -40,11 +40,11 @@ export async function fillFrom(profile, have) {
   return out;
 }
 
-/* Prep's CV and job description into My Sarthi. The JD joins the saved list (the newest ten are kept). What is
+/* Prep's CV and job description into the account. The JD joins the saved list (the newest ten are kept). What is
  * already saved there is left alone: Prep knows only a first name and a menu's language, the page keeps the full ones. */
 export async function saveFromPrep({ cv, jd, name, language, role, level }) {
   const profile = await readProfile();
-  if (!profile) return { ok: false, error: "My Sarthi is not available right now." };
+  if (!profile) return { ok: false, error: "Your account is not available right now." };
   const p = {};
   if (!profile.name && name) p.name = name;
   if (!profile.language && language) p.language = language;
@@ -56,7 +56,7 @@ export async function saveFromPrep({ cv, jd, name, language, role, level }) {
     p.jds = [...kept.map((j) => ({ id: j.id, title: j.title, text: j.text })), { title: role || "From Prep Sarthi", text: jd }];
   }
   const saved = await post("/account/profile/save", { profile: p });
-  if (!saved || saved.error) return { ok: false, error: (saved && saved.error) || "Could not save to My Sarthi. Try again." };
+  if (!saved || saved.error) return { ok: false, error: (saved && saved.error) || "Could not save to your account. Try again." };
   return { ok: true, geminiSaved: Boolean(saved.gemini && saved.gemini.saved) };
 }
 

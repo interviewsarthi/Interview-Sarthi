@@ -126,7 +126,7 @@ export async function initPasses(context) {
     if ($("entitle").textContent.startsWith("Free demo") && $("s-cv").classList.contains("on")) { $("cv").focus(); return; }
     openPasses();
   };
-  // The header's Sign in / name button: sign-in stays
+  // The header's Log in / name button: login stays
   // optional, but the way in should not hide inside the pass screen.
   if (ctx.passesOn) $("acct").style.display = "inline-flex";
   const acctMenu = (open) => { const want = open === undefined ? $("acct-menu").hidden : open; $("acct-menu").hidden = !want; $("acct-btn").setAttribute("aria-expanded", String(want)); };
@@ -192,7 +192,7 @@ function choosePlan(id) {
  * @param {string} [message]
  * @param {{plan?: "m", checkout?: boolean, signin?: boolean}} [opts]  the pricing page's buttons
  *        open the app straight at checkout for the pass that was clicked; the
- *        header's Sign in button lands on the sign-in step alone
+ *        header's Log in button lands on the login step alone
  */
 export async function openPasses(message, opts = {}) {
   offerWhere = ["demo_call", "demo_exit"].includes(opts.where) ? opts.where : null;
@@ -212,7 +212,7 @@ export async function openPasses(message, opts = {}) {
   await showGoogleButton();
 }
 
-const BLOCKED = "Google sign-in did not load. An ad blocker or Brave Shields usually causes this: allow accounts.google.com for this site, or open it in another browser, then try again.";
+const BLOCKED = "Google login did not load. An ad blocker or Brave Shields usually causes this: allow accounts.google.com for this site, or open it in another browser, then try again.";
 
 /* Draw Google's button once. Every caller shares one attempt, so a second
  * call can never report a failure the first one is still working through. */
@@ -261,26 +261,26 @@ function paint() {
   // Buying: hidden behind "Extend" once a pass is live.
   const buying = (!live && !freeReady) || extendOpen;
   const signinOnly = step === "signin" && !account;
-  if (step === "signin" && account) step = "choose";       // signed in: nothing left to ask
+  if (step === "signin" && account) step = "choose";       // logged in: nothing left to ask
   $("buy-block").style.display = buying && step === "choose" ? "block" : "none";
   $("live-month-included").hidden = live;
   $("checkout").style.display = buying && (step === "checkout" || signinOnly) ? "block" : "none";
   $("pass-signin").style.display = account ? "none" : "block";
   $("pass-pay").style.display = account && !signinOnly ? "block" : "none";
   $("have-pass-row").style.display = account ? "none" : "block";
-  $("checkout-label").textContent = signinOnly ? "Google sign-in" : "You are buying";
+  $("checkout-label").textContent = signinOnly ? "Google login" : "You are buying";
   $("checkout-plan").style.display = signinOnly ? "none" : "block";
   $("checkout-what").style.display = signinOnly ? "none" : "block";
   $("checkout-back").textContent = signinOnly ? "Back" : "Change";
   $("checkout-back").style.display = signinOnly ? "none" : "";   // the page's own Back is right below
   $("signin-why").textContent = signinOnly
-    ? "Sign in with the Google account you bought with, and your pass appears here."
-    : "Sign in with Google first, so your pass follows you to any phone or laptop.";
-  if (account) $("pass-who2").textContent = `Signed in as ${account.email}`;
+    ? "Log in with the Google account you bought with, and your pass appears here."
+    : "Log in with Google first, so your pass follows you to any phone or laptop.";
+  if (account) $("pass-who2").textContent = `Logged in as ${account.email}`;
 
   // Words at the top follow the state, so the page never asks for money twice.
   if (signinOnly) {
-    $("pass-kicker").textContent = "Sign in";
+    $("pass-kicker").textContent = "Log in";
     $("pass-title").innerHTML = 'Welcome <em>back.</em>';
     $("pass-lede").textContent = "New here? Continuing with Google creates your account. There is no password to remember.";
   } else {
@@ -305,7 +305,7 @@ function paint() {
       ? friends ? `${banked} free days waiting (from your Live Sarthi month pass and friends).`
         : `You have ${banked} free days from your Live Sarthi month pass.`
       : `You have ${banked} free day${banked > 1 ? "s" : ""} from friends who bought a pass.`;
-    $("start-days").textContent = account ? `Start my ${banked} free day${banked > 1 ? "s" : ""}` : "Sign in above to start them";
+    $("start-days").textContent = account ? `Start my ${banked} free day${banked > 1 ? "s" : ""}` : "Log in above to start them";
     $("start-days").disabled = !account;
   }
   $("live-gift-claim").hidden = !account;
@@ -344,7 +344,7 @@ async function claimGift(event) {
   } finally { claimingGift = false; button.disabled = false; }
 }
 
-/* A Google account is all it takes. No Gemini key is needed to sign in or to
+/* A Google account is all it takes. No Gemini key is needed to log in or to
  * buy; the key only matters once an interview starts. */
 async function onGoogle(credential) {
   const cameToSignIn = step === "signin";
@@ -355,7 +355,7 @@ async function onGoogle(credential) {
     const live = ctx.state.ent.kind === "pass";
     const freeReady = (ctx.state.ent.invite?.banked_days || 0) > 0;
     if (cameToSignIn && live && ctx.showHome) { step = "choose"; say(""); paint(); ctx.showHome(); return; }
-    if (cameToSignIn) { step = "choose"; say(live ? "Welcome back. Your pass is live." : freeReady ? "Signed in. You have free days ready to start." : "Signed in. Choose a pass below.", live || freeReady ? "ok" : ""); }
+    if (cameToSignIn) { step = "choose"; say(live ? "Welcome back. Your pass is live." : freeReady ? "Logged in. You have free days ready to start." : "Logged in. Choose a pass below.", live || freeReady ? "ok" : ""); }
     else say("");
     paint();
     if (!cameToSignIn && !live) $("phone").focus();
@@ -396,7 +396,7 @@ async function pay() {
       const label = phoneEl.previousElementSibling;
       if (label) label.style.display = "";
     }
-    say(err.status === 401 ? "Your sign-in expired. Sign in again." : err.message, "bad");
+    say(err.status === 401 ? "Your login expired. Log in again." : err.message, "bad");
     if (err.status === 401) { session.clear(); ctx.setEntitlement({ ...ctx.state.ent, account: null }); paint(); }
     $("pay").disabled = false;
   }
@@ -433,7 +433,7 @@ async function resumePendingOrder() {
   }
   if (!pending || !session.get() || Date.now() - (pending.at || 0) > 3600_000) {
     document.documentElement.classList.remove("ps-pass", "ps-confirm");
-    if (fromUrl) { ctx.show("s-pass"); $("pass-body").style.display = "block"; paint(); say("That payment could not be matched to this browser. If money left your account, sign in below with the same Google account and your pass will be there.", ""); ctx.paymentResult?.("pending", pending); return true; }
+    if (fromUrl) { ctx.show("s-pass"); $("pass-body").style.display = "block"; paint(); say("That payment could not be matched to this browser. If money left your account, log in below with the same Google account and your pass will be there.", ""); ctx.paymentResult?.("pending", pending); return true; }
     return false;
   }
   ctx.state.hash = ctx.state.hash || pending.hash;

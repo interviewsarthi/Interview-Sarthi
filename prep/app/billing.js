@@ -1,7 +1,7 @@
 /* Prep Sarthi: free minutes, passes and invites, through the licence server.
  *
  * Free minutes are keyed by a one-way hash of the Gemini key (the key itself
- * never leaves the browser). Passes belong to a Google account; after sign-in
+ * never leaves the browser). Passes belong to a Google account; after login
  * the server gives this browser a 30-day session. The server is the only
  * clock: the page asks how many seconds are left and counts down from there.
  *
@@ -74,7 +74,7 @@ async function post(path, body) {
 }
 
 function shape(r, hash) {
-  // `trial` is absent when the person is signed in but this browser holds no
+  // `trial` is absent when the person is logged in but this browser holds no
   // Gemini key yet: then only the pass is known.
   const hasTrial = !!(r.trial && typeof r.trial.seconds_left === "number");
   const trialLeft = hasTrial ? Math.max(0, Number(r.trial.seconds_left)) : 0;
@@ -87,7 +87,7 @@ function shape(r, hash) {
 }
 
 /**
- * What this key (and this account, if signed in) may do right now.
+ * What this key (and this account, if logged in) may do right now.
  * @returns {{kind:"pass"|"trial"|"none", secondsLeft:number, expiresAt?:string, invite, account, plans, source}}
  */
 export async function entitlement(hash) {
@@ -102,7 +102,7 @@ export async function entitlement(hash) {
 }
 
 /* What the signed-in person owns, when this browser has no key to hash yet.
- * Returns null when nobody is signed in. */
+ * Returns null when nobody is logged in. */
 export async function entitlementBySession() {
   if (!session.get()) return null;
   try {
@@ -125,10 +125,10 @@ export async function tick(hash, seconds) {
 
 // ---- passes
 
-/* Plans, the sign-in id and the free demo's length come from a plain file on the site, and the region from
+/* Plans, the login id and the free demo's length come from a plain file on the site, and the region from
  * Cloudflare's trace on the licence host, which answers at the edge without running the worker. Until 2 Nov 2026 every
  * app load asked the worker for this, and an outside client replaying that call used up most of the worker's free
- * 100,000 requests a day. Local previews keep the test worker: its sandbox sign-in and region override are not in the
+ * 100,000 requests a day. Local previews keep the test worker: its sandbox login and region override are not in the
  * file. A price change goes in mock.js MOCK_PLANS and prep/app/config.json together; scripts/check_prep_config.py
  * fails the push when they differ. */
 export const TRACE_URL = "https://license.interviewsarthi.com/cdn-cgi/trace";
@@ -176,8 +176,8 @@ export async function claimLiveGift(key, hash) {
 
 // Straight to /prep/ (was the retired /mock/, whose redirect page gave WhatsApp the preview "Moved to /prep/").
 export const inviteLink = (code) => `https://interviewsarthi.com/prep/?ref=${encodeURIComponent(code)}`;
-/* The invite of a visitor on the free demo: no key, no sign-in, tied to this browser's demo device. The server
-   answers 403 until this browser has had a demo. Signed in, the session lets its earned days reach the account. */
+/* The invite of a visitor on the free demo: no key, no login, tied to this browser's demo device. The server
+   answers 403 until this browser has had a demo. Logged in, the session lets its earned days reach the account. */
 export const deviceInvite = () => post("/mock/invite", { device: demoDevice(), session: session.get() || undefined });
 /* The invite code this visitor arrived through, if any: their first pass is a week longer. */
 export const invitedBy = () => mem.get("ps_ref");

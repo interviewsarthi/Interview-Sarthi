@@ -62,12 +62,12 @@ async function openProgress() {
   $('pg-title')?.focus({preventScroll:true});
 }
 function preview() {
-  return `<div class="pg-preview"><span class="label">Included with your 30-day pass</span><h2>A little practice.<br>A clearer picture.</h2><p>See how your answers develop, revisit every saved interview, and know what to work on next. Account saving is your choice.</p><div class="pg-preview-steps"><span>01 / Practise</span><span>02 / Find your focus</span><span>03 / See your progress</span></div><div class="pg-toolbar">${button('passes', state().signedIn ? 'View passes →' : 'Sign in / view passes →','','pill small')}${button('practice','Back to practice')}</div><p class="pg-caption">Your real progress appears after you practise. No sample scores are mixed into your history.</p></div>`;
+  return `<div class="pg-preview"><span class="label">Included with your 30-day pass</span><h2>A little practice.<br>A clearer picture.</h2><p>See how your answers develop, revisit every saved interview, and know what to work on next. Account saving is your choice.</p><div class="pg-preview-steps"><span>01 / Practise</span><span>02 / Find your focus</span><span>03 / See your progress</span></div><div class="pg-toolbar">${button('passes', state().signedIn ? 'View passes →' : 'Log in / view passes →','','pill small')}${button('practice','Back to practice')}</div><p class="pg-caption">Your real progress appears after you practise. No sample scores are mixed into your history.</p></div>`;
 }
 function render() {
   const s = state(), host = $('s-progress');
   if (!s.signedIn) {
-    host.innerHTML = `<header class="pg-head"><div><span class="pg-eyebrow">Your preparation, over time</span><h1 id="pg-title" tabindex="-1">My <em>progress.</em></h1><p>Sign in to see the interviews saved to your account.</p></div></header>${preview()}`; return;
+    host.innerHTML = `<header class="pg-head"><div><span class="pg-eyebrow">Your preparation, over time</span><h1 id="pg-title" tabindex="-1">My <em>progress.</em></h1><p>Log in to see the interviews saved to your account.</p></div></header>${preview()}`; return;
   }
   const period = currentPeriod();
   const raw = buildProgress(data.items, {period});
@@ -160,8 +160,8 @@ async function settings() {
 }
 function saveText(id, localOnly=false) {
   if (data.items.some(i => i.id === id && !i.local_only)) localOnly=false;
-  const s=statusOf(id), label={saving:'Saving to your account…',saved:'Saved to your account',retry:'Save pending · retry available',off:'Account saving is off',signed_out:'Sign in to save to your account',no_pass:'Not saved · an active pass is needed',failed:'Could not save this report'};
-  return `<span role="status">${esc(s?label[s.state]:localOnly?'This browser only':'Saved to your account')}${s?.message?` · ${esc(s.message)}`:''}</span>${['retry','signed_out'].includes(s?.state)?` ${button(s.state==='signed_out'?'passes':'retry',s.state==='signed_out'?'Sign in':'Retry','','pg-link')}`:''}${s?.state==='failed'?'<span> · Download the report to keep a copy.</span>':''}`;
+  const s=statusOf(id), label={saving:'Saving to your account…',saved:'Saved to your account',retry:'Save pending · retry available',off:'Account saving is off',signed_out:'Log in to save to your account',no_pass:'Not saved · an active pass is needed',failed:'Could not save this report'};
+  return `<span role="status">${esc(s?label[s.state]:localOnly?'This browser only':'Saved to your account')}${s?.message?` · ${esc(s.message)}`:''}</span>${['retry','signed_out'].includes(s?.state)?` ${button(s.state==='signed_out'?'passes':'retry',s.state==='signed_out'?'Log in':'Retry','','pg-link')}`:''}${s?.state==='failed'?'<span> · Download the report to keep a copy.</span>':''}`;
 }
 function decorateReport(record, locked=false) {
   reportRecord=record;
@@ -209,7 +209,7 @@ document.addEventListener('click',async event=>{
       case 'clear-day': selectedDay=''; render(); break;
       case 'settings': await settings(); break;
       case 'close': $('pg-dialog').close(); break;
-      case 'retry': await flushOutbox(); toast(pending().length?'Some items are still waiting. Please check your connection and sign-in.':'Saved items are up to date.'); scheduleRefresh(); break;
+      case 'retry': await flushOutbox(); toast(pending().length?'Some items are still waiting. Please check your connection and login.':'Saved items are up to date.'); scheduleRefresh(); break;
       case 'interview': await window.prepApp.openInterview(id); break;
       case 'evidence': await openEvidence(id,Number(el.dataset.turn)); break;
       case 'redrill': await window.prepApp.startRedrill(id,Number(el.dataset.question)); break;

@@ -1,6 +1,7 @@
 /* Live Sarthi on the phone: the licence server, and what this phone remembers.
  *
- * Kept in this browser only: the licence key, the Gemini key, the CV text and the answer choices. The Gemini key
+ * Kept in this browser: the licence key, the Gemini key, the CV text and the answer choices (logged in, also with the
+ * account: see account.js). The Gemini key
  * goes to Google and, at each start, to our licence server, which uses it once and keeps only a one-way hash.
  */
 
@@ -47,9 +48,15 @@ export function loadSetup() {
   return memo;
 }
 
+const listeners = [];
+/** fn(patch, before, after) after every saveSetup (logged in, account.js keeps the account up to date with it). */
+export function onSetupSaved(fn) { listeners.push(fn); }
+
 export function saveSetup(patch) {
-  memo = { ...loadSetup(), ...patch };
+  const before = loadSetup();
+  memo = { ...before, ...patch };
   ls.set(KEY, JSON.stringify(memo));
+  for (const fn of listeners) { try { fn(patch, before, memo); } catch (_) { /* never stops the app */ } }
   return memo;
 }
 

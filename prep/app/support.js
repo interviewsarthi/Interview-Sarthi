@@ -6,7 +6,7 @@
  * one Live Sarthi's Help uses (license-server src/support.js, supportprep.js): the bot answers first, the Sarthi team
  * when it cannot, and the reply shows here and, with an email, by email with a link to the conversation page.
  *
- * A report carries: the problem and the words typed; an email (none typed and signed in: the server uses the Google
+ * A report carries: the problem and the words typed; an email (none typed and logged in: the server uses the Google
  * account's); what this page knows (browser, pass kind, the last interview, the microphone, the message on screen);
  * the ids of the last interviews' timelines (diagnostics.js) with their tokens, so the server can read them; and,
  * unless "Include what was said in this interview" is unticked (it is ticked by default), that
@@ -21,7 +21,7 @@
 export const PROBLEMS = [
   { code: "prep_voice", label: "Mic or interviewer voice problem" },
   { code: "prep_report", label: "Report missing or score feels wrong" },
-  { code: "prep_payment", label: "Payment, pass or sign-in" },
+  { code: "prep_payment", label: "Payment, pass or login" },
   { code: "prep_key", label: "Gemini key problem" },
   { code: "prep_other", label: "Something else" },
   { code: "prep_idea", label: "An idea or suggestion" },
@@ -78,7 +78,7 @@ export function guessProblem(text = "") {
  * @param {object} o
  * @param {string} o.api           the licence server
  * @param {() => Promise<object>|object} o.context  what the page knows now (app.js supportContext)
- * @param {() => string} [o.session]  the Prep sign-in session, if any
+ * @param {() => string} [o.session]  the Prep login session, if any
  */
 export function createSupport({ api, context, session = () => "", storage = globalThis.localStorage, fetcher = (...a) => fetch(...a),
   now = Date.now, random = (n) => crypto.getRandomValues(new Uint8Array(n)), schedule = (fn, ms) => setTimeout(fn, ms),

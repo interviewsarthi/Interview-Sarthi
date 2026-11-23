@@ -290,7 +290,7 @@
   }
 
   /* What to do next, by what the visitor gave us and how the CV did. One main button per situation,
-   * each label naming where it goes, and "sign in" said before the click, never after:
+   * each label naming where it goes, and "log in" said before the click, never after:
    *   unreadable file              -> how to export a readable PDF        | paste the text instead
    *   no job, no role              -> check it against a job (same page)  | jobs that fit this CV (ApplySarthi)
    *   role / pasted job, below 75% -> fix the missing skills (same page)  | that role's jobs in India
@@ -308,7 +308,7 @@
     var second = function (label, attrs) { return btn(" ghost", label, attrs); };
     var live = '<p class="alsotry">Interview booked? <a href="/live/" data-act="live">Live Sarthi</a> shows answer ' +
       "hints during the call (Windows, 30 minutes free).</p>";
-    var signIn = '<p class="ats-cost">ApplySarthi is free. You sign in with Google or email and upload your CV there; ' +
+    var signIn = '<p class="ats-cost">ApplySarthi is free. You log in with Google or email and upload your CV there; ' +
       "this page never uploads it.</p>";
     if (res.unreadable) {
       return '<div class="ats-next" data-next="unreadable"><h3>Next: get a file an ATS can read</h3>' +
@@ -336,7 +336,7 @@
           '<p class="ats-btns">' + prep + second("Tailor my CV for this job", tailor) + view + "</p>" + live + "</div>"
         : '<div class="ats-next" data-next="job-fix"><h3>Next: tailor your CV for ' + name + "</h3>" +
           "<p>ApplySarthi rewrites your CV for this job, using only what your CV already says, and gives you a clean " +
-          "one-column PDF. Sign in, upload your CV, and it is made for you.</p>" +
+          "one-column PDF. Log in, upload your CV, and it is made for you.</p>" +
           '<p class="ats-btns">' + main("Tailor my CV for this job, free", tailor) + prepSecond + "</p>" + signIn + live + "</div>";
     }
     var list = role
@@ -344,7 +344,7 @@
           "&to=" + encodeURIComponent(role.r.jobs)) + '" data-act="list"')
       : second("Find jobs in India", 'href="' + goApply("ats_all", "&to=" + encodeURIComponent("/jobs-in/india")) + '" data-act="list"');
     var listNote = '<p class="ats-cost">On ApplySarthi, open a job and press <b>Tailor my CV for this job</b>. Free; ' +
-      "you sign in and upload your CV there.</p>";
+      "you log in and upload your CV there.</p>";
     if (!m) {
       return '<div class="ats-next" data-next="no-job"><h3>Next: check it against a job</h3>' +
         "<p>A CV is only as good as its fit to the job. Paste a job description, or pick a role, and see which " +

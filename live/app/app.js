@@ -1,15 +1,17 @@
 /* Live Sarthi on the phone: the screens. */
 
-import { loadSetup, saveSetup, deviceId, reasonText, LOCAL, post } from "./api.js?v=20261123-follow";
+import { loadSetup, saveSetup, deviceId, reasonText, LOCAL, post } from "./api.js?v=20261123-login";
 import { readCvFile, readCvText, checkKey } from "./cv.js?v=20261123-follow";
 import { Mic } from "./mic.js?v=20261123-follow";
-import { PhoneLive } from "./engine.js?v=20261123-follow";
+import { PhoneLive } from "./engine.js?v=20261123-login";
 import { answerHtml, partialView, esc } from "./protocol.js?v=20261123-follow";
 import { hear, norm } from "./follow.js?v=20261123-jump";
+import { A, loggedIn, googleClientId, logIn, loadAccount, logOutHere, deleteSaved, saveNow, passLine } from "./account.js?v=20261123-login";
 
 const $ = (id) => document.getElementById(id);
-const SCREENS = ["s-gate", "s-start", "s-key", "s-gemini", "s-cv", "s-ready", "s-live", "s-ended"];
-function show(id) { for (const s of SCREENS) $(s).hidden = s !== id; document.body.classList.toggle("interview", id === "s-live"); if (id !== "s-live") document.documentElement.classList.remove("light"); else setTheme(!!loadSetup().light); window.scrollTo(0, 0); }
+const SCREENS = ["s-gate", "s-start", "s-login", "s-key", "s-gemini", "s-cv", "s-ready", "s-live", "s-ended"];
+let shows = 0;   // screens shown so far: a late account refresh only moves someone who hasn't moved
+function show(id) { shows++; if (id === "s-start") paintAcctBar(); for (const s of SCREENS) $(s).hidden = s !== id; document.body.classList.toggle("interview", id === "s-live"); if (id !== "s-live") document.documentElement.classList.remove("light"); else setTheme(!!loadSetup().light); window.scrollTo(0, 0); }
 function notice(id, text, kind = "") { const el = $(id); el.hidden = !text; el.textContent = text || ""; el.className = "notice" + (kind ? " " + kind : ""); }
 const track = (name, data = {}) => { try { if (window.gtag) window.gtag("event", name, data); } catch (_) { /* no analytics */ } };
 
@@ -59,6 +61,7 @@ function showCv() {
   const s = loadSetup();
   fillStyle(s);
   $("cv-done").hidden = !s.cv;
+  $("delete-saved").hidden = !loggedIn();
   if (s.cv) $("cv-okline").textContent = `✓ Resume read${s.cvName ? ": " + s.cvName : ""}. Choose again to replace it.`;
   notice("cv-notice", "");
   show("s-cv");
@@ -110,20 +113,108 @@ $("cv-save").onclick = () => {
   showReady();
 };
 
-$("edit-setup").onclick = () => { const s = loadSetup(); S.prevKeyScreen = s.trial ? "s-start" : "s-key"; s.trial ? showGemini() : show("s-start"); };
+$("edit-setup").onclick = () => {
+  const s = loadSetup();
+  if (loggedIn()) { S.prevKeyScreen = "s-ready"; return showGemini(); }
+  S.prevKeyScreen = s.trial ? "s-start" : "s-key";
+  s.trial ? showGemini() : show("s-start");
+};
+
+// ── Log in / Sign up / Log out ───────────────────────────────────────────────────────────────────────────────────
+const LOGIN_WORDS = {
+  login: ["Log in", "Use the Google account you bought your pass with. Your pass and everything you saved come back."],
+  signup: ["Sign up", "Free, with your Google account. Your resume and answer choices are kept, so your next interview starts in one tap."],
+};
+const BLOCKED = "Google login did not load. An ad blocker or Brave Shields usually causes this: allow accounts.google.com for this site, or open it in another browser, then try again.";
+$("go-login").onclick = () => showLogin("login");
+$("go-signup").onclick = () => showLogin("signup");
+function showLogin(mode) {
+  const [title, lede] = LOGIN_WORDS[mode];
+  $("login-title").textContent = title; $("login-lede").textContent = lede;
+  notice("login-notice", "");
+  show("s-login");
+  drawGoogle();
+  track("liveweb_login_open", { mode });
+}
+let googleDrawn = null;
+function loadScript(src) { return new Promise((res, rej) => { const el = document.createElement("script"); el.src = src; el.async = true; el.onload = res; el.onerror = rej; document.head.appendChild(el); }); }
+function drawGoogle() {
+  if (googleDrawn) return googleDrawn;
+  googleDrawn = (async () => {
+    const id = await googleClientId();
+    if (!id) { if (LOCAL) { $("testlogin").hidden = false; return; } throw new Error("no client"); }
+    await loadScript("https://accounts.google.com/gsi/client");
+    if (!window.google || !window.google.accounts) throw new Error("blocked");
+    window.google.accounts.id.initialize({ client_id: id, callback: (r) => afterGoogle(r.credential), ux_mode: "popup" });
+    window.google.accounts.id.renderButton($("gbutton"), { theme: "filled_black", size: "large", shape: "pill", text: "continue_with", width: 300 });
+    setTimeout(() => { if (!$("gbutton").childElementCount) notice("login-notice", BLOCKED, "bad"); }, 1500);
+  })().catch(() => { googleDrawn = null; notice("login-notice", BLOCKED, "bad"); });
+  return googleDrawn;
+}
+$("testlogin-go").onclick = () => afterGoogle("test:" + ($("testlogin-email").value.trim() || "tester@example.com"));
+async function afterGoogle(credential) {
+  notice("login-notice", "Logging you in…");
+  const r = await logIn(credential);
+  if (!r.ok) return notice("login-notice", r.reason === "network" ? reasonText("network") : "Google login didn't work. Try again.", "bad");
+  const a = await loadAccount();
+  if (!a.ok) return notice("login-notice", a.reason === "network" ? reasonText("network") : "Your login didn't go through. Try again.", "bad");
+  notice("login-notice", "");
+  track("liveweb_login_ok", { passes: (a.me.keys || []).length });
+  route();
+}
+function paintAcctBar() {
+  const on = loggedIn(), acc = (A.me && A.me.account) || {};
+  $("acct-who").hidden = !on;
+  $("acct-who").textContent = on ? (acc.email ? "Logged in as " + acc.email : "Logged in") : "";
+  $("logout-top").hidden = !on; $("go-login").hidden = on; $("go-signup").hidden = on;
+}
+function doLogout() { logOutHere(); track("liveweb_logout"); show("s-start"); }
+$("logout").onclick = doLogout;
+$("logout-top").onclick = doLogout;
+$("delete-saved").onclick = async () => {
+  if (!confirm("Delete your saved resume, job description, own examples, answer choices and Gemini key from your account? Your pass stays. This phone will be logged out.")) return;
+  if (!(await deleteSaved())) return notice("cv-notice", reasonText("network"), "bad");
+  track("liveweb_saved_deleted");
+  show("s-start");
+};
+
+/* The next screen for what this phone has: ready, or the first step still missing. */
+function route() {
+  const s = loadSetup();
+  if (setupComplete(s)) return showReady();
+  if (!(s.trial || s.licenseKey)) return show("s-start");
+  if (!s.geminiKey) { S.prevKeyScreen = s.trial ? "s-start" : "s-key"; return showGemini(); }
+  return showCv();
+}
+
+const LEN_WORDS = { detailed: "Detailed", auto: "Automatic length", normal: "Normal length", short: "Short" };
+const ENG_WORDS = { simple: "simple English", polished: "polished English" };
+const LANG_WORDS = { en: "in English", hinglish: "in Hinglish", auto: "in the interviewer's language" };
+const styleWords = (s) => [LEN_WORDS[s.length], ENG_WORDS[s.english], LANG_WORDS[s.language]].filter(Boolean).join(", ");
 
 // ── ready ────────────────────────────────────────────────────────────────────────────────────────────────────────
 function setupComplete(s) { return !!(s.geminiKey && s.cv && s.name && (s.trial || s.licenseKey)); }
 
 function showReady() {
-  const s = loadSetup();
-  $("allow").textContent = s.trial ? "Free: 20 minutes on this phone." : `Pass ${s.licenseKey.slice(0, 7)}… ready.`;
+  const s = loadSetup(), on = loggedIn(), acc = (A.me && A.me.account) || {};
+  const pass = s.trial ? "Free: 20 minutes on this phone." : (on && passLine(s)) || `Pass ${s.licenseKey.slice(0, 7)}… ready.`;
+  $("allow").textContent = pass;
+  $("allow").hidden = on;
+  $("acct-card").hidden = !on;
+  $("logout").hidden = !on;
+  if (on) {
+    $("acct-name").textContent = s.name || acc.name || acc.email || "Logged in";
+    $("acct-pass").textContent = pass.replace(/\.$/, "");
+    $("acct-cv").textContent = s.cv ? "Resume: " + (s.cvName || "added") : "";
+    $("acct-style").textContent = "Answers: " + styleWords(s);
+  }
   $("buy-link").hidden = !s.trial;
   notice("start-notice", "");
   show("s-ready");
 }
 
 $("start").onclick = async () => {
+  await saveNow();
   LOG.length = 0; logSent = 0;
   const s = loadSetup();
   $("start").disabled = true;
@@ -400,10 +491,14 @@ async function flushLog(live) {
 }
 
 // ── first screen ─────────────────────────────────────────────────────────────────────────────────────────────────
-(function boot() {
+(async function boot() {
   if (!isPhoneOrTablet()) { show("s-gate"); track("liveweb_gate"); return; }
   const s = loadSetup();
-  if (setupComplete(s)) return showReady();
-  show("s-start");
-  track("liveweb_open");
+  track("liveweb_open", { logged_in: loggedIn() });
+  if (!loggedIn()) return setupComplete(s) ? showReady() : show("s-start");
+  // logged in: show what this phone has at once, then bring the account up to date (time left, things saved elsewhere)
+  if (setupComplete(s)) showReady(); else { show("s-start"); $("acct-who").hidden = false; $("acct-who").textContent = "Loading your account…"; }
+  const at = shows;
+  await loadAccount();
+  if (shows === at) route();
 })();

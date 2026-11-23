@@ -42,7 +42,7 @@ export const statusOf = (id) => states.get(id) || null;
 
 async function post(path, body) {
   const s = session.get();
-  if (!s) { const e = new Error("Sign in first."); e.status = 401; throw e; }
+  if (!s) { const e = new Error("Log in first."); e.status = 401; throw e; }
   const res = await fetch(LICENSE_API + path, {
     method: "POST", headers: { "content-type": "application/json" }, cache: "no-store", body: JSON.stringify({ session: s, ...body }),
   });
@@ -54,7 +54,7 @@ async function post(path, body) {
 
 // ---------------------------------------------------------------- the setting
 
-/** {enabled, consent_version, current_consent_version, retention_days, pass:{live, expires_at}} or null when signed out or offline. */
+/** {enabled, consent_version, current_consent_version, retention_days, pass:{live, expires_at}} or null when logged out or offline. */
 export async function getPrefs() {
   if (!session.get()) return null;
   try { const p = await post("/mock/history/prefs", {}); remember({ prefs: p }); return p; }
@@ -93,7 +93,7 @@ export function bodyOf(record) {
 
 /**
  * Save a finished interview (the record app.js builds after a report). Always updates this browser's own
- * list; sends it to the account when signed in with history on.
+ * list; sends it to the account when logged in with history on.
  * @returns {Promise<{state:string, summary:object}>}
  */
 export async function saveInterview(record) {
@@ -128,7 +128,7 @@ async function send(item) {
     const s = err.status;
     if (s === 409) { unqueue(item.id); remember({ prefs: { ...(cached().prefs || {}), enabled: false } }); emit(item.id, "off"); return "off"; }
     if (s === 403) { unqueue(item.id); emit(item.id, "no_pass", err.message); return "no_pass"; }
-    if (s === 401) { emit(item.id, "signed_out", err.message); return "signed_out"; }   // kept: sent after the next sign-in
+    if (s === 401) { emit(item.id, "signed_out", err.message); return "signed_out"; }   // kept: sent after the next login
     // 404: a server without history (not deployed yet) -- retrying cannot help.
     if (s === 400 || s === 404 || s === 413) { unqueue(item.id); emit(item.id, "failed", err.message); return "failed"; }
     bump(item.id);
@@ -160,7 +160,7 @@ function schedule() {
   if (timer && timer.unref) timer.unref();          // under node (the tests), a pending retry must not hold the process open
 }
 
-/** Send whatever is waiting. Called on load, after sign-in, when the browser comes back online, and on a timer. */
+/** Send whatever is waiting. Called on load, after login, when the browser comes back online, and on a timer. */
 export async function flushOutbox() {
   const box = mem.get(K.outbox, []) || [];
   if (!box.length || !session.get()) return 0;
@@ -199,7 +199,7 @@ function saveLocal(summary) {
 }
 
 /**
- * Every summary this person has: the account's (when signed in) merged with this browser's own. Items only
+ * Every summary this person has: the account's (when logged in) merged with this browser's own. Items only
  * in this browser carry local_only: true (the page can offer to add them to the account).
  * @returns {Promise<{items:Array, periods:Array, prefs:object|null, source:"account"|"cache"|"browser", more:boolean}>}
  */

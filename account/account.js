@@ -1,8 +1,8 @@
-/* My Sarthi: everything one person has with Interview Sarthi, after a Google sign-in.
+/* The account page: everything one person has with Interview Sarthi, after a Google login.
  *
  * The server side is the licence worker's /account routes (AI-Helps_SAAS license-server/src/account.js and the
- * modules it routes to). Sign-in is Prep Sarthi's own: the same Google button, the same 30-day session in the same
- * localStorage key, so someone signed in to Prep is signed in here too.
+ * modules it routes to). Login is Prep Sarthi's own: the same Google button, the same 30-day session in the same
+ * localStorage key, so someone logged in to Prep is logged in here too.
  *
  * Every piece of text from the server is set with textContent, never as HTML: a Live interview's transcript is
  * whatever the interviewer said. No analytics script runs on this page. */
@@ -97,12 +97,12 @@ async function act(button, work) {
   if (button) button.disabled = true;
   try { return await work(); }
   catch (err) {
-    if (err.status === 401) { session.clear(); showSignedOut(); say("Your sign-in ended. Sign in again.", true); return null; }
+    if (err.status === 401) { session.clear(); showSignedOut(); say("Your login ended. Log in again.", true); return null; }
     say(err.message, true); return null;
   } finally { if (button) button.disabled = false; }
 }
 
-// ------------------------------------------------------------------ sign-in
+// ------------------------------------------------------------------ login
 
 function show(view) {
   $("signed-out").hidden = view !== "out";
@@ -115,10 +115,10 @@ function show(view) {
 
 async function showSignedOut() {
   show("out");
-  if (wantConnect) say("Sign in to connect your PC to My Sarthi.");
+  if (wantConnect) say("Log in to connect your PC to your account.");
   if (LOCAL) $("test-login").hidden = false;
   try {
-    // The sign-in id is in a plain file on the site (prep/app/billing.js says why); the test worker keeps its sandbox login.
+    // The login id is in a plain file on the site (prep/app/billing.js says why); the test worker keeps its sandbox login.
     const cfg = LOCAL ? await call("/mock/config", {}, { auth: false }) : await (await fetch("/prep/app/config.json?v=20261102")).json();
     if (!cfg.google_client_id) return;
     await new Promise((resolve, reject) => {
@@ -129,7 +129,7 @@ async function showSignedOut() {
     window.google.accounts.id.initialize({ client_id: cfg.google_client_id, callback: (r) => signedIn(r.credential), ux_mode: "popup" });
     window.google.accounts.id.renderButton($("gbutton"), { theme: "filled_blue", size: "large", shape: "pill", text: "continue_with", width: 300 });
   } catch {
-    say("Google sign-in did not load. Turn off any content blocker for this page and reload.", true);
+    say("Google login did not load. Turn off any content blocker for this page and reload.", true);
   }
 }
 
@@ -190,8 +190,8 @@ function missing(target) {
 function render() {
   const a = data.account;
   $("hello").textContent = a.name ? `Hi, ${a.name.split(" ")[0]}` : "Your account";
-  $("hello-sub").textContent = `Signed in as ${a.email}`;
-  $("account-line").textContent = `Signed in with Google as ${a.email}${a.name ? ` (${a.name})` : ""}.`;
+  $("hello-sub").textContent = `Logged in as ${a.email}`;
+  $("account-line").textContent = `Logged in with Google as ${a.email}${a.name ? ` (${a.name})` : ""}.`;
   renderBell();
   renderKeys();
   renderInterviews();
@@ -308,7 +308,7 @@ function renderHome() {
   else {
     const pcs = data.live.pcs || [];
     box.append(tile("Your PCs", pcs.length ? `${pcs.length} connected` : "None connected",
-      pcs.length ? pcs.map((pc) => pc.name).join(", ") : "In Live Sarthi: settings → 5. My Sarthi → Connect.",
+      pcs.length ? pcs.map((pc) => pc.name).join(", ") : "In Live Sarthi: settings → section 5 → Connect.",
       el("button", { class: "btn ghost", type: "button", text: "Connect a PC", onclick: () => { go("interviews"); openConnect(); } }),
       pcs.length ? open("interviews", "Manage") : null));
   }
@@ -406,12 +406,12 @@ function keyCard(k) {
       el("span", { text: `${p.devices_used} of ${p.devices_max} computer${p.devices_max === 1 ? "" : "s"}` }),
       k.devices && k.devices.length ? el("span", { text: `On: ${k.devices.map((d) => d.name).join(", ")}` }) : null,
       el("span", { text: `Bought ${day(k.created_at)}` })),
-    k.prep_gift ? el("p", { class: "gift", text: `Prep Sarthi free for ${k.prep_gift.days} days with this pass.${k.prep_gift.claimed ? " Added to your Prep account." : " Sign in to Prep with this Google account to get it."}` }) : null);
+    k.prep_gift ? el("p", { class: "gift", text: `Prep Sarthi free for ${k.prep_gift.days} days with this pass.${k.prep_gift.claimed ? " Added to your Prep account." : " Log in to Prep with this Google account to get it."}` }) : null);
   if (k.upgrade && safe(k.upgrade.url)) card.append(upgradeBox(k.upgrade));
   const actions = el("div", { class: "actions" });
   if (safe(k.manage_url)) actions.append(el("a", { class: "btn ghost", href: safe(k.manage_url), text: "Manage this pass" }));
   if (k.how === "pasted") actions.append(el("button", { class: "btn ghost", type: "button", text: "Remove from my account", onclick: (e) => act(e.target, async () => {
-    if (!confirm("Take this key off your My Sarthi account? The pass itself keeps working.")) return;
+    if (!confirm("Take this key off your account? The pass itself keeps working.")) return;
     await call("/account/unlink", { key: k.key });
     await load();
   }) }));
@@ -502,7 +502,7 @@ $("live-more").addEventListener("click", (e) => act(e.target, async () => {
 }));
 
 $("live-delete-all").addEventListener("click", (e) => act(e.target, async () => {
-  if (!confirm("Delete every Live interview kept in My Sarthi? The copies on your PC stay.")) return;
+  if (!confirm("Delete every Live interview kept in your account? The copies on your PC stay.")) return;
   await call("/account/live/delete", { all: true });
   $("reader").hidden = true;
   await load();
@@ -520,7 +520,7 @@ async function openReader(id) {
 
 $("reader-close").addEventListener("click", () => { $("reader").hidden = true; });
 $("reader-delete").addEventListener("click", (e) => act(e.target, async () => {
-  if (!readerId || !confirm("Delete this interview from My Sarthi? The copy on your PC stays.")) return;
+  if (!readerId || !confirm("Delete this interview from your account? The copy on your PC stays.")) return;
   await call("/account/live/delete", { id: readerId });
   $("reader").hidden = true;
   await load();
@@ -531,7 +531,7 @@ function renderPcs() {
   if (unavailable("pcs")) return missing(list);
   list.replaceChildren();
   const pcs = data.live.pcs || [];
-  if (!pcs.length) list.append(el("li", { class: "empty", text: "No PC connected. In Live Sarthi: settings → 5. My Sarthi → Connect." }));
+  if (!pcs.length) list.append(el("li", { class: "empty", text: "No PC connected. In Live Sarthi: settings → section 5 → Connect." }));
   for (const pc of pcs) {
     list.append(el("li", {},
       el("div", {}, el("b", { text: pc.name }), el("div", { class: "meta", text: `Connected ${day(pc.linked_at)} · last used ${day(pc.last_used_at)}` })),
@@ -569,7 +569,7 @@ $("connect-form").addEventListener("submit", (e) => {
       el("p", { text: "Is this your PC, showing this code in Live Sarthi right now?" }),
       el("p", { class: "pc", text: info.name }),
       el("p", { class: "code", text: info.user_code }),
-      el("label", { class: "switch", for: "connect-keep" }, keep, el("span", { text: "Keep my Live interviews in My Sarthi" })),
+      el("label", { class: "switch", for: "connect-keep" }, keep, el("span", { text: "Keep my Live interviews in my account" })),
       el("p", { class: "fine" }, KEEP_TEXT + " ", el("a", { href: "/privacy.html#my-sarthi", text: "Privacy" })),
       el("label", { class: "switch", for: "connect-improve" }, improve, el("span", { text: "Also let Sarthi read them to improve Live Sarthi's answers (optional)" })),
       el("p", { class: "fine", text: IMPROVE_TEXT }),
@@ -689,14 +689,14 @@ $("gemini-form").addEventListener("submit", (e) => {
 });
 
 $("gemini-remove").addEventListener("click", (e) => act(e.target, async () => {
-  if (!confirm("Remove the saved Gemini key from My Sarthi? Your apps keep their own copy.")) return;
+  if (!confirm("Remove the saved Gemini key from your account? Your apps keep their own copy.")) return;
   const out = await call("/account/profile/gemini", { key: "" });
   geminiState(out.gemini);
   await load();
 }));
 
 $("profile-delete").addEventListener("click", (e) => act(e.target, async () => {
-  if (!confirm("Delete your whole My Sarthi profile (resume, job descriptions, examples and Gemini key)? Your apps keep their own copies.")) return;
+  if (!confirm("Delete your whole account profile (resume, job descriptions, examples and Gemini key)? Your apps keep their own copies.")) return;
   await call("/account/profile/delete");
   $("profile-form").hidden = true;
   $("profile-open").hidden = false;

@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <!-- Google refuses to draw its sign-in button without an origin; strict-origin sends only the site, never this page's address. -->
+  <!-- Google refuses to draw its login button without an origin; strict-origin sends only the site, never this page's address. -->
   <meta name="referrer" content="strict-origin">
-  <title>My Sarthi | Interview Sarthi</title>
+  <title>Your account | Interview Sarthi</title>
   <meta name="description" content="Your Live Sarthi passes, Prep Sarthi practice, saved interviews and profile in one place.">
   <script>
     // Live Sarthi opens this page with ?connect (no code in the URL: the person types the code shown in the app).
@@ -39,40 +39,40 @@
     <main>
       <p class="notice" id="notice" role="status" aria-live="polite"></p>
 
-      <!-- Signed in, waiting for the account. -->
+      <!-- Logged in, waiting for the account. -->
       <section class="card loading" id="loading" hidden aria-live="polite">
         <p id="loading-text">Loading your account…</p>
         <p class="fine" id="loading-slow" hidden>Still loading. The server is slower than usual right now.</p>
         <button class="btn ghost" id="loading-retry" type="button" hidden>Try again</button>
       </section>
 
-      <!-- Signed out -->
+      <!-- Logged out -->
       <section id="signed-out" hidden>
         <p class="eyebrow">Interview Sarthi</p>
-        <h1>My Sarthi</h1>
+        <h1>Your account</h1>
         <p class="lead">Your Live Sarthi passes, your Prep Sarthi practice, your saved interviews and your profile, in one place.</p>
         <div class="card">
-          <h2>Sign in</h2>
+          <h2>Log in</h2>
           <p>Use the Google account you use for Prep Sarthi, or the Gmail you bought Live Sarthi with. Your passes appear by themselves.</p>
           <div id="gbutton"></div>
           <form id="test-login" class="input-row" hidden>
-            <label for="test-email" class="sr">Test sign-in email</label><input id="test-email" type="email" placeholder="test sign-in (local preview only)" autocomplete="off">
-            <button class="btn ghost" type="submit">Sign in</button>
+            <label for="test-email" class="sr">Test login email</label><input id="test-email" type="email" placeholder="test login (local preview only)" autocomplete="off">
+            <button class="btn ghost" type="submit">Log in</button>
           </form>
         </div>
       </section>
 
-      <!-- My Sarthi is switched off on the server -->
+      <!-- The account page is switched off on the server -->
       <section class="card" id="closed" hidden>
-        <h2>My Sarthi opens soon</h2>
+        <h2>Your account opens soon</h2>
         <p>Your passes and apps work as usual. Come back in a little while.</p>
         <p><a href="/live/">Live Sarthi</a> · <a href="/prep/app/">Prep Sarthi</a> · <a href="https://apply.interviewsarthi.com/">ApplySarthi</a></p>
       </section>
 
-      <!-- Signed in -->
+      <!-- Logged in -->
       <div id="signed-in" hidden>
         <div class="account-intro">
-          <p class="eyebrow">My Sarthi</p>
+          <p class="eyebrow">Your account</p>
           <h1 id="hello">Your account</h1>
           <p class="lead" id="hello-sub"></p>
         </div>
@@ -81,7 +81,7 @@
           <p class="eyebrow">Live Sarthi on your PC</p>
           <h2 id="connect-title">Connect a PC</h2>
           <form id="connect-form">
-            <label for="connect-code">Type the code shown in Live Sarthi (settings → 5. My Sarthi → Connect)</label>
+            <label for="connect-code">Type the code shown in Live Sarthi (settings → section 5 → Connect)</label>
             <div class="input-row">
               <input id="connect-code" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" maxlength="12" placeholder="ABCD-EFGH" required>
               <button class="btn primary" type="submit">Check code</button>
@@ -94,7 +94,7 @@
         <!-- One section at a time: a menu down the side on a laptop, a row of tabs on a phone. -->
         <p class="menu-hint" aria-hidden="true">Swipe for more sections <span>→</span></p>
         <div class="dash" id="dash">
-        <nav class="menu" id="menu" aria-label="My Sarthi sections">
+        <nav class="menu" id="menu" aria-label="Account sections">
           <a href="#home" data-pane="home"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg><span>Home</span></a>
           <a href="#live" data-pane="live"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h4"/></svg><span>Live passes</span></a>
           <a href="#interviews" data-pane="interviews"><svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-6 4V5a2 2 0 0 1 2-2ZM7 8h10M7 12h7"/></svg><span>Interviews</span></a>
@@ -134,7 +134,7 @@
           <div class="card">
             <div class="consents">
               <div class="consent">
-                <label class="switch"><input type="checkbox" id="keep-live"> <span>Keep my Live interviews in My Sarthi</span></label>
+                <label class="switch"><input type="checkbox" id="keep-live"> <span>Keep my Live interviews in my account</span></label>
                 <p class="fine keep-again" id="keep-again" hidden>We changed what this box does: it now also keeps the interviews from the past year already on your PC. It is off until you tick it again.</p>
                 <p class="fine" id="keep-text"></p>
               </div>
@@ -143,7 +143,7 @@
                 <p class="fine" id="improve-text"></p>
               </div>
             </div>
-            <p class="fine" id="no-pc" hidden>Connect Live Sarthi on your PC first: in the app open <b>settings</b>, then <b>5. My Sarthi</b>, then <b>Connect</b>.</p>
+            <p class="fine" id="no-pc" hidden>Connect Live Sarthi on your PC first: in the app open <b>settings</b>, then <b>section 5</b>, then <b>Connect</b>.</p>
             <ul class="list" id="live-list"></ul>
             <div class="actions">
               <button class="btn ghost" id="live-more" type="button" hidden>Show more</button>
@@ -167,7 +167,7 @@
         <section class="block" id="profile" aria-labelledby="profile-title">
           <h2 id="profile-title">Your profile</h2>
           <div class="card">
-            <p class="fine">Live Sarthi (settings → My Sarthi) and Prep Sarthi fill their empty boxes from this. Nothing here is required.</p>
+            <p class="fine">Live Sarthi (settings → section 5) and Prep Sarthi fill their empty boxes from this. Nothing here is required.</p>
             <p id="profile-summary"></p>
             <button class="btn ghost" id="profile-open" type="button">Edit profile</button>
             <form id="profile-form" hidden>
@@ -227,7 +227,7 @@
         <section class="block" id="apply" aria-labelledby="apply-title">
           <h2 id="apply-title">ApplySarthi</h2>
           <div class="card">
-            <p>Find jobs and track your applications. ApplySarthi has its own sign-in.</p>
+            <p>Find jobs and track your applications. ApplySarthi has its own login.</p>
             <a class="btn ghost" href="https://apply.interviewsarthi.com/">Open ApplySarthi →</a>
           </div>
         </section>
@@ -237,7 +237,7 @@
           <div class="card">
             <p id="account-line"></p>
             <div class="actions">
-              <button class="btn ghost" id="sign-out" type="button">Sign out</button>
+              <button class="btn ghost" id="sign-out" type="button">Log out</button>
               <button class="btn ghost danger" id="profile-delete" type="button">Delete my profile</button>
             </div>
             <p class="fine">Signing out here also signs you out of Prep Sarthi in this browser. <a href="/privacy.html">Privacy</a></p>
@@ -247,7 +247,7 @@
         </div>
         <p class="fine dates">All dates are in India time (IST).</p>
       </div>
-      <noscript><p>Turn on JavaScript to open My Sarthi.</p></noscript>
+      <noscript><p>Turn on JavaScript to open your account.</p></noscript>
     </main>
     <footer><a href="/">Interview Sarthi</a> · <a href="/help.html">Help</a> · <a href="/privacy.html">Privacy</a></footer>
   </div>

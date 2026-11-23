@@ -138,3 +138,19 @@ body.interview #app { max-width: 900px; padding-top: max(8px, env(safe-area-inse
 .end-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
 .end-list h3 { margin: 6px 0 0; font-size: 17px; }
 .focus.still { animation: none; }
+/* Log in / Sign up / Log out */
+.acct-top { display: flex; justify-content: flex-end; align-items: center; gap: 14px; min-height: 40px; margin-bottom: -6px; }
+.acct-top .link { align-self: center; padding: 8px 0; }
+.acct-who { color: var(--muted); font-size: 14px; margin-right: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%; }
+.btn.tiny { min-height: 38px; padding: 0 16px; font-size: 14.5px; border-radius: 999px; width: auto; }
+.gbutton { min-height: 48px; display: flex; justify-content: center; }
+.testlogin { display: flex; flex-direction: column; gap: 8px; }
+.testlogin[hidden] { display: none; }
+.acct-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.acct-card[hidden] { display: none; }
+.acct-card p { margin: 0; }
+.acct-name { font-weight: 700; font-size: 17px; }
+.acct-line { color: var(--muted); font-size: 15px; line-height: 1.45; }
+.acct-line:empty { display: none; }
+.row-links { flex-wrap: wrap; gap: 8px 18px; }
+.danger-link { color: var(--rose); font-size: 14px; margin-top: 10px; }

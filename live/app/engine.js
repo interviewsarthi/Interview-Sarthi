@@ -1,6 +1,6 @@
 /* Live Sarthi on the phone: the listening engine. */
 
-import { API, post, promptBody } from "./api.js?v=20261123-follow";
+import { API, post, promptBody } from "./api.js?v=20261123-login";
 import { stripAnswerPrefix, parseAnswer, looksCutShort, wantsCode, parseCode } from "./protocol.js?v=20261123-follow";
 
 const TOKEN_URL = "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContentConstrained?access_token=";

@@ -12,7 +12,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./app.css?v=20261123-jump">
+  <link rel="stylesheet" href="./app.css?v=20261123-login">
 </head>
 <body>
 <main id="app">
@@ -28,6 +28,12 @@
 
   <!-- First visit -->
   <section id="s-start" class="screen" hidden>
+    <div class="acct-top">
+      <span class="acct-who" id="acct-who" hidden></span>
+      <button class="link" id="logout-top" hidden>Log out</button>
+      <button class="link" id="go-login">Log in</button>
+      <button class="btn tiny" id="go-signup">Sign up</button>
+    </div>
     <div class="hero-start"><img class="mark" src="/assets/mark.svg" alt="" width="44" height="44">
     <h1>Live Sarthi <em>on your phone</em></h1></div>
     <ol class="how">
@@ -39,6 +45,25 @@
     <button class="btn" id="go-pass">I have a pass</button>
     <p class="small">No pass yet? <a href="/phone/#pricing">See passes</a>. One pass works on the Windows app and here.</p>
     <p class="small"><a href="/phone/">How it works</a> · <a href="/privacy.html#phone">Privacy</a> · <a href="/help.html">Help</a></p>
+  </section>
+
+  <!-- Log in / Sign up: Google's button -->
+  <section id="s-login" class="screen" hidden>
+    <button class="back" data-back="s-start" aria-label="Back">‹ Back</button>
+    <h1 id="login-title">Log in</h1>
+    <p class="lede" id="login-lede"></p>
+    <div class="gbutton" id="gbutton"></div>
+    <div class="testlogin" id="testlogin" hidden>
+      <label class="field"><span>Test email (local test server only)</span><input id="testlogin-email" value="tester@example.com" autocomplete="off"></label>
+      <button class="btn" id="testlogin-go">Test log in</button>
+    </div>
+    <p class="notice" id="login-notice" hidden></p>
+    <ul class="checks">
+      <li>Your pass is <b>found by your email</b></li>
+      <li>Your resume, job description and answer choices are <b>ready on any phone</b></li>
+      <li>Your Gemini key is <b>stored encrypted</b></li>
+    </ul>
+    <p class="small"><a href="/privacy.html#phone">Privacy</a></p>
   </section>
 
   <!-- Pass key -->
@@ -100,12 +125,19 @@
       </details>
       <button class="btn primary" id="cv-save">Save</button>
     </div>
+    <button class="link danger-link" id="delete-saved" hidden>Delete my saved details</button>
   </section>
 
   <!-- Ready -->
   <section id="s-ready" class="screen" hidden>
     <img class="mark" src="/assets/mark.svg" alt="" width="40" height="40">
     <h1>Ready when you are</h1>
+    <div class="acct-card" id="acct-card" hidden>
+      <p class="acct-name" id="acct-name"></p>
+      <p class="acct-line" id="acct-pass"></p>
+      <p class="acct-line" id="acct-cv"></p>
+      <p class="acct-line" id="acct-style"></p>
+    </div>
     <ul class="checks">
       <li>Interview sound on the <b>laptop's loudspeaker</b>, not earphones</li>
       <li>This phone <b>just below your webcam</b>, screen up, within an arm's length of the speaker</li>
@@ -114,7 +146,7 @@
     <p class="allow" id="allow"></p>
     <button class="btn primary big" id="start">Start listening</button>
     <p class="notice" id="start-notice" hidden></p>
-    <div class="row-links"><button class="link" id="edit-setup">Change setup</button><a class="link" href="/phone/#pricing" id="buy-link" hidden>Get a pass</a></div>
+    <div class="row-links"><button class="link" id="edit-setup">Change setup</button><a class="link" href="/phone/#pricing" id="buy-link" hidden>Get a pass</a><button class="link" id="logout" hidden>Log out</button></div>
   </section>
 
   <!-- Listening: made for a glance at a phone under the webcam -->
@@ -168,6 +200,6 @@
   </section>
 
 </main>
-<script type="module" src="./app.js?v=20261123-jump"></script>
+<script type="module" src="./app.js?v=20261123-login"></script>
 </body>
 </html>
