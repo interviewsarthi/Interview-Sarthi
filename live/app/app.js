@@ -5,6 +5,7 @@ import { readCvFile, readCvText, checkKey } from "./cv.js?v=20261123-follow";
 import { Mic } from "./mic.js?v=20261123-follow";
 import { PhoneLive } from "./engine.js?v=20261123-follow";
 import { answerHtml, partialView, esc } from "./protocol.js?v=20261123-follow";
+import { hear, norm } from "./follow.js?v=20261123-jump";
 
 const $ = (id) => document.getElementById(id);
 const SCREENS = ["s-gate", "s-start", "s-key", "s-gemini", "s-cv", "s-ready", "s-live", "s-ended"];
@@ -243,19 +244,6 @@ function wordsHtml(text, claims) {
 }
 
 // ── follow-along: the phone hears the candidate read; what is said turns grey and the screen keeps up ─────────────
-const FILLERS = new Set(["um", "umm", "uh", "uhh", "hmm", "er", "erm", "ah", "mm"]);
-const COMMON = new Set("the a an and or to of in on is it i that so we was for with as at be this you my our they he she but".split(" "));
-const norm = (w) => String(w || "").toLowerCase().normalize("NFKD").replace(/[^a-z0-9]/g, "");
-function close(a, b) {
-  if (a === b) return true;
-  if (a.length >= 4 && b.length >= 4 && (a.startsWith(b.slice(0, 4)) && b.startsWith(a.slice(0, 4))) && Math.abs(a.length - b.length) <= 3) return true;
-  if (a.length >= 5 && b.length >= 5 && Math.abs(a.length - b.length) <= 1) {   // one letter wrong
-    let i = 0, j = 0, d = 0;
-    while (i < a.length && j < b.length) { if (a[i] === b[j]) { i++; j++; } else { d++; if (a.length > b.length) i++; else if (b.length > a.length) j++; else { i++; j++; } } if (d > 1) return false; }
-    return d + (a.length - i) + (b.length - j) <= 1;
-  }
-  return false;
-}
 const F = { id: null, cursor: 0, heard: [], words: [], manualAt: 0 };
 function followReset(id) { F.id = id; F.cursor = 0; F.heard = []; }
 function followWords() {
@@ -263,28 +251,9 @@ function followWords() {
 }
 function followHeard(piece) {
   if (!F.id) return;
-  for (const w of String(piece || "").split(/\s+/)) { const x = norm(w); if (x && !FILLERS.has(x)) F.heard.push(x); }
-  if (F.heard.length > 12) F.heard = F.heard.slice(-12);
-  if (!F.words.length) return;
-  const idx = [];
-  for (let i = 0; i < F.words.length; i++) if (F.words[i] && !FILLERS.has(F.words[i])) idx.push(i);
-  const from = Math.max(0, idx.findIndex((i) => i >= F.cursor) - 3);
-  const to = Math.min(idx.length, (from < 0 ? 0 : from) + 60);
-  for (const k of [4, 3, 2]) {
-    if (F.heard.length < k) continue;
-    const h = F.heard.slice(-k);
-    if (k === 2 && h.every((x) => COMMON.has(x))) continue;
-    for (let p = from; p < to; p++) {
-      let q = p, ok = true, last = -1;
-      for (let j = 0; j < k; j++) {
-        // each heard word must match the next answer word, or the one after it (a skipped word)
-        if (q < idx.length && close(h[j], F.words[idx[q]])) { last = idx[q]; q++; }
-        else if (q + 1 < idx.length && close(h[j], F.words[idx[q + 1]])) { last = idx[q + 1]; q += 2; }
-        else { ok = false; break; }
-      }
-      if (ok && last + 1 > F.cursor - 2) { if (last + 1 > F.cursor) { F.cursor = last + 1; followPaint(true); } return; }
-    }
-  }
+  const r = hear(F.words, F.heard, F.cursor, piece);
+  F.heard = r.heard;
+  if (r.cursor > F.cursor) { F.cursor = r.cursor; followPaint(true); }
 }
 let followTimer = 0;
 function followPaint(scroll) {
