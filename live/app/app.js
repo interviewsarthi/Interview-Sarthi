@@ -1,10 +1,10 @@
 /* Live Sarthi on the phone: the screens. */
 
-import { loadSetup, saveSetup, deviceId, reasonText, LOCAL, post } from "./api.js?v=20261123-phone";
-import { readCvFile, readCvText, checkKey } from "./cv.js?v=20261123-phone";
-import { Mic } from "./mic.js?v=20261123-phone";
-import { PhoneLive } from "./engine.js?v=20261123-phone";
-import { answerHtml, partialView, esc } from "./protocol.js?v=20261123-phone";
+import { loadSetup, saveSetup, deviceId, reasonText, LOCAL, post } from "./api.js?v=20261123-follow";
+import { readCvFile, readCvText, checkKey } from "./cv.js?v=20261123-follow";
+import { Mic } from "./mic.js?v=20261123-follow";
+import { PhoneLive } from "./engine.js?v=20261123-follow";
+import { answerHtml, partialView, esc } from "./protocol.js?v=20261123-follow";
 
 const $ = (id) => document.getElementById(id);
 const SCREENS = ["s-gate", "s-start", "s-key", "s-gemini", "s-cv", "s-ready", "s-live", "s-ended"];
@@ -131,7 +131,7 @@ $("start").onclick = async () => {
   try { await S.mic.start(); }
   catch (_) { $("start").disabled = false; return notice("start-notice", "Allow the microphone for this page: your browser asks once. In settings, look for Microphone under this site.", "bad"); }
   await keepAwake();
-  S.live = new PhoneLive({ setup: loadSetup, device: deviceId(), onCards: renderCards, onHeard: (t) => { $("hearing").textContent = t ? "Hearing: " + t.slice(-140) : ""; },
+  S.live = new PhoneLive({ setup: loadSetup, device: deviceId(), onCards: renderCards, onHeard: (t) => { $("hearing").textContent = t ? "Hearing: " + t.slice(-140) : ""; }, onHeardPiece: followHeard,
     onStatus: setState, onAllowance: setAllowance, onEnd: ended, onEvent: logEvent });
   S.mic.onChunk = (pcm, rms) => { if (S.live) S.live.sendAudio(pcm, rms); level(rms); };
   S.mic.onState = (st) => { logEvent("mic", { state: st }); if (st === "ended") askResume(); };
@@ -208,25 +208,101 @@ function viewOf(c) {
   const v = c.view || partialView(c.text);
   return { words: c.view ? c.view.answer : v.text, madeUp: c.view ? c.view.madeUp : v.madeUp, claims: c.view ? c.view.claims : v.claims };
 }
-/* The bold phrases, as glanceable talking points. */
-function keyPoints(words) {
-  const out = [];
-  for (const m of String(words || "").matchAll(/\*\*([^*\n]{2,60})\*\*/g)) { const t = m[1].trim(); if (t && !out.includes(t)) out.push(t); }
-  return out.slice(0, 5);
-}
-/* The opening (the gist, at least 8 words up to a sentence end) a little bigger, the rest as it is. */
-function answerBody(words, claims) {
-  const t = String(words || "");
+
+/* The answer as word spans (data-i = word number), so the words already said can be greyed out. **bold** stays bold;
+ * the opening sentence (8 words or more) is a little bigger; sentences to defend get a dotted underline. */
+function wordsHtml(text, claims) {
+  const t = String(text || "");
+  const plain = t.replace(/\*\*/g, "");
+  const marked = [];
+  for (const c of claims || []) { const i = plain.indexOf(c); if (i >= 0) marked.push([i, i + c.length]); }
   const re = /[.!?](?=\s+[A-Z"'(]|\s*$)/g;
-  let m, cut = -1;
-  while ((m = re.exec(t))) {
-    const head = t.slice(0, m.index + 1);
-    if (head.split(/\s+/).length >= 8) { cut = m.index + 1; break; }
-    if (m.index > 320) break;
+  let gistEnd = -1, m;
+  while ((m = re.exec(plain))) { if (plain.slice(0, m.index + 1).split(/\s+/).length >= 8) { gistEnd = m.index + 1; break; } if (m.index > 320) break; }
+  let bold = false, n = 0, pos = 0, out = "";
+  for (const tok of t.split(/(\s+)/)) {
+    if (!tok) continue;
+    if (/^\s+$/.test(tok)) { out += tok.includes("\n") ? "<br>" : " "; pos += tok.length; continue; }
+    let w = tok;
+    while (w.startsWith("**")) { bold = !bold; w = w.slice(2); }
+    let closes = 0;
+    while (w.endsWith("**")) { closes++; w = w.slice(0, -2); }
+    const inner = w.replace(/\*\*/g, "");
+    const at = pos;
+    pos += inner.length;
+    if (inner) {
+      const cls = ["w"];
+      if (bold) cls.push("b");
+      if (gistEnd > 0 && at < gistEnd) cls.push("g");
+      if (marked.some(([a, b]) => at >= a && at < b)) cls.push("claim");
+      out += `<span class="${cls.join(" ")}" data-i="${n++}">${esc(inner)}</span>`;
+    }
+    for (let k = 0; k < closes; k++) bold = !bold;
   }
-  if (cut < 0 || (t.slice(0, cut).match(/\*\*/g) || []).length % 2) return answerHtml(t, claims);
-  return `<span class="gist">${answerHtml(t.slice(0, cut), claims)}</span>${answerHtml(t.slice(cut).trimStart(), claims)}`;
+  return out;
 }
+
+// ── follow-along: the phone hears the candidate read; what is said turns grey and the screen keeps up ─────────────
+const FILLERS = new Set(["um", "umm", "uh", "uhh", "hmm", "er", "erm", "ah", "mm"]);
+const COMMON = new Set("the a an and or to of in on is it i that so we was for with as at be this you my our they he she but".split(" "));
+const norm = (w) => String(w || "").toLowerCase().normalize("NFKD").replace(/[^a-z0-9]/g, "");
+function close(a, b) {
+  if (a === b) return true;
+  if (a.length >= 4 && b.length >= 4 && (a.startsWith(b.slice(0, 4)) && b.startsWith(a.slice(0, 4))) && Math.abs(a.length - b.length) <= 3) return true;
+  if (a.length >= 5 && b.length >= 5 && Math.abs(a.length - b.length) <= 1) {   // one letter wrong
+    let i = 0, j = 0, d = 0;
+    while (i < a.length && j < b.length) { if (a[i] === b[j]) { i++; j++; } else { d++; if (a.length > b.length) i++; else if (b.length > a.length) j++; else { i++; j++; } } if (d > 1) return false; }
+    return d + (a.length - i) + (b.length - j) <= 1;
+  }
+  return false;
+}
+const F = { id: null, cursor: 0, heard: [], words: [], manualAt: 0 };
+function followReset(id) { F.id = id; F.cursor = 0; F.heard = []; }
+function followWords() {
+  F.words = [...document.querySelectorAll("#cards .answer .w")].map((el) => norm(el.textContent));
+}
+function followHeard(piece) {
+  if (!F.id) return;
+  for (const w of String(piece || "").split(/\s+/)) { const x = norm(w); if (x && !FILLERS.has(x)) F.heard.push(x); }
+  if (F.heard.length > 12) F.heard = F.heard.slice(-12);
+  if (!F.words.length) return;
+  const idx = [];
+  for (let i = 0; i < F.words.length; i++) if (F.words[i] && !FILLERS.has(F.words[i])) idx.push(i);
+  const from = Math.max(0, idx.findIndex((i) => i >= F.cursor) - 3);
+  const to = Math.min(idx.length, (from < 0 ? 0 : from) + 60);
+  for (const k of [4, 3, 2]) {
+    if (F.heard.length < k) continue;
+    const h = F.heard.slice(-k);
+    if (k === 2 && h.every((x) => COMMON.has(x))) continue;
+    for (let p = from; p < to; p++) {
+      let q = p, ok = true, last = -1;
+      for (let j = 0; j < k; j++) {
+        // each heard word must match the next answer word, or the one after it (a skipped word)
+        if (q < idx.length && close(h[j], F.words[idx[q]])) { last = idx[q]; q++; }
+        else if (q + 1 < idx.length && close(h[j], F.words[idx[q + 1]])) { last = idx[q + 1]; q += 2; }
+        else { ok = false; break; }
+      }
+      if (ok && last + 1 > F.cursor - 2) { if (last + 1 > F.cursor) { F.cursor = last + 1; followPaint(true); } return; }
+    }
+  }
+}
+let followTimer = 0;
+function followPaint(scroll) {
+  for (const el of document.querySelectorAll("#cards .answer .w")) el.classList.toggle("said", Number(el.dataset.i) < F.cursor);
+  if (F.cursor > 0) $("scroll-hint").hidden = true;
+  if (!scroll) return;
+  // heard words come in bursts: one scroll after the burst, to an exact place (overlapping smooth scrolls cancel)
+  clearTimeout(followTimer);
+  followTimer = setTimeout(() => {
+    if (Date.now() - F.manualAt < 3000) return;
+    const el = document.querySelector(`#cards .answer .w[data-i="${Math.max(0, F.cursor - 1)}"]`);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top, vh = window.innerHeight;
+    if (top > vh * 0.45 || top < vh * 0.12) window.scrollTo({ top: Math.max(0, window.scrollY + top - vh * 0.28), behavior: "smooth" });
+  }, 160);
+}
+for (const ev of ["touchstart", "wheel"]) window.addEventListener(ev, () => { F.manualAt = Date.now(); }, { passive: true });
+
 let shownId = null;
 function renderCards(cards) {
   S.cards = cards;
@@ -234,31 +310,32 @@ function renderCards(cards) {
   $("waiting").hidden = !!c;
   $("earlier-btn").hidden = cards.length < 2;
   $("earlier-btn").textContent = `Earlier answers (${cards.length - 1})`;
-  if (!c) { $("cards").innerHTML = ""; shownId = null; scrollHint(); return; }
+  if (!c) { $("cards").innerHTML = ""; shownId = null; followReset(null); scrollHint(); return; }
   const streaming = c.state === "streaming" || c.state === "continuing";
   const { words, madeUp, claims } = viewOf(c);
-  const points = keyPoints(words);
   let body = `<p class="q">${esc(c.question ? c.question.slice(-220) : "")}</p>`;
-  if (points.length) body += `<div class="points">${points.map((p) => `<span>${esc(p)}</span>`).join("")}</div>`;
   if (madeUp) body += `<span class="tag">Made-up example</span>`;
-  body += `<p class="answer${streaming ? " cursor" : ""}">${answerBody(words, claims)}</p>`;
+  body += `<p class="answer${streaming ? " cursor" : ""}">${wordsHtml(words, claims)}</p>`;
   if (c.code) body += `<pre>${esc(c.code)}</pre>` + (c.codeExplain ? `<p class="explain">${esc(c.codeExplain)}</p>` : "")
     + `<div class="langs">${Object.keys(LANG_LABEL).map((l) => `<button data-card="${c.id}" data-lang="${l}">${LANG_LABEL[l]}</button>`).join("")}</div>`;
   else if (c.codeState === "writing") body += `<p class="more">Writing the code…</p>`;
   const fresh = shownId !== c.id;
   $("cards").innerHTML = `<article class="${fresh ? "focus" : "focus still"}">${body}</article>`;
-  if (fresh) { shownId = c.id; window.scrollTo({ top: 0 }); }
+  if (fresh) { shownId = c.id; followReset(c.id); window.scrollTo({ top: 0 }); }
+  followWords();
+  followPaint(false);
   scrollHint();
 }
-/* A long answer: tap the lower half to move down a screen, the upper half to move back. */
+/* A long answer the phone can't follow (the candidate says it in other words): tap to page. */
 function scrollHint() {
   const long = document.documentElement.scrollHeight > window.innerHeight + 40 && !$("s-live").hidden;
-  $("scroll-hint").hidden = !long || window.scrollY > 40;
+  $("scroll-hint").hidden = !long || window.scrollY > 40 || F.cursor > 0;
 }
 window.addEventListener("scroll", scrollHint, { passive: true });
 $("cards").addEventListener("click", (e) => {
   const b = e.target.closest("button[data-lang]");
   if (b) { if (S.live) S.live.recode(b.dataset.card, b.dataset.lang); return; }
+  F.manualAt = Date.now();
   const page = window.innerHeight * 0.7;
   window.scrollBy({ top: e.clientY > window.innerHeight / 2 ? page : -page, behavior: "smooth" });
 });

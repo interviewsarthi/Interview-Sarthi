@@ -1,7 +1,7 @@
 /* Live Sarthi on the phone: the listening engine. */
 
-import { post, promptBody } from "./api.js?v=20261123-phone";
-import { stripAnswerPrefix, parseAnswer, looksCutShort, wantsCode, parseCode } from "./protocol.js?v=20261123-phone";
+import { API, post, promptBody } from "./api.js?v=20261123-follow";
+import { stripAnswerPrefix, parseAnswer, looksCutShort, wantsCode, parseCode } from "./protocol.js?v=20261123-follow";
 
 const TOKEN_URL = "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContentConstrained?access_token=";
 const MODELS = ["gemini-3.8-live", "gemini-3.1-flash-live-preview"];
@@ -34,7 +34,7 @@ export class PhoneLive {
    * @param {(name:string, data:object) => void} [o.onEvent]
    */
   constructor(o) {
-    Object.assign(this, { setupOf: o.setup, device: o.device, onCards: o.onCards, onHeard: o.onHeard || (() => {}),
+    Object.assign(this, { setupOf: o.setup, device: o.device, onCards: o.onCards, onHeard: o.onHeard || (() => {}), onHeardPiece: o.onHeardPiece || (() => {}),
       onStatus: o.onStatus || (() => {}), onAllowance: o.onAllowance || (() => {}), onEnd: o.onEnd || (() => {}),
       onEvent: o.onEvent || (() => {}) });
     this.cards = []; this.memory = []; this.heard = ""; this.turn = null;
@@ -194,6 +194,7 @@ export class PhoneLive {
       this.heard += sc.inputTranscription.text;
       if (this.heard.length > 1500) this.heard = this.heard.slice(-1500);
       this.onHeard(this.heard.trim());
+      try { this.onHeardPiece(sc.inputTranscription.text); } catch (_) { /* UI */ }
     }
     if (sc.outputTranscription && sc.outputTranscription.text) this._said(sc.outputTranscription.text, t);
     if (sc.interrupted) this._closeAnswerTurn("interrupted");
@@ -252,17 +253,59 @@ export class PhoneLive {
   async _continue(card) {
     card.state = "continuing"; this._render();
     const s = this.setupOf();
-    const r = await post("/live/web/text", { ...promptBody(s), session_id: this.session.id, session_token: this.session.token, kind: "continue",
-      question: card.question || "(the interviewer's last question)", partial: card.text, earlier: this.memory.slice(-3).map((x) => x.a) }, { timeout: 35000 });
-    if (r.ok && r.text && /^\W*DONE\W*$/i.test(r.text.trim())) {
-      this._event("continued", { words: 0, done: true });
-    } else if (r.ok && r.text) {
-      let rest = (stripAnswerPrefix(r.text) ?? r.text).trim();
-      if (/[.!?।]["')*\]]*$/.test(card.text.trim())) {
-        rest = rest.replace(/^[.…\s]+/, "");
-        rest = rest.charAt(0).toUpperCase() + rest.slice(1);
+    const body = { ...promptBody(s), session_id: this.session.id, session_token: this.session.token, kind: "continue",
+      question: card.question || "(the interviewer's last question)", partial: card.text, earlier: this.memory.slice(-3).map((x) => x.a) };
+    const base = card.text.trimEnd();
+    const sentenceEnd = /[.!?।]["')*\]]*$/.test(base);
+    const tidy = (raw) => {
+      let rest = String(raw || "").replace(/^\s+/, "");
+      const v = stripAnswerPrefix(rest);
+      if (v === null) return "";
+      rest = v;
+      if (/^\W*D(O(N(E)?)?)?\W*$/i.test(rest.trim())) return "";   // "DONE" (or its start): nothing to add
+      if (sentenceEnd) { rest = rest.replace(/^[.…\s]+/, ""); rest = rest.charAt(0).toUpperCase() + rest.slice(1); }
+      return rest;
+    };
+    let raw = "", got = false;
+    // streamed: the words are added below as they are written, nothing above them moves
+    try {
+      const ac = new AbortController();
+      const first = setTimeout(() => ac.abort(), 12000);
+      const r = await fetch(API + "/live/web/text", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...body, stream: true }), cache: "no-store", signal: ac.signal });
+      if (r.ok && r.body && /text\/plain/.test(r.headers.get("content-type") || "")) {
+        clearTimeout(first);
+        const reader = r.body.getReader(), dec = new TextDecoder();
+        const idle = () => setTimeout(() => ac.abort(), 15000);
+        let t = idle();
+        for (;;) {
+          const { done, value } = await reader.read();
+          clearTimeout(t);
+          if (done) break;
+          t = idle();
+          raw += dec.decode(value, { stream: true });
+          const rest = tidy(raw);
+          if (rest) { card.text = base + " " + rest; got = true; this._render(); }
+        }
+        clearTimeout(t);
+      } else {
+        clearTimeout(first);
+        // a server that answers in one piece: use it as it is
+        const d = r.ok ? await r.json().catch(() => ({})) : {};
+        if (d && d.text) { raw = d.text; const rest = tidy(raw); if (rest) { card.text = base + " " + rest; got = true; this._render(); } }
       }
-      card.text = card.text.trimEnd() + " " + rest;
+    } catch (_) { /* falls back below */ }
+    if (got || /^\W*DONE\W*$/i.test(raw.trim())) {
+      this._event("continued", { words: got ? words(tidy(raw)) : 0, done: !got });
+      if (got) this._context("CONTEXT ONLY, no reply: the candidate's full answer to the last question, which they are saying aloud now: " + card.text);
+      return this._finish(card);
+    }
+    // not streamed (an old server, a dropped stream): one request for the whole rest
+    const r = await post("/live/web/text", body, { timeout: 35000 });
+    const rest = r.ok && r.text ? tidy(r.text) : "";
+    if (r.ok && r.text && !rest) {
+      this._event("continued", { words: 0, done: true });
+    } else if (rest) {
+      card.text = base + " " + rest;
       this._event("continued", { words: words(rest) });
       this._context("CONTEXT ONLY, no reply: the candidate's full answer to the last question, which they are saying aloud now: " + card.text);
     } else {
