@@ -64,7 +64,7 @@
 </header>
 <p aria-label="Breadcrumb" class="crumb"><a href="/">Home</a> › Privacy Policy</p>
 <h1>Privacy Policy</h1>
-<p class="lead">Last updated 12 November 2026 · Interview Sarthi is operated by an individual seller in India. Payments from India are processed by Cashfree Payments, or by Razorpay when Cashfree is unavailable. Payments from outside India are sold through Dodo Payments Inc as merchant of record, which was also the case for every order placed before 16 September 2026.</p>
+<p class="lead">Last updated 23 November 2026 · Interview Sarthi is operated by an individual seller in India. Payments from India are processed by Cashfree Payments, or by Razorpay when Cashfree is unavailable. Payments from outside India are sold through Dodo Payments Inc as merchant of record, which was also the case for every order placed before 16 September 2026.</p>
 <div class="box"><p style="margin:0"><b>Scope:</b> this policy covers Live Sarthi, Prep Sarthi, My Sarthi (the account page) and this website. Live interview content goes from your PC to Google, and reaches us only if you choose to share an interview (see What we receive); Prep interview content goes from your browser to Google, and is kept in your Prep Sarthi account only if you switch on saved interviews; in the free demo, the requests that prepare the interview and write the report pass through our license server on the way, without being stored. We operate licensing and payment services as described below. Apply Sarthi stores account data under its <a href="https://apply.interviewsarthi.com/privacy">separate privacy policy</a>.</p></div>
 <h2>What Live Sarthi processes, and where</h2>
 <ul>
@@ -74,6 +74,15 @@
 <li><b>Job description and your own examples, only if you type them in setup</b>: stored as text in the same folder on your PC and sent to the AI provider as written, alongside the resume summary. Empty a box and press Save to delete its file.</li>
 <li><b>Transcripts, summaries and recordings</b>: saved on your PC, in the folder above: what was said as text, any report you ask for, the app's logs, and sound recordings of the call and your microphone. Delete the folder to remove them. If you connect Live Sarthi to My Sarthi and switch on "Keep my Live interviews" there, your interviews from the past year on that PC (sent once) and each finished interview after that are also kept in your My Sarthi account (see <a href="#my-sarthi">My Sarthi</a> below). From version 1.0.43 the Live Sarthi app no longer connects to My Sarthi and sends it no interviews; earlier versions still do, as described here.</li>
 <li><b>API keys</b>: stored on your PC in <code>config.env</code>. Never transmitted to us, unless you save your Gemini key in My Sarthi yourself (see <a href="#my-sarthi">My Sarthi</a> below).</li>
+</ul>
+<h2 id="phone">Live Sarthi on your phone</h2>
+<p>Live Sarthi also runs in your phone's browser (interviewsarthi.com/live/app). It works differently from the Windows app, so here is exactly what happens:</p>
+<ul>
+<li><b>Sound in the room</b>: while you are listening, your phone's microphone hears the room, which is the interviewer from your laptop's speaker and you. It is streamed from your phone to Google Gemini under your own API key, to recognise questions and write answers. It is not sent to us and not recorded.</li>
+<li><b>Your resume, job description, own examples and pay fields</b>: kept in your phone's browser. At each start and reconnect they are sent through our license server, which uses them once to prepare the session with Google, and does not store them. A resume file you choose is read on your phone, and sent once to Gemini under your own key to fill in your name and experience level.</li>
+<li><b>Your Gemini API key</b>: kept in your phone's browser. At each start, reconnect and finished answer it passes through our license server, which uses it once to call Google for you and never stores or logs it. We keep only a one-way hash of it, which cannot be turned back into the key, to count your free minutes.</li>
+<li><b>Questions and answers</b>: when an answer is finished on our server, the question heard, the start of the answer and your last few answers pass through our license server to Google. Photos you take of a question pass through the same way, once. None of this is stored.</li>
+<li><b>What we keep</b>: your pass key if you use one, a random id made by this browser for your phone, when each session started and ended and how many minutes it ran, and a timeline of app events made of names and numbers only (for example "reconnected" or "answer finished, 212 words"; never words you or the interviewer said, audio or keys). The timeline is deleted after 30 days and the session records after 90 days. Clearing your browser's site data removes everything kept on your phone.</li>
 </ul>
 <h2>What we receive</h2>
 <ul>

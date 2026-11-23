@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>if (location.protocol === "http:" && /interviewsarthi\.com$/.test(location.hostname)) { location.replace("https://" + location.host + location.pathname + location.search + location.hash); }</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Live Sarthi on your phone</title>
+  <meta name="description" content="Live Sarthi on your phone: interview answers from your resume, on the phone beside your laptop.">
+  <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+  <meta name="theme-color" content="#0b1020">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./app.css?v=20261123-glance">
+</head>
+<body>
+<main id="app">
+
+  <!-- A laptop or desktop: this page belongs on the phone -->
+  <section id="s-gate" class="screen" hidden>
+    <img class="mark" src="/assets/mark.svg" alt="" width="44" height="44">
+    <h1>Open this on your phone</h1>
+    <p class="lede">Live Sarthi's web app runs on your phone, lying next to the laptop where your interview happens. The answers appear on the phone, so they never show on the laptop's screen.</p>
+    <div class="url-box"><span>On your phone, open</span><b>interviewsarthi.com/live/app</b></div>
+    <p class="small">Interviewing on this computer instead? <a href="/live/">Get the Windows app</a>.</p>
+  </section>
+
+  <!-- First visit -->
+  <section id="s-start" class="screen" hidden>
+    <div class="hero-start"><img class="mark" src="/assets/mark.svg" alt="" width="44" height="44">
+    <h1>Live Sarthi <em>on your phone</em></h1></div>
+    <ol class="how">
+      <li><b>Interview on your laptop</b> with the sound on its loudspeaker.</li>
+      <li><b>Put this phone where you can see it,</b> just below your webcam. It listens to the interviewer.</li>
+      <li><b>Answers from your resume appear here</b>, never on the laptop's screen.</li>
+    </ol>
+    <button class="btn primary" id="go-trial">Try 20 minutes free</button>
+    <button class="btn" id="go-pass">I have a pass</button>
+    <p class="small">No pass yet? <a href="/phone/#pricing">See passes</a>. One pass works on the Windows app and here.</p>
+    <p class="small"><a href="/phone/">How it works</a> · <a href="/privacy.html#phone">Privacy</a> · <a href="/help.html">Help</a></p>
+  </section>
+
+  <!-- Pass key -->
+  <section id="s-key" class="screen" hidden>
+    <button class="back" data-back="s-start" aria-label="Back">‹ Back</button>
+    <h1>Your pass key</h1>
+    <p class="lede">It's in the email you got after buying, and starts with <b>IS-</b>.</p>
+    <label class="field"><span>Pass key</span><input id="lic" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="IS-XXXX-XXXX-XXXX"></label>
+    <p class="notice" id="lic-notice" hidden></p>
+    <button class="btn primary" id="lic-next">Next</button>
+  </section>
+
+  <!-- Gemini key -->
+  <section id="s-gemini" class="screen" hidden>
+    <button class="back" id="gem-back" aria-label="Back">‹ Back</button>
+    <h1>Your free Gemini key</h1>
+    <p class="lede">Live Sarthi runs on Google's Gemini with your own free key. If you use Live Sarthi on Windows, Prep Sarthi or Apply Sarthi, it's the same key.</p>
+    <a class="btn ghost" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Get a free key from Google ↗</a>
+    <p class="small"><a href="/free-gemini-api-key-guide.html" target="_blank" rel="noopener">How to get it, step by step</a></p>
+    <label class="field"><span>Paste your key</span><input id="gem" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste here"></label>
+    <p class="notice" id="gem-notice" hidden></p>
+    <button class="btn primary" id="gem-next">Check key</button>
+  </section>
+
+  <!-- CV and answer style -->
+  <section id="s-cv" class="screen" hidden>
+    <button class="back" data-back="s-gemini" aria-label="Back">‹ Back</button>
+    <h1>Your resume</h1>
+    <p class="lede">Answers are built from it. A PDF or a photo of it works.</p>
+    <label class="btn ghost file"><input type="file" id="cv-file" accept=".pdf,.txt,.md,image/*,application/pdf">Choose your resume</label>
+    <details class="paste"><summary>Or paste it as text</summary>
+      <textarea id="cv-paste" rows="6" placeholder="Paste your resume here"></textarea>
+      <button class="btn small-btn" id="cv-paste-go">Use this text</button>
+    </details>
+    <p class="notice" id="cv-notice" hidden></p>
+
+    <div id="cv-done" hidden>
+      <p class="okline" id="cv-okline"></p>
+      <label class="field"><span>Your name</span><input id="nm" autocomplete="name"></label>
+      <label class="field"><span>Experience</span>
+        <select id="lvl"><option value="">Let the resume decide</option><option value="fresher">Fresher (0-1 year)</option><option value="1-3">1-3 years</option><option value="3-8">3-8 years</option><option value="8+">8+ years</option></select></label>
+      <label class="field"><span>Answer length</span>
+        <select id="len"><option value="detailed">Detailed (recommended)</option><option value="auto">Automatic</option><option value="normal">Normal</option><option value="short">Short</option></select></label>
+      <label class="field"><span>English</span>
+        <select id="eng"><option value="simple">Simple everyday</option><option value="polished">Polished professional</option></select></label>
+      <label class="field"><span>Answers in</span>
+        <select id="lang"><option value="en">English</option><option value="hinglish">Hinglish</option><option value="auto">The interviewer's language</option></select></label>
+      <details class="more"><summary>More (optional)</summary>
+        <label class="field"><span>Job description</span><textarea id="jd" rows="4" placeholder="Paste the job post"></textarea></label>
+        <label class="field"><span>Your own examples</span><textarea id="stories" rows="4" placeholder="Real stories in your own words: a hard bug, a deadline, a disagreement"></textarea></label>
+        <label class="field"><span>Code in</span>
+          <select id="code"><option value="auto">Automatic</option><option value="python">Python</option><option value="java">Java</option><option value="cpp">C++</option><option value="javascript">JavaScript</option><option value="sql">SQL</option></select></label>
+        <div class="grid2">
+          <label class="field"><span>Current CTC</span><input id="pay-cur" placeholder="optional"></label>
+          <label class="field"><span>Expected CTC</span><input id="pay-exp" placeholder="optional"></label>
+          <label class="field"><span>Notice period</span><input id="pay-not" placeholder="optional"></label>
+          <label class="field"><span>Other offers</span><input id="pay-off" placeholder="optional"></label>
+        </div>
+      </details>
+      <button class="btn primary" id="cv-save">Save</button>
+    </div>
+  </section>
+
+  <!-- Ready -->
+  <section id="s-ready" class="screen" hidden>
+    <img class="mark" src="/assets/mark.svg" alt="" width="40" height="40">
+    <h1>Ready when you are</h1>
+    <ul class="checks">
+      <li>Interview sound on the <b>laptop's loudspeaker</b>, not earphones</li>
+      <li>This phone <b>just below your webcam</b>, screen up, within an arm's length of the speaker</li>
+      <li><b>Do Not Disturb</b> on, so a call can't take the microphone</li>
+    </ul>
+    <p class="allow" id="allow"></p>
+    <button class="btn primary big" id="start">Start listening</button>
+    <p class="notice" id="start-notice" hidden></p>
+    <div class="row-links"><button class="link" id="edit-setup">Change setup</button><a class="link" href="/phone/#pricing" id="buy-link" hidden>Get a pass</a></div>
+  </section>
+
+  <!-- Listening: made for a glance at a phone under the webcam -->
+  <section id="s-live" class="screen live" hidden>
+    <header class="bar">
+      <span class="dot" id="dot" aria-hidden="true"></span>
+      <span class="state" id="state">Listening</span>
+      <span class="left" id="left"></span>
+      <button class="icon" id="size" aria-label="Text size">Aa</button>
+      <button class="icon" id="snap" aria-label="Photo of the question">📷</button>
+      <button class="icon" id="menu" aria-label="More">⋯</button>
+    </header>
+    <div class="level" aria-hidden="true"><i id="level"></i></div>
+    <div class="waiting" id="waiting">
+      <div class="ear" aria-hidden="true">👂</div>
+      <h2>Listening for the interviewer…</h2>
+      <p>The bar above moves when the phone hears the laptop. An answer appears here when a question is asked.</p>
+      <p class="hearing" id="hearing"></p>
+    </div>
+    <div id="cards" aria-live="polite"></div>
+    <div class="footbar">
+      <button class="pill hint" id="scroll-hint" hidden>Tap lower half to scroll ↓</button>
+      <button class="pill" id="earlier-btn" hidden>Earlier answers</button>
+    </div>
+    <input type="file" id="snap-file" accept="image/*" capture="environment" hidden>
+
+    <div class="sheet" id="sheet-earlier" hidden><div class="sheet-body" id="earlier-list"></div></div>
+    <div class="sheet" id="sheet-menu" hidden><div class="sheet-body">
+      <h3>Options</h3>
+      <button class="sheet-item" id="theme-btn">Light screen (for a bright room)</button>
+      <button class="sheet-item" id="smaller">Smaller text</button>
+      <button class="sheet-item" id="bigger">Bigger text</button>
+      <button class="sheet-item danger" id="stop">Stop listening</button>
+      <button class="btn" data-close>Close</button>
+    </div></div>
+    <div class="sheet" id="sheet-stop" hidden><div class="sheet-body">
+      <h3>Stop listening?</h3>
+      <p class="small">Your answers stay on this screen. You can start again any time.</p>
+      <div class="row"><button class="btn" data-close>Keep listening</button><button class="btn primary" id="stop-yes">Stop</button></div>
+    </div></div>
+    <div class="tap-resume" id="tap-resume" hidden><button class="btn primary big" id="resume">Tap to keep listening</button><p>Your phone paused the microphone.</p></div>
+  </section>
+
+  <!-- Ended -->
+  <section id="s-ended" class="screen" hidden>
+    <h1 id="end-title">Interview ended</h1>
+    <p class="lede" id="end-text"></p>
+    <a class="btn primary" href="/phone/#pricing" id="end-buy" hidden>Get a pass</a>
+    <button class="btn" id="end-again">Back to start</button>
+    <div class="end-list" id="end-list"></div>
+  </section>
+
+</main>
+<script type="module" src="./app.js?v=20261123-glance"></script>
+</body>
+</html>

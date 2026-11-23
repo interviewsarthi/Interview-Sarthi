@@ -1,0 +1,15 @@
+{
+  "name": "Live Sarthi",
+  "short_name": "Live Sarthi",
+  "description": "Interview answers from your resume, on the phone beside your laptop.",
+  "start_url": "/live/app/",
+  "scope": "/live/app/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7fafc",
+  "theme_color": "#7251bf",
+  "icons": [
+    { "src": "/assets/favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
