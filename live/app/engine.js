@@ -1,7 +1,7 @@
 /* Live Sarthi on the phone: the listening engine. */
 
 import { API, post, promptBody } from "./api.js?v=20261123-login";
-import { stripAnswerPrefix, parseAnswer, looksCutShort, wantsCode, parseCode } from "./protocol.js?v=20261123-follow";
+import { stripAnswerPrefix, parseAnswer, looksCutShort, wantsCode, parseCode } from "./protocol.js?v=20261128-tag";
 
 const TOKEN_URL = "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContentConstrained?access_token=";
 const MODELS = ["gemini-3.8-live", "gemini-3.1-flash-live-preview"];

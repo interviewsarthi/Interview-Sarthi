@@ -14,9 +14,33 @@ const TRAILING_CHECKIN = new RegExp(
   "deeper|elaborate|examples?|further)[^.?!]*|happy to (?:go deeper|elaborate)" +
   "[^.?!]*)[.?!]*\\s*)+$", "i");
 
+const LEAD_TOKEN = /^\s*(?:<[^<>]{0,40}>|\{[^{}]{0,40}\})/;
+const VERDICTS = ["ANSWER:", "NO_ANSWER", "NO ANSWER"];
+
+/** [the text without tags the model put in front of its verdict ("<speaker:Name>ANSWER: ..."), still unknown].
+ * A tag is dropped only when a verdict follows (or may still follow), or it is a speaker tag; other markup stays.
+ * Still unknown: an unclosed tag at the start may become one. */
+function dropLeadTags(text) {
+  let rest = text;
+  for (;;) {
+    const m = rest.match(LEAD_TOKEN);
+    if (!m) break;
+    const after = rest.slice(m[0].length).trimStart().replace(/^[`"' ]+/, "");
+    const probe = after.toUpperCase();
+    const verdictAhead = !probe || VERDICTS.some((v) => probe.startsWith(v) || v.startsWith(probe));
+    if (!(verdictAhead || m[0].trim().toLowerCase().startsWith("<speaker"))) break;
+    rest = after;
+  }
+  const head = rest.trimStart();
+  const unknown = !!head && "<{".includes(head[0]) && !head.slice(0, 42).includes(head[0] === "<" ? ">" : "}") && head.length <= 41;
+  return [rest, unknown];
+}
+
 /** Streaming: null while the verdict is unknown, "" for NO_ANSWER, otherwise the visible answer so far. */
 export function stripAnswerPrefix(partial) {
-  const cleaned = String(partial || "").trimStart().replace(/^[`"' ]+/, "");
+  const [rest, unknown] = dropLeadTags(String(partial || "").trimStart().replace(/^[`"' ]+/, ""));
+  if (unknown) return null;  // "<speak": a tag still arriving, nothing to show yet
+  const cleaned = rest.trimStart().replace(/^[`"' ]+/, "");
   const probe = cleaned.toUpperCase();
   if (probe.startsWith("NO_ANSWER") || probe.startsWith("NO ANSWER")) return "";
   if (probe.startsWith("ANSWER:")) return cleaned.slice(7).trimStart().replace(/^[`"' ]+/, "") || null;
@@ -26,7 +50,7 @@ export function stripAnswerPrefix(partial) {
 
 /** The parts of an answer for the card: words, the made-up label, sentences to defend, code. null = no answer. */
 export function parseAnswer(text) {
-  let cleaned = String(text || "").trim().replace(WRAPPING, "");
+  let cleaned = dropLeadTags(String(text || "").trim().replace(WRAPPING, ""))[0].trim().replace(WRAPPING, "");
   const probe = cleaned.toUpperCase();
   if (!cleaned || probe.startsWith("NO_ANSWER") || probe.startsWith("NO ANSWER")) return null;
   if (probe.startsWith("ANSWER:")) cleaned = cleaned.slice(7).trim().replace(/^[`"' ]+/, "");

@@ -3,8 +3,8 @@
 import { loadSetup, saveSetup, deviceId, reasonText, LOCAL, post } from "./api.js?v=20261123-login";
 import { readCvFile, readCvText, checkKey } from "./cv.js?v=20261123-follow";
 import { Mic } from "./mic.js?v=20261123-follow";
-import { PhoneLive } from "./engine.js?v=20261123-login";
-import { answerHtml, partialView, esc } from "./protocol.js?v=20261123-follow";
+import { PhoneLive } from "./engine.js?v=20261128-tag";
+import { answerHtml, partialView, esc } from "./protocol.js?v=20261128-tag";
 import { hear, norm } from "./follow.js?v=20261123-jump";
 import { A, loggedIn, googleClientId, logIn, loadAccount, logOutHere, deleteSaved, saveNow, passLine } from "./account.js?v=20261123-login";
 
