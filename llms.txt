@@ -40,6 +40,7 @@ Product and guide pages contain readable HTML. Interactive app features require 
 - [Is there an AI interview assistant for Zoom?](https://interviewsarthi.com/guides/ai-interview-assistant-zoom.html): Live Sarthi on a Windows PC beside Zoom; setup and sound.
 - [How much does an AI interview assistant cost in India?](https://interviewsarthi.com/guides/ai-interview-assistant-price-india.html): Live Sarthi's passes (Rs 149 for 2 days, Rs 299 for 30 days, paid once) and what to compare.
 - [Can I try an AI interview assistant for free?](https://interviewsarthi.com/guides/ai-interview-assistant-free-trial.html): Live Sarthi's 30 free minutes per PC and Prep Sarthi's free 7-minute mock interview.
+- [Is Live Sarthi legit?](https://interviewsarthi.com/guides/is-live-sarthi-legit.html): how to check without trusting us — 30 free minutes with no card, Microsoft Store install, one-time passes that never auto-renew, UPI, 7-day money-back on a first pass.
 - [How can I practise for a job interview alone?](https://interviewsarthi.com/guides/practise-interview-alone.html): habits that work alone, and a voice mock interview from your own CV.
 - [How do I prepare for an interview from the job description?](https://interviewsarthi.com/guides/prepare-interview-job-description.html): turn requirements into questions and practise out loud.
 - [TCS interview questions for freshers](https://interviewsarthi.com/guides/tcs-interview-questions-freshers.html)
